@@ -1,0 +1,47 @@
+{{> admin-navbar }}
+
+<div class="container mt-4">
+  <h1 class="mb-4">Gerenciar Páginas</h1>
+
+  <h2 class="mb-3">Relacionar Conteúdos</h2>
+  <form action="/admin/pages/assign-content" method="POST">
+    <div class="mb-3">
+      <label for="page" class="form-label">Selecione a Página:</label>
+      <select name="pageId" id="page" class="form-select">
+        <option value="1">Home</option>
+        <option value="2">Sobre</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="content" class="form-label">Selecione o Conteúdo:</label>
+      <select name="contentId" id="content" class="form-select">
+        <option value="101">Banner 1</option>
+        <option value="102">Promoção 1</option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Relacionar</button>
+  </form>
+
+  <hr class="my-4">
+
+  <h2 class="mb-3">Páginas e seus Conteúdos</h2>
+  <ul class="list-group">
+    <li class="list-group-item">
+      <strong>Home:</strong>
+      <ul>
+        <li>Banner 1</li>
+        <li>Promoção 1</li>
+      </ul>
+    </li>
+    <li class="list-group-item">
+      <strong>Sobre:</strong>
+      <ul>
+        <li>Nenhum conteúdo relacionado</li>
+      </ul>
+    </li>
+  </ul>
+</div>
+
+{{> admin-footer }}

@@ -1,6 +1,6 @@
 import { Controller, Get, Res } from '@nestjs/common';
-import { ContentsService } from './contents.service';
 import { Response } from 'express';
+import { ContentsService } from '../services/contents.service';
 
 @Controller('contents')
 export class ContentsController {
@@ -8,7 +8,7 @@ export class ContentsController {
 
   @Get()
   index(@Res() res: Response) {
-    return res.render(this.contentsService.getVewPath(), {
+    return res.render(this.contentsService.getVewPath('home'), {
       message: 'Hello world!',
     });
   }

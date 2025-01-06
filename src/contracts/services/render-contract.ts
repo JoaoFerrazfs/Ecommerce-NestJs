@@ -1,3 +1,3 @@
 export interface RenderContract {
-  getVewPath(): string;
+  getVewPath(fileName: string): string;
 }
