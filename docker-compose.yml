@@ -1,18 +1,14 @@
-version: '3.8'
-
 services:
   mongo-ecommerce-nest:
     image: mongo:latest
     container_name: mongo-db
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: nest-admin
-      MONGO_INITDB_ROOT_PASSWORD: 12345678
     ports:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
     networks:
       - mongo-network
+    command: ["mongod", "--noauth"]
 
 volumes:
   mongo-data:
