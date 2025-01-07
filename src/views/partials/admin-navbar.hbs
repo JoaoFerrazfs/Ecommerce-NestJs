@@ -8,20 +8,82 @@
       <ul class="navbar-nav">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Conteúdos
+            Gerenciar Páginas
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="/admin/contents">Paginas</a></li>
-            <li><a class="dropdown-item" href="/admin/contents/banner">Banners</a></li>
+            <!-- Submenu Conteúdos -->
+            <li class="dropdown">
+              <a class="dropdown-item dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Conteúdos
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Listar</a></li>
+                <li><a class="dropdown-item" href="/admin/contents/create">Criar</a></li>
+              </ul>
+            </li>
+            <!-- Submenu Banners -->
+            <li class="dropdown">
+              <a class="dropdown-item dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Banners
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Listar</a></li>
+                <li><a class="dropdown-item" href="/admin/banners/create">Criar</a></li>
+              </ul>
+            </li>
           </ul>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="#conteudos">Conteúdos</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#produtos">Produtos</a>
         </li>
       </ul>
     </div>
   </div>
 </nav>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Seleciona todos os dropdowns com submenus
+    const dropdowns = document.querySelectorAll('.dropdown-menu .dropdown');
+
+    dropdowns.forEach(function (dropdown) {
+      dropdown.addEventListener('mouseover', function (e) {
+        const submenu = dropdown.querySelector('.dropdown-menu');
+        if (submenu) {
+          submenu.classList.add('show');
+        }
+      });
+
+      dropdown.addEventListener('mouseout', function (e) {
+        const submenu = dropdown.querySelector('.dropdown-menu');
+        if (submenu) {
+          submenu.classList.remove('show');
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  /* Muda a cor de fundo dos botões ao passar o mouse */
+  .dropdown-item:hover,
+  .nav-link:hover {
+    background-color: #495057; /* Cor escura agradável */
+    color: #fff; /* Mantém o texto branco */
+  }
+
+  /* Estilo para submenus */
+  .dropdown-menu .dropdown-menu {
+    left: 100%; /* Posiciona à direita */
+    top: 0;
+    margin-top: 0;
+  }
+
+  /* Faz o submenu aparecer automaticamente ao passar o mouse */
+  .dropdown:hover > .dropdown-menu {
+    display: block;
+  }
+
+  /* Remove o fundo padrão ao passar o mouse nos pais de submenus */
+  .dropdown:hover > .dropdown-item {
+    background-color: #495057;
+    color: #fff;  
+  }
+</style>
