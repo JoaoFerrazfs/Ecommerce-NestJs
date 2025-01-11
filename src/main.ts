@@ -4,6 +4,7 @@ import { join } from 'path';
 import * as hbs from 'express-handlebars';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { COMPARISON } from './views/helpers/comparison';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -17,6 +18,7 @@ async function bootstrap() {
       partialsDir: join(__dirname, '..', 'src', 'views', 'partials'),
       defaultLayout: join(__dirname, '..', 'src', 'views', 'layouts', 'main'),
       layoutsDir: join(__dirname, '..', 'src', 'views', 'layouts'),
+      helpers: COMPARISON
     }),
   );
 

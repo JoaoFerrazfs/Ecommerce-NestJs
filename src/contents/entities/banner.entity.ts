@@ -1,5 +1,12 @@
-import { BaseEntity, Column, Entity, ObjectIdColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ObjectIdColumn,
+  ManyToOne,
+} from 'typeorm';
 import { ObjectId } from 'mongodb';
+import { Content } from './content.entity';
 
 @Entity('banners')
 export class Banner extends BaseEntity {
@@ -11,4 +18,7 @@ export class Banner extends BaseEntity {
 
   @Column()
   image: string;
+
+  @ManyToOne(() => Content, content => content.banners)
+  content: Content;
 }

@@ -1,48 +1,47 @@
-import { Controller, Get, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { ContentsService } from '../../services/contents.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Content } from '../../entities/content.entity';
 import { Repository } from 'typeorm';
-import { Banner } from '../../entities/banner.entity';
+import { CreateContentDto } from '../../dto/create-content.dto';
 
-@Controller(['admin'])
+@Controller('admin')
 export class AdminContentsController {
   constructor(
     @InjectRepository(Content)
     private readonly contentRepository: Repository<Content>,
-    @InjectRepository(Banner)
-    private readonly bannerRepository: Repository<Banner>,
     private readonly contentsService: ContentsService,
-  ) {}
+  ) {
+  }
 
   @Get(['', 'contents'])
   index(@Res() res: Response) {
-    return res.render(this.contentsService.getVewPath('adminContents'), {
+    return res.render(this.contentsService.getVewPath('listContents'), {
+      layout: 'admin',
+    });
+  }
+
+  @Get(['', 'contents'])
+  create(@Res() res: Response) {
+    return res.render(this.contentsService.getVewPath('adminContentsCreate'), {
       layout: 'admin',
     });
   }
 
   @Get('contents/create')
   content(@Res() res: Response) {
-    return res.render(this.contentsService.getVewPath('adminContents'), {
+    return res.render(this.contentsService.getVewPath('adminContentsCreate'), {
       layout: 'admin',
+      isEdit: false,
     });
   }
 
-  @Post('contents/create') async createContent() {
-    const banner = await this.bannerRepository.create({
-      title: 'olaaa',
-      image: 'https',
-    });
+  @Post('contents/create') async createContent(@Body() data: CreateContentDto) {
+    return { data: await this.contentsService.createContent(data) };
+  }
 
-    const savedBanner = await this.bannerRepository.save(banner);
-
-    const content = await this.contentRepository.create({
-      banners: [savedBanner],
-      name: '',
-    });
-
-    return { data: await this.contentRepository.save(content) };
+  @Get('contents/list') async list() {
+    return { data: await this.contentsService.list() };
   }
 }

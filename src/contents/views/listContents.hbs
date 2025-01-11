@@ -1,0 +1,132 @@
+{{> admin-navbar }}
+
+<div class="container mt-4">
+  <section id="conteudos">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="mb-0">Lista de Conteúdos</h2>
+      <a href="/admin/contents/create" class="btn btn-info btn-sm">Criar um conteúdo</a>
+    </div>
+
+    <table class="table table-bordered" id="content-table">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Título</th>
+        <th>Banners</th>
+        <th>Ações</th>
+      </tr>
+      </thead>
+      <tbody id="content-list">
+      </tbody>
+    </table>
+  </section>
+</div>
+
+{{> admin-footer }}
+
+<script>
+  // Função principal para inicializar a página
+  document.addEventListener('DOMContentLoaded', () => {
+    loadContents();
+    initDeleteButtons();
+  });
+
+  // Carrega os conteúdos da API
+  async function loadContents() {
+    try {
+      const response = await fetch('http://localhost:3000/admin/contents/list');
+      if (!response.ok) {
+        throw new Error('Erro ao carregar os conteúdos');
+      }
+      const data = await response.json();
+      renderContents(data.data);
+    } catch (error) {
+      console.error('Erro:', error);
+      alert('Falha ao carregar os conteúdos.');
+    }
+  }
+
+  // Renderiza os conteúdos na tabela
+  function renderContents(contents) {
+    const contentList = document.getElementById('content-list');
+    contentList.innerHTML = '';  // Limpar o conteúdo anterior
+
+    contents.forEach(content => {
+      const row = document.createElement('tr');
+      console.log(content.id)
+      row.setAttribute('data-id', content.id);
+
+      // Coluna ID
+      const idCell = document.createElement('td');
+      idCell.textContent = content.id;
+      row.appendChild(idCell);
+
+      // Coluna Título
+      const titleCell = document.createElement('td');
+      titleCell.textContent = content.name;
+      row.appendChild(titleCell);
+
+      // Coluna Banners
+      const bannersCell = document.createElement('td');
+      const ul = document.createElement('ul');
+      content.banners.forEach(banner => {
+        const li = document.createElement('li');
+        const img = document.createElement('img');
+        img.src = banner.image;
+        img.alt = `Imagem de ${banner.title}`;
+        img.className = 'img-thumbnail';
+        img.style.maxWidth = '50px';
+        li.appendChild(img);
+        li.appendChild(document.createTextNode(banner.title));
+        ul.appendChild(li);
+      });
+      bannersCell.appendChild(ul);
+      row.appendChild(bannersCell);
+
+      // Coluna Ações
+      const actionsCell = document.createElement('td');
+      const editButton = document.createElement('button');
+      editButton.className = 'btn btn-warning btn-sm';
+      editButton.textContent = 'Editar';
+      editButton.onclick = () => window.location.href = `/admin/contents/edit/${content.id}`;
+
+      const deleteButton = document.createElement('button');
+      deleteButton.className = 'btn btn-danger btn-sm delete-btn';
+      deleteButton.textContent = 'Excluir';
+      deleteButton.onclick = () => handleDelete(content.id, row);
+
+      actionsCell.appendChild(editButton);
+      actionsCell.appendChild(deleteButton);
+      row.appendChild(actionsCell);
+
+      contentList.appendChild(row);
+    });
+  }
+
+  // Lógica para lidar com exclusão
+  function handleDelete(contentId, row) {
+    if (confirm('Tem certeza que deseja excluir este conteúdo?')) {
+      deleteContent(contentId)
+        .then(() => {
+          row.remove();
+          alert('Conteúdo excluído com sucesso!');
+        })
+        .catch(error => {
+          console.error('Erro:', error);
+          alert('Falha ao excluir o conteúdo. Tente novamente.');
+        });
+    }
+  }
+
+  // Faz a requisição DELETE para a API
+  async function deleteContent(contentId) {
+    const response = await fetch(`/admin/contents/${contentId}`, {
+      method: 'DELETE',
+    });
+
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(errorMessage || 'Erro ao excluir o conteúdo.');
+    }
+  }
+</script>

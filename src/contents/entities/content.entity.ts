@@ -13,9 +13,9 @@ export class Content extends BaseEntity {
   @ObjectIdColumn()
   id: ObjectId;
 
-  @Column({ default: 'olaaaa' })
+  @Column()
   name: string;
 
-  @OneToMany(() => Banner, (banner) => banner._id)
+  @Column()
   banners: Banner[];
 }

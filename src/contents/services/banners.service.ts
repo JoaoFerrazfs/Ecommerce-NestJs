@@ -3,7 +3,7 @@ import { Banner } from '../entities/banner.entity';
 import { Repository } from 'typeorm';
 import { UpdateBannerDto } from '../dto/update-banner.dto';
 import { ConfigService } from '@nestjs/config';
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ObjectId } from 'mongodb';
 
 @Injectable()

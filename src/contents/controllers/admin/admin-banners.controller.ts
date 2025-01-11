@@ -86,4 +86,9 @@ export class AdminBannerController {
     }
     return { data: await this.bannersService.deleteBanner(id) };
   }
+
+  @Get('list')
+  async listBanners() {
+    return { data: await this.bannersService.list() };
+  }
 }

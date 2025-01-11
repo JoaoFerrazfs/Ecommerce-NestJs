@@ -1,0 +1,184 @@
+{{> admin-navbar }}
+
+<div class="container mt-4">
+  <h1 class="mb-4">{{#if isEdit}}Editar Página{{else}}Cadastrar Página{{/if}}</h1>
+
+  <form method="POST">
+    <!-- Campo oculto para o ID da página (usado na edição) -->
+    {{#if isEdit}}
+      <input type="hidden" name="pageId" value="{{page.id}}" />
+    {{/if}}
+
+    <!-- Seleção de Nome da Página -->
+    <div class="mb-3">
+      <label for="page-name" class="form-label">Nome da Página:</label>
+      <input
+        type="text"
+        id="page-name"
+        name="title"
+        class="form-control"
+        value="{{#if isEdit}}{{page.name}}{{/if}}"
+        placeholder="Digite o nome da página"
+        required
+      />
+    </div>
+
+    <!-- Seleção de Banners -->
+    <div class="mb-3">
+      <label for="banners" class="form-label">Adicionar Banners:</label>
+      <select id="banners" class="form-select">
+        <option value="">Selecione um banner</option>
+      </select>
+      <button type="button" class="btn btn-secondary mt-2" id="add-banner">Adicionar Banner</button>
+    </div>
+
+    <!-- Lista de Banners Selecionados -->
+    <div class="mb-3">
+      <label class="form-label">Banners Selecionados (Arraste para ordenar):</label>
+      <ul id="selected-banners" class="list-group">
+        {{#if isEdit}}
+          {{#each page.banners}}
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center"
+              data-banner-id="{{id}}"
+            >
+              <img src="{{image}}" alt="{{title}}" class="me-3" style="width: 50px; height: auto;" />
+              <span>{{title}}</span>
+              <button type="button" class="btn btn-danger btn-sm remove-banner">Remover</button>
+            </li>
+          {{/each}}
+        {{/if}}
+      </ul>
+    </div>
+
+    <!-- Campo Oculto para Submeter os Banners Selecionados -->
+    <input type="hidden" name="banners" id="selected-banners-input" />
+
+    <!-- Botão de Submissão -->
+    <button type="submit" class="btn btn-primary">
+      {{#if isEdit}}Salvar Alterações{{else}}Criar Página{{/if}}
+    </button>
+  </form>
+
+</div>
+
+<!-- Script -->
+<script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    const form = document.querySelector("form");
+    const bannersSelect = document.getElementById("banners");
+    const addBannerButton = document.getElementById("add-banner");
+    const bannersList = document.getElementById("selected-banners");
+    const bannersInput = document.getElementById("selected-banners-input");
+
+    // Função para carregar banners da API
+    async function fetchBanners() {
+      const response = await fetch("http://localhost:3000/admin/banners/list");
+      const data = await response.json();
+      return data.data;
+    }
+
+    // Preenche o select com banners disponíveis
+    const banners = await fetchBanners();
+    banners.forEach((banner) => {
+      const option = document.createElement("option");
+      option.value = banner._id;
+      option.textContent = banner.title;
+      bannersSelect.appendChild(option);
+    });
+
+    // Adiciona banner selecionado à lista
+    addBannerButton.addEventListener("click", () => {
+      const selectedBannerId = bannersSelect.value;
+      const selectedBanner = banners.find((b) => b._id === selectedBannerId);
+
+      if (!selectedBanner) return alert("Selecione um banner válido!");
+
+      // Verifica se o banner já foi adicionado
+      const alreadyAdded = Array.from(bannersList.children).some(
+        (li) => li.dataset.bannerId === selectedBannerId
+      );
+      if (alreadyAdded) return alert("Este banner já foi adicionado!");
+
+      // Cria item na lista
+      const listItem = document.createElement("li");
+      listItem.className = "list-group-item d-flex justify-content-between align-items-center";
+      listItem.dataset.bannerId = selectedBanner._id;
+      listItem.innerHTML = `
+        <img src="${selectedBanner.image}" alt="${selectedBanner.title}" class="me-3" style="width: 50px; height: auto;" />
+        <span>${selectedBanner.title}</span>
+        <button type="button" class="btn btn-danger btn-sm remove-banner">Remover</button>
+      `;
+
+      // Adiciona funcionalidade de remoção
+      listItem.querySelector(".remove-banner").addEventListener("click", () => {
+        listItem.remove();
+        updateHiddenInput();
+      });
+
+      // Adiciona item à lista e atualiza o campo oculto
+      bannersList.appendChild(listItem);
+      updateHiddenInput();
+    });
+
+    // Atualiza o campo oculto com a ordem dos banners selecionados
+    function updateHiddenInput() {
+      const bannerIds = Array.from(bannersList.children).map(
+        (li) => li.dataset.bannerId
+      );
+      bannersInput.value = JSON.stringify(bannerIds);
+    }
+
+    // Habilita arrastar e ordenar os banners
+    new Sortable(bannersList, {
+      animation: 150,
+      onEnd: updateHiddenInput,
+    });
+
+    // Interceptar o envio do formulário
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault(); // Impede o envio padrão do formulário
+
+      const formData = new FormData(form);
+      const data = new URLSearchParams();
+
+      // Converte FormData para URLSearchParams para envio adequado
+      formData.forEach((value, key) => {
+        // Se o campo for "banners", garantir que seja um array de IDs
+        if (key === "banners") {
+          const bannerIds = Array.from(bannersList.children).map(
+            (li) => li.dataset.bannerId
+          );
+          bannerIds.forEach((bannerId) => {
+            data.append("banners[]", bannerId); // Envia cada banner como um item separado
+          });
+        } else {
+          data.append(key, value);
+        }
+      });
+
+      // Envia a requisição via fetch
+      try {
+        const response = await fetch(form.action, {
+          method: "POST",
+          body: data,
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          // Atualize a tela com uma mensagem de sucesso
+          alert("Página criada/atualizada com sucesso!");
+        } else {
+          // Exibe uma mensagem de erro
+          const errorResult = await response.json();
+          alert(`Erro: ${errorResult.message}`);
+        }
+      } catch (error) {
+        alert("Erro ao enviar o formulário. Tente novamente.");
+      }
+    });
+
+  });
+</script>
+
+{{> admin-footer }}
