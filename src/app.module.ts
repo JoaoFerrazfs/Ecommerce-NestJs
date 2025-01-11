@@ -1,8 +1,11 @@
 import { Module } from '@nestjs/common';
-import { ContentsModule } from './contents/contents.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
+import { ConfigModule } from '@nestjs/config';
 import { Content } from './contents/entities/content.entity';
 import { Banner } from './contents/entities/banner.entity';
+import { ContentsModule } from './contents/contents.module';
 
 @Module({
   imports: [
@@ -19,6 +22,11 @@ import { Banner } from './contents/entities/banner.entity';
       logging: true,
     }),
     ContentsModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+      serveRoot: '/public',
+    }),
+    ConfigModule.forRoot({isGlobal: true}),
   ],
   controllers: [],
   providers: [],

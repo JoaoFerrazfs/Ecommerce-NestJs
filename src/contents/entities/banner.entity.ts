@@ -1,12 +1,13 @@
 import { BaseEntity, Column, Entity, ObjectIdColumn } from 'typeorm';
+import { ObjectId } from 'mongodb';
 
 @Entity('banners')
 export class Banner extends BaseEntity {
   @ObjectIdColumn()
-  id: string;
+  _id: ObjectId;
 
   @Column()
-  name: string;
+  title: string;
 
   @Column()
   image: string;

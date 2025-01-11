@@ -9,3 +9,4 @@ export class ContentsService implements RenderContract {
     return this.PATH_VIEWS + fileName;
   }
 }
+

@@ -2,20 +2,20 @@ import {
   BaseEntity,
   Column,
   Entity,
-  ManyToOne,
   ObjectIdColumn,
   OneToMany,
 } from 'typeorm';
 import { Banner } from './banner.entity';
+import { ObjectId } from 'mongodb';
 
 @Entity('contents')
 export class Content extends BaseEntity {
   @ObjectIdColumn()
-  id: string;
+  id: ObjectId;
 
   @Column({ default: 'olaaaa' })
   name: string;
 
-  @OneToMany(() => Banner, (banner) => banner.id)
+  @OneToMany(() => Banner, (banner) => banner._id)
   banners: Banner[];
 }

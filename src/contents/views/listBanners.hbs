@@ -1,0 +1,91 @@
+{{> admin-navbar }}
+
+<div class="container mt-4">
+  <section id="conteudos">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="mb-0">Lista de Banners</h2>
+      <a href="/admin/banners/create" class="btn btn-info btn-sm">Criar um banner</a>
+    </div>
+
+    <table class="table table-bordered">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Título</th>
+        <th>Imagem</th>
+        <th>Ações</th>
+      </tr>
+      </thead>
+      <tbody>
+      {{#each banners}}
+        <tr data-id="{{this._id}}">
+          <td>{{this._id}}</td>
+          <td>{{this.title}}</td>
+          <td>
+            <img src="{{this.image}}" alt="Imagem de {{this.title}}" class="img-thumbnail" style="max-width: 100px;">
+          </td>
+          <td>
+            <form action="/admin/banners/edit/{{this._id}}" method="GET" style="display: inline;">
+              <button type="submit" class="btn btn-warning btn-sm" aria-label="Editar {{this.title}}">
+                Editar
+              </button>
+            </form>
+            <button class="btn btn-danger btn-sm delete-btn" aria-label="Excluir {{this.title}}">
+              Excluir
+            </button>
+          </td>
+        </tr>
+      {{/each}}
+      </tbody>
+    </table>
+  </section>
+</div>
+
+{{> admin-footer }}
+
+<script>
+  // Função principal para inicializar eventos
+  document.addEventListener('DOMContentLoaded', () => {
+    initDeleteButtons();
+  });
+
+  // Inicializa os eventos dos botões de exclusão
+  function initDeleteButtons() {
+    const deleteButtons = document.querySelectorAll('.delete-btn');
+
+    deleteButtons.forEach(button => {
+      button.addEventListener('click', handleDelete);
+    });
+  }
+
+  // Lógica para lidar com exclusão
+  function handleDelete(event) {
+    const button = event.target;
+    const row = button.closest('tr');
+    const bannerId = row.getAttribute('data-id');
+
+    if (confirm('Tem certeza que deseja excluir este banner?')) {
+      deleteBanner(bannerId)
+        .then(() => {
+          row.remove();
+          alert('Banner excluído com sucesso!');
+        })
+        .catch(error => {
+          console.error('Erro:', error);
+          alert('Falha ao excluir o banner. Tente novamente.');
+        });
+    }
+  }
+
+  // Faz a requisição DELETE para a API
+  async function deleteBanner(bannerId) {
+    const response = await fetch(`/admin/banners/${bannerId}`, {
+      method: 'DELETE',
+    });
+
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(errorMessage || 'Erro ao excluir o banner.');
+    }
+  }
+</script>
