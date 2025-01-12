@@ -53,12 +53,12 @@
 
     contents.forEach(content => {
       const row = document.createElement('tr');
-      console.log(content.id)
-      row.setAttribute('data-id', content.id);
+      row.setAttribute('data-id', content._id);
 
       // Coluna ID
       const idCell = document.createElement('td');
-      idCell.textContent = content.id;
+      idCell.className = 'd-flex justify-content-center align-items-center';
+      idCell.textContent = content._id;
       row.appendChild(idCell);
 
       // Coluna Título
@@ -70,14 +70,22 @@
       const bannersCell = document.createElement('td');
       const ul = document.createElement('ul');
       content.banners.forEach(banner => {
+        const bannerTitleText = document.createTextNode(banner.title);
+        const bannerTitleElement = document.createElement('span');
+        bannerTitleElement.appendChild(bannerTitleText);
+        bannerTitleElement.style.marginTop = '10px';
+        bannerTitleElement.style.marginLeft = '15px';
+
         const li = document.createElement('li');
+        li.style.marginTop  = '10px';
         const img = document.createElement('img');
         img.src = banner.image;
         img.alt = `Imagem de ${banner.title}`;
         img.className = 'img-thumbnail';
-        img.style.maxWidth = '50px';
+        img.style.maxWidth = '80px';
+        img.style.marginTop  = '10px';
         li.appendChild(img);
-        li.appendChild(document.createTextNode(banner.title));
+        li.appendChild(bannerTitleElement);
         ul.appendChild(li);
       });
       bannersCell.appendChild(ul);
@@ -85,15 +93,18 @@
 
       // Coluna Ações
       const actionsCell = document.createElement('td');
+      actionsCell.className = 'd-flex justify-content-center align-items-center';
       const editButton = document.createElement('button');
       editButton.className = 'btn btn-warning btn-sm';
       editButton.textContent = 'Editar';
-      editButton.onclick = () => window.location.href = `/admin/contents/edit/${content.id}`;
+      editButton.onclick = () => window.location.href = `/admin/contents/edit/${content._id}`;
+
+      editButton.style.marginRight = '10px';
 
       const deleteButton = document.createElement('button');
       deleteButton.className = 'btn btn-danger btn-sm delete-btn';
       deleteButton.textContent = 'Excluir';
-      deleteButton.onclick = () => handleDelete(content.id, row);
+      deleteButton.onclick = () => handleDelete(content._id, row);
 
       actionsCell.appendChild(editButton);
       actionsCell.appendChild(deleteButton);
@@ -120,7 +131,7 @@
 
   // Faz a requisição DELETE para a API
   async function deleteContent(contentId) {
-    const response = await fetch(`/admin/contents/${contentId}`, {
+    const response = await fetch(`/contents/content/${contentId}`, {
       method: 'DELETE',
     });
 

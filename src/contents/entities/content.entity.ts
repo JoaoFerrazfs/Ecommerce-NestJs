@@ -11,7 +11,7 @@ import { ObjectId } from 'mongodb';
 @Entity('contents')
 export class Content extends BaseEntity {
   @ObjectIdColumn()
-  id: ObjectId;
+  _id: ObjectId;
 
   @Column()
   name: string;

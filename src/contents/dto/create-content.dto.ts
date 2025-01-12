@@ -4,7 +4,7 @@ export class CreateContentDto {
 
   @IsNotEmpty({ message: 'O campo é title é um campo obrigatório' })
   @MinLength(3, { message: 'O campo title precisa ter no mínimo 3 letras' })
-  title: string;
+  name: string;
 
   @IsNotEmpty({ message: 'O campo banners é um campo obrigatório' })
   @IsArray({ message: 'O campo banners é um campo array de ids' })
