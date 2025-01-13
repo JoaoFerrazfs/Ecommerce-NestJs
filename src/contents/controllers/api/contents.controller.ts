@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { ContentsService } from '../../services/contents.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Content } from '../../entities/content.entity';
@@ -12,8 +20,7 @@ export class ContentsController {
     @InjectRepository(Content)
     private readonly contentRepository: Repository<Content>,
     private readonly contentsService: ContentsService,
-  ) {
-  }
+  ) {}
 
   @Post('/create') async createContent(@Body() data: CreateContentDto) {
     return { data: await this.contentsService.createContent(data) };
@@ -27,7 +34,10 @@ export class ContentsController {
     return { data: await this.contentsService.find(id) };
   }
 
-  @Patch('/:id') async update(@Body() data: UpdateContentDto, @Param('id') id: string) {
+  @Patch('/:id') async update(
+    @Body() data: UpdateContentDto,
+    @Param('id') id: string,
+  ) {
     return { data: await this.contentsService.update(data, id) };
   }
 

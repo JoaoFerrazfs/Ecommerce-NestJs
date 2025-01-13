@@ -18,7 +18,7 @@ async function bootstrap() {
       partialsDir: join(__dirname, '..', 'src', 'views', 'partials'),
       defaultLayout: join(__dirname, '..', 'src', 'views', 'layouts', 'main'),
       layoutsDir: join(__dirname, '..', 'src', 'views', 'layouts'),
-      helpers: COMPARISON
+      helpers: COMPARISON,
     }),
   );
 

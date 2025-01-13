@@ -2,8 +2,11 @@ import {
   Body,
   Controller,
   Delete,
-  Get, HttpCode, NotFoundException,
-  Param, Patch,
+  Get,
+  HttpCode,
+  NotFoundException,
+  Param,
+  Patch,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -18,20 +21,17 @@ import multerConfig from '../../../files/multer-config';
 
 @Controller(['api/banners'])
 export class BannerController {
-  constructor(
-    private readonly bannersService: BannersService,
-  ) {
-  }
+  constructor(private readonly bannersService: BannersService) {}
 
   @UseInterceptors(FileInterceptor('image', multerConfig))
   @HttpCode(204)
-  @Patch('/:id') async edit(
+  @Patch('/:id')
+  async edit(
     @Param('id') id: string,
     @UploadedFile() file: Express.Multer.File,
     @Body() { title }: UpdateBannerDto,
   ) {
-
-    let payload: { title: string, filename?: string } = { title };
+    let payload: { title: string; filename?: string } = { title };
     if (file?.filename) payload.filename = file.filename;
 
     await this.bannersService.update(id, payload);
@@ -51,15 +51,13 @@ export class BannerController {
     @UploadedFile() file: Express.Multer.File,
     @Body() { title }: CreateBannerDto,
   ) {
-
     return { data: await this.bannersService.saveBanner(file.filename, title) };
   }
 
   @Delete('/:id')
   @HttpCode(204)
   async delete(@Param('id') id: string) {
-
-    if (!await this.bannersService.deleteBanner(id)) {
+    if (!(await this.bannersService.deleteBanner(id))) {
       throw new NotFoundException('Aconteceu algum erro');
     }
     return { data: await this.bannersService.deleteBanner(id) };

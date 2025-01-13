@@ -21,7 +21,10 @@ export class AdminController {
     });
   }
 
-  @Get('/contents/edit/:id') async edit(@Res() res: Response, @Param('id') id: string) {
+  @Get('/contents/edit/:id') async edit(
+    @Res() res: Response,
+    @Param('id') id: string,
+  ) {
     return res.render(this.adminService.getVewPath('adminContentsCreate'), {
       layout: 'admin',
       isEdit: true,
@@ -41,11 +44,13 @@ export class AdminController {
     });
   }
 
-  @Get('/banners/edit/:id') async editBanner(@Res() res: Response, @Param('id') id: string) {
+  @Get('/banners/edit/:id') async editBanner(
+    @Res() res: Response,
+    @Param('id') id: string,
+  ) {
     return res.render(this.adminService.getVewPath('adminBannerCreate'), {
       layout: 'admin',
       id,
     });
   }
-
 }

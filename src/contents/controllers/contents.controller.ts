@@ -4,8 +4,7 @@ import { ContentsService } from '../services/contents.service';
 
 @Controller()
 export class ContentsController {
-  constructor(private readonly contentsService: ContentsService) {
-  }
+  constructor(private readonly contentsService: ContentsService) {}
 
   @Get('contents')
   contents(@Res() res: Response) {

@@ -27,7 +27,7 @@ import { AdminModule } from './admin/admin.module';
       rootPath: join(__dirname, '..', 'public'),
       serveRoot: '/public',
     }),
-    ConfigModule.forRoot({isGlobal: true}),
+    ConfigModule.forRoot({ isGlobal: true }),
     AdminModule,
   ],
   controllers: [],

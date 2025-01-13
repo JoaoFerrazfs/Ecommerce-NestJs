@@ -8,25 +8,25 @@ import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class BannersService {
-
   constructor(
     @InjectRepository(Banner)
     private readonly bannerRepository: Repository<Banner>,
     private configService: ConfigService,
-  ) {
-  }
+  ) {}
 
   list(): Promise<Banner[]> {
     return this.bannerRepository.find();
   }
 
   findById(id: string): Promise<Banner | null> {
-    return this.bannerRepository.findOneBy({ _id:  new ObjectId(id) });
+    return this.bannerRepository.findOneBy({ _id: new ObjectId(id) });
   }
 
-  async update(id: string, payload: Partial<UpdateBannerDto> & { filename?: string }): Promise<Boolean> {
-
-    const updatePayload = this.buildPayload(payload.title, payload.filename)
+  async update(
+    id: string,
+    payload: Partial<UpdateBannerDto> & { filename?: string },
+  ): Promise<Boolean> {
+    const updatePayload = this.buildPayload(payload.title, payload.filename);
 
     const result = await this.bannerRepository.update(id, updatePayload);
 
@@ -36,7 +36,7 @@ export class BannersService {
   }
 
   saveBanner(fileName: string, title: string): Promise<Banner> {
-    const updatePayload = this.buildPayload(title, fileName)
+    const updatePayload = this.buildPayload(title, fileName);
 
     const banner = this.bannerRepository.create(updatePayload);
 
@@ -57,10 +57,12 @@ export class BannersService {
     return `${protocol}://${host}:${port}/public/uploads/files/${fileName}`;
   }
 
-  buildPayload(title?: string, filename?: string): Partial<UpdateBannerDto> & { image: string } {
+  buildPayload(
+    title?: string,
+    filename?: string,
+  ): Partial<UpdateBannerDto> & { image: string } {
     const image = filename ? this.buildImageURL(filename) : undefined;
 
     return { ...(title && { title }), ...(image && { image }) };
   }
 }
-
