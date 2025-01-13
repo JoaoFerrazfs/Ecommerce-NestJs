@@ -9,10 +9,14 @@ describe('AdminService', () => {
       providers: [AdminService],
     }).compile();
 
-    service = module.get<AdminService>(AdminService);
+    service = module.get(AdminService);
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+  it('should return complete path', () => {
+    // Actions
+    const actual = service.getVewPath('admin');
+
+    //Assertions
+    expect(actual).toBe('contents/views/admin');
   });
 });
