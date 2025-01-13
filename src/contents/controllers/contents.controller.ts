@@ -6,13 +6,8 @@ import { ContentsService } from '../services/contents.service';
 export class ContentsController {
   constructor(private readonly contentsService: ContentsService) {}
 
-  @Get('contents')
+  @Get(['contents', ''])
   contents(@Res() res: Response) {
-    return res.render(this.contentsService.getVewPath('home'));
-  }
-
-  @Get()
-  index(@Res() res: Response) {
     return res.render(this.contentsService.getVewPath('home'));
   }
 }

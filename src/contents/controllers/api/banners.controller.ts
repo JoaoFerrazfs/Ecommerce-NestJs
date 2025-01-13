@@ -35,7 +35,6 @@ export class BannerController {
     if (file?.filename) payload.filename = file.filename;
 
     await this.bannersService.update(id, payload);
-
     return;
   }
 
@@ -60,7 +59,8 @@ export class BannerController {
     if (!(await this.bannersService.deleteBanner(id))) {
       throw new NotFoundException('Aconteceu algum erro');
     }
-    return { data: await this.bannersService.deleteBanner(id) };
+
+    return;
   }
 
   @Get('/list')
