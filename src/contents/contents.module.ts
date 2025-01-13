@@ -5,15 +5,15 @@ import { Content } from './entities/content.entity';
 import { Banner } from './entities/banner.entity';
 import { BannersService } from './services/banners.service';
 import { ConfigService } from '@nestjs/config';
-import { ContentsController } from './controllers/ecommerce/contents.controller';
-import { AdminContentsController } from './controllers/admin/admin-contents.controller';
-import { AdminBannerController } from './controllers/admin/admin-banners.controller';
+import { ContentsController } from './controllers/contents.controller';
+import { BannerController as ApiBannersController } from './controllers/api/banners.controller';
+import { ContentsController as ApiContentsController } from './controllers/api/contents.controller';
 
 @Module({
   controllers: [
     ContentsController,
-    AdminContentsController,
-    AdminBannerController,
+    ApiContentsController,
+    ApiBannersController,
   ],
   providers: [ContentsService, BannersService, ConfigService],
   imports: [TypeOrmModule.forFeature([Content, Banner])],

@@ -3,8 +3,8 @@
 <div class="container mt-4">
   <section id="conteudos">
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <h2 class="mb-0">{{#if banner}}Editar Banner{{else}}Cadastro de Banner{{/if}}</h2>
-      <a href="/admin/banners" class="btn btn-info btn-sm">Listar banners</a>
+      <h2 class="mb-0">{{#if id}}Editar Banner{{else}}Cadastro de Banner{{/if}}</h2>
+      <a href="/banners" class="btn btn-info btn-sm">Listar banners</a>
     </div>
 
     <form id="bannerForm" enctype="multipart/form-data">
@@ -14,18 +14,15 @@
                class="form-control"
                id="title"
                name="title"
-               placeholder="Digite o título do banner"
-               value="{{#if banner}}{{banner.title}}{{/if}}">
+               placeholder="Digite o título do banner">
       </div>
       <div class="mb-3">
         <label for="image" class="form-label">Imagem</label>
         <input type="file" class="form-control" id="image" name="image">
-        {{#if banner}}
-          <div class="mt-2">
-            <img src="{{banner.image}}" alt="{{banner.title}}" class="img-thumbnail" style="max-width: 100px;">
-            <p class="text-muted">Imagem atual</p>
-          </div>
-        {{/if}}
+        <div id="current-image-container" class="mt-2" style="display: none;">
+          <img id="current-image" src="" alt="" class="img-thumbnail" style="max-width: 100px;">
+          <p class="text-muted">Imagem atual</p>
+        </div>
       </div>
       <button type="submit" class="btn btn-primary">{{#if banner}}Salvar Alterações{{else}}Cadastrar{{/if}}</button>
     </form>
@@ -35,13 +32,45 @@
 {{> admin-footer }}
 
 <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const bannerId = window.location.pathname.split('/').pop(); // Obtém o ID do banner da URL (se disponível)
+    if (bannerId !== 'create') {
+      fetchBanner(bannerId); // Chama a função para buscar os dados do banner
+    }
+  });
+
+  // Função para buscar os dados do banner na API
+  async function fetchBanner(bannerId) {
+    try {
+      console.log(bannerId)
+      const response = await fetch(`${window.location.origin}/api/banners/find/${bannerId}`);
+      const data = await response.json();
+
+      if (data && data.data) {
+        const banner = data.data;
+        // Preenche os campos do formulário com os dados do banner
+        document.getElementById('title').value = banner.title;
+        const currentImageContainer = document.getElementById('current-image-container');
+        const currentImage = document.getElementById('current-image');
+        currentImage.src = banner.image;
+        currentImageContainer.style.display = 'block'; // Exibe a imagem atual
+      } else {
+        alert('Não foi possível carregar os dados do banner.');
+      }
+    } catch (error) {
+      console.error('Erro ao carregar os dados do banner:', error);
+      alert('Erro ao carregar os dados do banner.');
+    }
+  }
+
+  // Função para lidar com o envio do formulário
   document.getElementById('bannerForm').addEventListener('submit', function(event) {
     event.preventDefault();
 
     const formData = new FormData(this);
 
-    const isEditing = {{#if banner}}true{{else}}false{{/if}};
-    const url = isEditing ? `/admin/banners/{{id}}` : '/admin/banners/create';
+    const isEditing = {{#if id}}true{{else}}false{{/if}};
+    const url = isEditing ? `/api/banners/{{id}}` : '/api/banners/create';
     const method = isEditing ? 'PATCH' : 'POST';
 
     fetch(url, { method: method, body: formData })
@@ -54,7 +83,6 @@
         if (!isEditing) document.getElementById('bannerForm').reset();
       })
       .catch(error => {
-        console.error(error);
         console.error('Erro:', error);
         alert(error.message);
       });

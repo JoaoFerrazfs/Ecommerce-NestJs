@@ -21,9 +21,7 @@ export class BannersService {
   }
 
   findById(id: string): Promise<Banner | null> {
-    const objectId = new ObjectId(id);
-
-    return this.bannerRepository.findOneBy({ _id: objectId });
+    return this.bannerRepository.findOneBy({ _id:  new ObjectId(id) });
   }
 
   async update(id: string, payload: Partial<UpdateBannerDto> & { filename?: string }): Promise<Boolean> {

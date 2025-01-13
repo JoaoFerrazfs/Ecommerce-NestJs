@@ -78,14 +78,14 @@
 
     // Função para carregar banners da API
     async function fetchBanners() {
-      const response = await fetch('http://localhost:3000/admin/banners/list');
+      const response = await fetch(`${window.location.origin}/api/banners/list`);
       const data = await response.json();
       return data.data;
     }
 
     // Função para buscar os dados do conteúdo quando estamos editando
     async function fetchContentById(id) {
-      const response = await fetch(`http://localhost:3000/contents/content/${id}`);
+      const response = await fetch(`${window.location.origin}/api/contents/${id}`);
       if (response.ok) {
         return await response.json();
       } else {
@@ -185,8 +185,8 @@
       };
 
       const endpoint = contentId
-        ? `http://localhost:3000/contents/content/${contentId}`
-        : 'http://localhost:3000/admin/contents/create';
+        ? `${window.location.origin}/api/contents/${contentId}`
+        : `${window.location.origin}/api/contents/create`;
 
       try {
         const response = await fetch(endpoint, {

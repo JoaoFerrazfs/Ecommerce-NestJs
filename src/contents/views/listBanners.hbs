@@ -4,10 +4,10 @@
   <section id="conteudos">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h2 class="mb-0">Lista de Banners</h2>
-      <a href="/admin/banners/create" class="btn btn-info btn-sm">Criar um banner</a>
+      <a href="/banners/create" class="btn btn-info btn-sm">Criar um banner</a>
     </div>
 
-    <table class="table table-bordered">
+    <table class="table table-bordered" id="banners-table">
       <thead>
       <tr>
         <th>ID</th>
@@ -17,25 +17,7 @@
       </tr>
       </thead>
       <tbody>
-      {{#each banners}}
-        <tr data-id="{{this._id}}">
-          <td>{{this._id}}</td>
-          <td>{{this.title}}</td>
-          <td>
-            <img src="{{this.image}}" alt="Imagem de {{this.title}}" class="img-thumbnail" style="max-width: 100px;">
-          </td>
-          <td>
-            <form action="/admin/banners/edit/{{this._id}}" method="GET" style="display: inline;">
-              <button type="submit" class="btn btn-warning btn-sm" aria-label="Editar {{this.title}}">
-                Editar
-              </button>
-            </form>
-            <button class="btn btn-danger btn-sm delete-btn" aria-label="Excluir {{this.title}}">
-              Excluir
-            </button>
-          </td>
-        </tr>
-      {{/each}}
+      <!-- Os banners serão carregados aqui dinamicamente -->
       </tbody>
     </table>
   </section>
@@ -46,13 +28,62 @@
 <script>
   // Função principal para inicializar eventos
   document.addEventListener('DOMContentLoaded', () => {
-    initDeleteButtons();
+    fetchBanners();
   });
+
+  // Função para fazer a requisição e carregar os banners
+  async function fetchBanners() {
+    try {
+      const response = await fetch(`${window.location.origin}/api/banners/list`);
+      const data = await response.json();
+
+      if (data && data.data) {
+        renderBanners(data.data);
+      } else {
+        alert('Não foi possível carregar os banners.');
+      }
+    } catch (error) {
+      console.error('Erro ao carregar banners:', error);
+      alert('Erro ao carregar os banners.');
+    }
+  }
+
+  // Função para renderizar os banners na tabela
+  function renderBanners(banners) {
+    const tbody = document.querySelector('#banners-table tbody');
+    tbody.innerHTML = ''; // Limpa o conteúdo atual da tabela
+
+    banners.forEach(banner => {
+      const tr = document.createElement('tr');
+      tr.setAttribute('data-id', banner._id);
+
+      tr.innerHTML = `
+        <td>${banner._id}</td>
+        <td>${banner.title}</td>
+        <td>
+          <img src="${banner.image}" alt="Imagem de ${banner.title}" class="img-thumbnail" style="max-width: 100px;">
+        </td>
+        <td>
+          <form action="/admin/banners/edit/${banner._id}" method="GET" style="display: inline;">
+            <button type="submit" class="btn btn-warning btn-sm" aria-label="Editar ${banner.title}">
+              Editar
+            </button>
+          </form>
+          <button class="btn btn-danger btn-sm delete-btn" aria-label="Excluir ${banner.title}">
+            Excluir
+          </button>
+        </td>
+      `;
+
+      tbody.appendChild(tr);
+    });
+
+    initDeleteButtons(); // Inicializa os eventos dos botões de exclusão
+  }
 
   // Inicializa os eventos dos botões de exclusão
   function initDeleteButtons() {
     const deleteButtons = document.querySelectorAll('.delete-btn');
-
     deleteButtons.forEach(button => {
       button.addEventListener('click', handleDelete);
     });
@@ -79,7 +110,7 @@
 
   // Faz a requisição DELETE para a API
   async function deleteBanner(bannerId) {
-    const response = await fetch(`/admin/banners/${bannerId}`, {
+    const response = await fetch(`${window.location.origin}/api/banners/${bannerId}`, {
       method: 'DELETE',
     });
 

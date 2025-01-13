@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { Content } from './contents/entities/content.entity';
 import { Banner } from './contents/entities/banner.entity';
 import { ContentsModule } from './contents/contents.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { ContentsModule } from './contents/contents.module';
       serveRoot: '/public',
     }),
     ConfigModule.forRoot({isGlobal: true}),
+    AdminModule,
   ],
   controllers: [],
   providers: [],

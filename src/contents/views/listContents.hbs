@@ -34,7 +34,7 @@
   // Carrega os conteúdos da API
   async function loadContents() {
     try {
-      const response = await fetch('http://localhost:3000/admin/contents/list');
+      const response = await fetch(`${window.location.origin}/api/contents/list`);
       if (!response.ok) {
         throw new Error('Erro ao carregar os conteúdos');
       }
@@ -131,7 +131,7 @@
 
   // Faz a requisição DELETE para a API
   async function deleteContent(contentId) {
-    const response = await fetch(`/contents/content/${contentId}`, {
+    const response = await fetch(`${window.location.origin}/api/contents/${contentId}`, {
       method: 'DELETE',
     });
 
