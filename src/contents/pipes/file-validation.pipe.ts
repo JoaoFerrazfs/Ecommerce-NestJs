@@ -11,7 +11,7 @@ export class FileValidationPipe implements PipeTransform {
     }
 
     const isValidMime = this.ALLOWED_MIME_TYPES.some((mime) => {
-      return file.mimetype !== mime;
+      return file.mimetype === mime;
     });
 
     if (!isValidMime) {
