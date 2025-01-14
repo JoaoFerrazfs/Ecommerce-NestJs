@@ -1,10 +1,5 @@
 import { BannersService } from '../../../src/contents/services/banners.service';
-import { Banner } from '../../../src/contents/entities/banner.entity';
-
-export const mockedBanner = {
-  title: 'test',
-  image: 'https://localhost/image.jpg',
-} as Banner;
+import { mockedBanner } from '../entities/mock.banner.entity';
 
 export const BANNERS_SERVICE = {
   provide: BannersService,

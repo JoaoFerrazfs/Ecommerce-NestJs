@@ -12,33 +12,33 @@ import { UpdateContentDto } from '../dto/update-content.dto';
 export class ContentsService implements RenderContract {
   PATH_VIEWS = 'contents/views/';
 
-  constructor(
+  public constructor(
     @InjectRepository(Content)
     private readonly contentRepository: Repository<Content>,
     @InjectRepository(Banner)
     private readonly bannerRepository: Repository<Banner>,
   ) {}
 
-  getVewPath(fileName: string) {
+  public getVewPath(fileName: string) {
     return this.PATH_VIEWS + fileName;
   }
 
-  async list() {
+  public async list() {
     return await this.contentRepository.find();
   }
 
-  async delete(id: string) {
+  public async delete(id: string) {
     const result = await this.contentRepository.delete(new ObjectId(id));
 
     return Boolean(result.affected);
   }
 
-  async find(id: string) {
+  public async findById(id: string) {
     const objectId = new ObjectId(id);
     return this.contentRepository.findOneBy({ _id: objectId });
   }
 
-  async createContent(data: CreateContentDto) {
+  public async createContent(data: CreateContentDto) {
     const banners = await Promise.all(
       data.banners.map(async (bannerId) => {
         return await this.bannerRepository.findOneBy({
@@ -54,7 +54,7 @@ export class ContentsService implements RenderContract {
     return await this.contentRepository.save(content);
   }
 
-  async update(data: UpdateContentDto, id: string) {
+  public async update(data: UpdateContentDto, id: string) {
     const banners = await Promise.all(
       data.banners.map(async (bannerId) => {
         return await this.bannerRepository.findOneBy({

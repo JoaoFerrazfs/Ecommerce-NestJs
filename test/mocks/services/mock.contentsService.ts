@@ -1,19 +1,14 @@
 import { ContentsService } from '../../../src/contents/services/contents.service';
-import { Content } from '../../../src/contents/entities/content.entity';
-import { mockedBanner } from './mock.bannerService';
-
-const content = {
-  name: 'test',
-  banners: [mockedBanner],
-} as Content;
+import { mockedContent } from '../entities/mock.content.entity';
 
 export const CONTENTS_SERVICE = {
   provide: ContentsService,
   useValue: {
-    createContent: jest.fn().mockResolvedValue(content),
-    find: jest.fn().mockResolvedValue(content),
+    createContent: jest.fn().mockResolvedValue(mockedContent),
+    find: jest.fn().mockResolvedValue(mockedContent),
     delete: jest.fn().mockResolvedValue(true),
-    update: jest.fn().mockResolvedValue(content),
-    list: jest.fn().mockResolvedValue([content]),
+    update: jest.fn().mockResolvedValue(mockedContent),
+    findById: jest.fn().mockResolvedValue(mockedContent),
+    list: jest.fn().mockResolvedValue([mockedContent]),
   },
 };

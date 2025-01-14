@@ -31,7 +31,7 @@ export class ContentsController {
   }
 
   @Get('/:id') async find(@Param('id') id: string) {
-    return { data: await this.contentsService.find(id) };
+    return { data: await this.contentsService.findById(id) };
   }
 
   @Patch('/:id') async update(

@@ -5,7 +5,7 @@ import { RenderContract } from '../../contracts/services/render-contract';
 export class AdminService implements RenderContract {
   PATH_VIEWS = 'contents/views/';
 
-  getVewPath(fileName: string) {
+  public getVewPath(fileName: string) {
     return this.PATH_VIEWS + fileName;
   }
 }

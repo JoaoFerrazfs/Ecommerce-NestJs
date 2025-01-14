@@ -8,21 +8,21 @@ import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class BannersService {
-  constructor(
+  public constructor(
     @InjectRepository(Banner)
     private readonly bannerRepository: Repository<Banner>,
     private configService: ConfigService,
   ) {}
 
-  list(): Promise<Banner[]> {
+  public list(): Promise<Banner[]> {
     return this.bannerRepository.find();
   }
 
-  findById(id: string): Promise<Banner | null> {
+  public findById(id: string): Promise<Banner | null> {
     return this.bannerRepository.findOneBy({ _id: new ObjectId(id) });
   }
 
-  async update(
+  public async update(
     id: string,
     payload: Partial<UpdateBannerDto> & { filename?: string },
   ): Promise<Boolean> {
@@ -35,7 +35,7 @@ export class BannersService {
     return Boolean(result.affected);
   }
 
-  saveBanner(fileName: string, title: string): Promise<Banner> {
+  public saveBanner(fileName: string, title: string): Promise<Banner> {
     const updatePayload = this.buildPayload(title, fileName);
 
     const banner = this.bannerRepository.create(updatePayload);
@@ -43,13 +43,13 @@ export class BannersService {
     return this.bannerRepository.save(banner);
   }
 
-  async deleteBanner(id: string): Promise<Boolean> {
+  public async deleteBanner(id: string): Promise<Boolean> {
     const result = await this.bannerRepository.delete(id);
 
     return Boolean(result.affected);
   }
 
-  buildImageURL(fileName: string): string {
+  private buildImageURL(fileName: string): string {
     const protocol = this.configService.get('PROTOCOL', 'http');
     const host = this.configService.get('HOST', 'localhost');
     const port = this.configService.get('PORT', '3000');
@@ -57,7 +57,7 @@ export class BannersService {
     return `${protocol}://${host}:${port}/public/uploads/files/${fileName}`;
   }
 
-  buildPayload(
+  private buildPayload(
     title?: string,
     filename?: string,
   ): Partial<UpdateBannerDto> & { image: string } {

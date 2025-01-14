@@ -15,7 +15,6 @@ describe('Api Banners Controller', () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ContentsController],
       providers: [
-        ContentsService,
         MockBannerService,
         MockContentsRepository,
         MockBannersRepository,
@@ -67,7 +66,7 @@ describe('Api Banners Controller', () => {
     });
   });
 
-  it('should find a banners', async () => {
+  it('should find a banner', async () => {
     // Actions
     const actual = await controller.find('123');
 
