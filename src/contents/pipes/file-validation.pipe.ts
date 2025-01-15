@@ -6,9 +6,7 @@ export class FileValidationPipe implements PipeTransform {
   ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/jpg'];
 
   transform(file: any, metadata: ArgumentMetadata) {
-    if (!file) {
-      throw new BadRequestException('Nenhum arquivo enviado.');
-    }
+    if (!file) return undefined;
 
     const isValidMime = this.ALLOWED_MIME_TYPES.some((mime) => {
       return file.mimetype === mime;

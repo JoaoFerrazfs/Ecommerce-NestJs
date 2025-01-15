@@ -1,19 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { FileValidationPipe } from './file-validation.pipe';
 import { ArgumentMetadata, BadRequestException } from '@nestjs/common';
+import { HasFile } from './has-file.pipe';
 
-describe('File Validation Pipe', () => {
-  let pipe: FileValidationPipe;
+describe('Has File Pipe', () => {
+  let pipe: HasFile;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [FileValidationPipe],
+      providers: [HasFile],
     }).compile();
 
-    pipe = module.get(FileValidationPipe);
+    pipe = module.get(HasFile);
   });
 
-  it('should validate a file', async () => {
+  it('should validate if has file', async () => {
     // Set
     const file = { mimetype: 'image/jpg' } as Express.Multer.File;
     const metadata = {} as ArgumentMetadata;
@@ -30,22 +30,10 @@ describe('File Validation Pipe', () => {
     const file = undefined;
     const metadata = {} as ArgumentMetadata;
 
-    // Actions
-    const actual = pipe.transform(file, metadata);
-
-    // Assertions
-    expect(actual).toBeUndefined();
-  });
-
-  it('should throw a BadRequestException for an invalid file type', async () => {
-    // Arrange
-    const file = { mimetype: 'image/webp' } as Express.Multer.File;
-    const metadata = {} as ArgumentMetadata;
-
     // Actions & Assertions
     expect(() => pipe.transform(file, metadata)).toThrow(BadRequestException);
     expect(() => pipe.transform(file, metadata)).toThrow(
-      'O arquivo precisa ser um JPG, JPEG ou PNG.',
+      'Nenhum arquivo enviado.',
     );
   });
 });

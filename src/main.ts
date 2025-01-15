@@ -35,10 +35,10 @@ async function bootstrap() {
     .setTitle('Ecommerce NestJS')
     .setVersion('1.0')
     .addServer('http://localhost:3000/')
-    .setBasePath('/api')
     .build();
 
-  const documentFactory = ():OpenAPIObject => SwaggerModule.createDocument(app, config, {include: [ContentsModule]});
+  const documentFactory = (): OpenAPIObject =>
+    SwaggerModule.createDocument(app, config, { include: [ContentsModule] });
 
   SwaggerModule.setup('oas', app, documentFactory, {
     jsonDocumentUrl: 'OAS/json',

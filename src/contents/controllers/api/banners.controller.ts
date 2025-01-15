@@ -27,6 +27,7 @@ import {
   UpdateBanner,
 } from '../../oas/banner.oas';
 import { Banner } from '../../entities/banner.entity';
+import { HasFile } from '../../pipes/has-file.pipe';
 
 @Controller(['api/banners'])
 export class BannerController {
@@ -38,7 +39,7 @@ export class BannerController {
   @Patch('/:id')
   async edit(
     @Param('id') id: string,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile(FileValidationPipe) file: Express.Multer.File,
     @Body() { title }: UpdateBannerDto,
   ): Promise<void> {
     let payload: { title: string; filename?: string } = { title };
@@ -61,9 +62,8 @@ export class BannerController {
   @CreateBanner()
   @Post('/create')
   @UseInterceptors(FileInterceptor('image', multerConfig))
-  @UsePipes(FileValidationPipe)
   async store(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile(HasFile, FileValidationPipe) file: Express.Multer.File,
     @Body() { title }: CreateBannerDto,
   ): Promise<{ data: Banner }> {
     return { data: await this.bannersService.saveBanner(file.filename, title) };

@@ -45,13 +45,16 @@ export function CreateContent() {
               banners: {
                 type: 'array',
                 items: {
-                  type: 'object', required: ['title', 'image'],
+                  type: 'object',
+                  required: ['title', 'image'],
                   properties: {
-                    _id: { type: 'string', example: '677ecdf5b0b5e2594e8e562d' },
+                    _id: {
+                      type: 'string',
+                      example: '677ecdf5b0b5e2594e8e562d',
+                    },
                     title: { type: 'string', example: 'Melhores ofertas' },
                     image: { type: 'string', example: 'https://image.com' },
                   },
-
                 },
               },
             },
@@ -79,18 +82,20 @@ export function ListContents() {
                 banners: {
                   type: 'array',
                   items: {
-                    type: 'object', required: ['title', 'image'],
+                    type: 'object',
+                    required: ['title', 'image'],
                     properties: {
-                      _id: { type: 'string', example: '677ecdf5b0b5e2594e8e562d' },
+                      _id: {
+                        type: 'string',
+                        example: '677ecdf5b0b5e2594e8e562d',
+                      },
                       title: { type: 'string', example: 'Melhores ofertas' },
                       image: { type: 'string', example: 'https://image.com' },
                     },
-
                   },
                 },
               },
             },
-
           },
         },
       },
@@ -115,13 +120,16 @@ export function FindContent() {
               banners: {
                 type: 'array',
                 items: {
-                  type: 'object', required: ['title', 'image'],
+                  type: 'object',
+                  required: ['title', 'image'],
                   properties: {
-                    _id: { type: 'string', example: '677ecdf5b0b5e2594e8e562d' },
+                    _id: {
+                      type: 'string',
+                      example: '677ecdf5b0b5e2594e8e562d',
+                    },
                     title: { type: 'string', example: 'Melhores ofertas' },
                     image: { type: 'string', example: 'https://image.com' },
                   },
-
                 },
               },
             },
@@ -162,13 +170,16 @@ export function UpdateContent() {
               banners: {
                 type: 'array',
                 items: {
-                  type: 'object', required: ['title', 'image'],
+                  type: 'object',
+                  required: ['title', 'image'],
                   properties: {
-                    _id: { type: 'string', example: '677ecdf5b0b5e2594e8e562d' },
+                    _id: {
+                      type: 'string',
+                      example: '677ecdf5b0b5e2594e8e562d',
+                    },
                     title: { type: 'string', example: 'Melhores ofertas' },
                     image: { type: 'string', example: 'https://image.com' },
                   },
-
                 },
               },
             },

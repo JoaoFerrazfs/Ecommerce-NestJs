@@ -17,8 +17,7 @@ export class ContentsService implements RenderContract {
     private readonly contentRepository: Repository<Content>,
     @InjectRepository(Banner)
     private readonly bannerRepository: Repository<Banner>,
-  ) {
-  }
+  ) {}
 
   public getVewPath(fileName: string): string {
     return this.PATH_VIEWS + fileName;

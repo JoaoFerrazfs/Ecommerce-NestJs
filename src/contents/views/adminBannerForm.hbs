@@ -42,7 +42,6 @@
   // Função para buscar os dados do banner na API
   async function fetchBanner(bannerId) {
     try {
-      console.log(bannerId)
       const response = await fetch(`${window.location.origin}/api/banners/find/${bannerId}`);
       const data = await response.json();
 
