@@ -84,7 +84,7 @@ describe('Api Banners Controller', () => {
 
     // Assertions
     await expect(actual).rejects.toEqual(
-      new NotFoundException('Aconteceu algum erro'),
+      new NotFoundException('Não foi possivel realizar a deleção'),
     );
   });
 

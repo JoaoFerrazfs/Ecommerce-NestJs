@@ -16,64 +16,18 @@ const idParam = {
   example: '677ecdf5b0b5e2594e8e562d',
 } as ApiParamOptions;
 
-export function UpdateContent() {
-  return applyDecorators(
-    ApiParam(idParam),
-    ApiConsumes('multipart/form-data'),
-    ApiBody({
-      schema: {
-        type: 'object',
-        properties: {
-          title: { type: 'string', example: 'Melhores ofertas' },
-          photo: {
-            type: 'string',
-            format: 'binary',
-            description: 'The photo to upload',
-          },
-        },
-      },
-    } as ApiBodyOptions),
-  );
-}
-
-export function FindContent() {
-  return applyDecorators(
-    ApiParam(idParam),
-    ApiResponse({
-      status: 200,
-      schema: {
-        required: ['data'],
-        properties: {
-          data: {
-            type: 'object',
-            properties: {
-              _id: { type: 'string', example: '677ecdf5b0b5e2594e8e562d' },
-              title: { type: 'string', example: 'Melhores ofertas' },
-              image: { type: 'string', example: 'https://placehold.it' },
-            },
-          },
-        },
-      },
-    } as ApiResponseOptions),
-    ApiResponse({
-      status: 404,
-    } as ApiResponseOptions),
-  );
-}
-
 export function CreateContent() {
   return applyDecorators(
-    ApiConsumes('multipart/form-data'),
     ApiBody({
       schema: {
         type: 'object',
-        required: ['title', 'photo'],
+        required: ['name', 'banners'],
         properties: {
-          title: { type: 'string', example: 'Melhores ofertas' },
-          photo: {
-            type: 'string',
-            format: 'binary',
+          name: { type: 'string', example: 'Melhores ofertas' },
+          banners: {
+            type: 'array',
             description: 'The photo to upload',
+            example: ['677ec5eeb8fc6b91ab73fede'],
           },
         },
       },
@@ -85,28 +39,26 @@ export function CreateContent() {
         properties: {
           data: {
             type: 'object',
-            required: ['_id', 'title', 'image'],
+            required: ['_id', 'name', 'banners'],
             properties: {
               _id: { type: 'string', example: '677ecdf5b0b5e2594e8e562d' },
-              title: { type: 'string', example: 'Melhores ofertas' },
-              image: { type: 'string', example: 'https://placehold.it' },
+              name: { type: 'string', example: 'Melhores ofertas' },
+              banners: {
+                type: 'array',
+                items: {
+                  type: 'object', required: ['title', 'image'],
+                  properties: {
+                    _id: { type: 'string', example: '677ecdf5b0b5e2594e8e562d' },
+                    title: { type: 'string', example: 'Melhores ofertas' },
+                    image: { type: 'string', example: 'https://image.com' },
+                  },
+
+                },
+              },
             },
           },
         },
       },
-    } as ApiResponseOptions),
-  );
-}
-
-export function DeleteContent() {
-  return applyDecorators(
-    ApiParam(idParam),
-    ApiResponse({
-      status: 204,
-    } as ApiResponseOptions),
-    ApiResponse({
-      status: 400,
-      example: 'Não foi possivel realizar a deleção',
     } as ApiResponseOptions),
   );
 }
@@ -121,20 +73,116 @@ export function ListContents() {
           data: {
             type: 'array',
             items: {
-              type: 'object',
-              required: ['_id', 'title', 'image'],
+              required: ['_id', 'name', 'banners'],
               properties: {
                 _id: { type: 'string', example: '677ecdf5b0b5e2594e8e562d' },
-                title: { type: 'string', example: 'Melhores ofertas' },
-                image: { type: 'string', example: 'https://placehold.it' },
+                name: { type: 'string', example: 'Melhores ofertas' },
+                banners: {
+                  type: 'array',
+                  items: {
+                    type: 'object', required: ['title', 'image'],
+                    properties: {
+                      _id: { type: 'string', example: '677ecdf5b0b5e2594e8e562d' },
+                      title: { type: 'string', example: 'Melhores ofertas' },
+                      image: { type: 'string', example: 'https://image.com' },
+                    },
+
+                  },
+                },
+              },
+            },
+
+          },
+        },
+      },
+    } as ApiResponseOptions),
+  );
+}
+
+export function FindContent() {
+  return applyDecorators(
+    ApiParam(idParam),
+    ApiResponse({
+      status: 200,
+      schema: {
+        required: ['data'],
+        properties: {
+          data: {
+            type: 'object',
+            required: ['_id', 'name', 'banners'],
+            properties: {
+              _id: { type: 'string', example: '677ecdf5b0b5e2594e8e562d' },
+              name: { type: 'string', example: 'Melhores ofertas' },
+              banners: {
+                type: 'array',
+                items: {
+                  type: 'object', required: ['title', 'image'],
+                  properties: {
+                    _id: { type: 'string', example: '677ecdf5b0b5e2594e8e562d' },
+                    title: { type: 'string', example: 'Melhores ofertas' },
+                    image: { type: 'string', example: 'https://image.com' },
+                  },
+
+                },
               },
             },
           },
         },
       },
     } as ApiResponseOptions),
+  );
+}
+
+export function UpdateContent() {
+  return applyDecorators(
+    ApiParam(idParam),
+    ApiBody({
+      schema: {
+        type: 'object',
+        properties: {
+          name: { type: 'string', example: 'Melhores ofertas' },
+          banners: {
+            type: 'array',
+            description: 'The photo to upload',
+            example: ['677ec5eeb8fc6b91ab73fede'],
+          },
+        },
+      },
+    } as ApiBodyOptions),
     ApiResponse({
-      status: 404,
+      status: 200,
+      schema: {
+        required: ['data'],
+        properties: {
+          data: {
+            type: 'object',
+            required: ['_id', 'name', 'banners'],
+            properties: {
+              _id: { type: 'string', example: '677ecdf5b0b5e2594e8e562d' },
+              name: { type: 'string', example: 'Melhores ofertas' },
+              banners: {
+                type: 'array',
+                items: {
+                  type: 'object', required: ['title', 'image'],
+                  properties: {
+                    _id: { type: 'string', example: '677ecdf5b0b5e2594e8e562d' },
+                    title: { type: 'string', example: 'Melhores ofertas' },
+                    image: { type: 'string', example: 'https://image.com' },
+                  },
+
+                },
+              },
+            },
+          },
+        },
+      },
     } as ApiResponseOptions),
+  );
+}
+
+export function DeleteContent() {
+  return applyDecorators(
+    ApiParam(idParam),
+    ApiResponse({ status: 204 } as ApiResponseOptions),
   );
 }

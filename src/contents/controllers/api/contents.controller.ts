@@ -2,7 +2,7 @@ import {
   Body,
   Controller,
   Delete,
-  Get,
+  Get, HttpCode,
   Param,
   Patch,
   Post,
@@ -13,35 +13,48 @@ import { Content } from '../../entities/content.entity';
 import { Repository } from 'typeorm';
 import { CreateContentDto } from '../../dto/create-content.dto';
 import { UpdateContentDto } from '../../dto/update-content.dto';
+import { CreateContent, DeleteContent, FindContent, ListContents, UpdateContent } from '../../oas/content.oas';
 
 @Controller('api/contents')
 export class ContentsController {
-  constructor(
+  public constructor(
     @InjectRepository(Content)
     private readonly contentRepository: Repository<Content>,
     private readonly contentsService: ContentsService,
-  ) {}
+  ) {
+  }
 
-  @Post('/create') async createContent(@Body() data: CreateContentDto) {
+  @CreateContent()
+  @Post('/create')
+  public async createContent(@Body() data: CreateContentDto): Promise<{ data: Content }> {
     return { data: await this.contentsService.createContent(data) };
   }
 
-  @Get('/list') async list() {
+  @ListContents()
+  @Get('/list')
+  public async list(): Promise<{ data: Content[] }> {
     return { data: await this.contentsService.list() };
   }
 
-  @Get('/:id') async find(@Param('id') id: string) {
+  @FindContent()
+  @Get('/:id')
+  public async find(@Param('id') id: string): Promise<{ data: Content } | null> {
     return { data: await this.contentsService.findById(id) };
   }
 
-  @Patch('/:id') async update(
+  @UpdateContent()
+  @Patch('/:id')
+  public async update(
     @Body() data: UpdateContentDto,
     @Param('id') id: string,
-  ) {
+  ): Promise<{ data: Content }> {
     return { data: await this.contentsService.update(data, id) };
   }
 
-  @Delete('/:id') async delete(@Param('id') id: string) {
+  @DeleteContent()
+  @Delete('/:id')
+  @HttpCode(204)
+  public async delete(@Param('id') id: string): Promise<{ data: Boolean }> {
     return { data: await this.contentsService.delete(id) };
   }
 }

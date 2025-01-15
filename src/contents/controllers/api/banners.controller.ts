@@ -20,19 +20,19 @@ import { BannersService } from '../../services/banners.service';
 import { UpdateBannerDto } from '../../dto/update-banner.dto';
 import multerConfig from '../../../files/multer-config';
 import {
-  CreateContent,
-  DeleteContent,
-  FindContent,
-  ListContents,
-  UpdateContent,
-} from '../../oas/content.oas';
+  CreateBanner,
+  DeleteBanner,
+  FindBanner,
+  ListBanners,
+  UpdateBanner,
+} from '../../oas/banner.oas';
 import { Banner } from '../../entities/banner.entity';
 
 @Controller(['api/banners'])
 export class BannerController {
   constructor(private readonly bannersService: BannersService) {}
 
-  @UpdateContent()
+  @UpdateBanner()
   @UseInterceptors(FileInterceptor('image', multerConfig))
   @HttpCode(204)
   @Patch('/:id')
@@ -48,7 +48,7 @@ export class BannerController {
     return;
   }
 
-  @FindContent()
+  @FindBanner()
   @Get('/find/:id')
   async findById(@Param('id') id: string): Promise<{ data: Banner }> {
     const banner = await this.bannersService.findById(id);
@@ -58,7 +58,7 @@ export class BannerController {
     return { data: banner };
   }
 
-  @CreateContent()
+  @CreateBanner()
   @Post('/create')
   @UseInterceptors(FileInterceptor('image', multerConfig))
   @UsePipes(FileValidationPipe)
@@ -69,7 +69,7 @@ export class BannerController {
     return { data: await this.bannersService.saveBanner(file.filename, title) };
   }
 
-  @DeleteContent()
+  @DeleteBanner()
   @Delete('/:id')
   @HttpCode(204)
   async delete(@Param('id') id: string): Promise<void> {
@@ -81,7 +81,7 @@ export class BannerController {
     return;
   }
 
-  @ListContents()
+  @ListBanners()
   @Get('/list')
   async listBanners(): Promise<{ data: Banner[] }> {
     return { data: await this.bannersService.list() };

@@ -1,8 +1,8 @@
 import { IsArray, IsNotEmpty, Matches, MinLength } from 'class-validator';
 
 export class CreateContentDto {
-  @IsNotEmpty({ message: 'O campo é title é um campo obrigatório' })
-  @MinLength(3, { message: 'O campo title precisa ter no mínimo 3 letras' })
+  @IsNotEmpty({ message: 'O campo é name é um campo obrigatório' })
+  @MinLength(3, { message: 'O campo name precisa ter no mínimo 3 letras' })
   name: string;
 
   @IsNotEmpty({ message: 'O campo banners é um campo obrigatório' })

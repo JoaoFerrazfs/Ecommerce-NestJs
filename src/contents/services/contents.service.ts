@@ -17,28 +17,29 @@ export class ContentsService implements RenderContract {
     private readonly contentRepository: Repository<Content>,
     @InjectRepository(Banner)
     private readonly bannerRepository: Repository<Banner>,
-  ) {}
+  ) {
+  }
 
-  public getVewPath(fileName: string) {
+  public getVewPath(fileName: string): string {
     return this.PATH_VIEWS + fileName;
   }
 
-  public async list() {
+  public async list(): Promise<Content[]> {
     return await this.contentRepository.find();
   }
 
-  public async delete(id: string) {
+  public async delete(id: string): Promise<Boolean> {
     const result = await this.contentRepository.delete(new ObjectId(id));
 
     return Boolean(result.affected);
   }
 
-  public async findById(id: string) {
+  public async findById(id: string): Promise<Content | null> {
     const objectId = new ObjectId(id);
     return this.contentRepository.findOneBy({ _id: objectId });
   }
 
-  public async createContent(data: CreateContentDto) {
+  public async createContent(data: CreateContentDto): Promise<Content> {
     const banners = await Promise.all(
       data.banners.map(async (bannerId) => {
         return await this.bannerRepository.findOneBy({
@@ -54,7 +55,7 @@ export class ContentsService implements RenderContract {
     return await this.contentRepository.save(content);
   }
 
-  public async update(data: UpdateContentDto, id: string) {
+  public async update(data: UpdateContentDto, id: string): Promise<Content> {
     const banners = await Promise.all(
       data.banners.map(async (bannerId) => {
         return await this.bannerRepository.findOneBy({
