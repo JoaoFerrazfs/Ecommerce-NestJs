@@ -5,7 +5,10 @@ import * as hbs from 'express-handlebars';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { COMPARISON } from './views/helpers/comparison';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
+import { BannerController } from './contents/controllers/api/banners.controller';
+import { ContentsController } from './contents/controllers/api/contents.controller';
+import { ContentsModule } from './contents/contents.module';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -32,10 +35,11 @@ async function bootstrap() {
     .setTitle('Ecommerce NestJS')
     .setVersion('1.0')
     .addServer('http://localhost:3000/')
-    .addTag('Ecommerce-NestJS')
+    .setBasePath('/api')
     .build();
 
-  const documentFactory = () => SwaggerModule.createDocument(app, config);
+  const documentFactory = ():OpenAPIObject => SwaggerModule.createDocument(app, config, {include: [ContentsModule]});
+
   SwaggerModule.setup('oas', app, documentFactory, {
     jsonDocumentUrl: 'OAS/json',
     customSiteTitle: 'Ecommerce Nest JS',

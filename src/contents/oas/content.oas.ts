@@ -2,7 +2,6 @@ import { applyDecorators } from '@nestjs/common';
 import {
   ApiBody,
   ApiBodyOptions,
-  ApiConsumes,
   ApiParam,
   ApiParamOptions,
   ApiResponse,
