@@ -3,7 +3,7 @@ import { PipeTransform, ArgumentMetadata } from '@nestjs/common';
 
 @Injectable()
 export class FileValidationPipe implements PipeTransform {
-  ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/jpg'];
+  ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
 
   transform(file: any, metadata: ArgumentMetadata) {
     if (!file) return undefined;
@@ -14,7 +14,7 @@ export class FileValidationPipe implements PipeTransform {
 
     if (!isValidMime) {
       throw new BadRequestException(
-        'O arquivo precisa ser um JPG, JPEG ou PNG.',
+        'O arquivo precisa ser um WEBP, JPG, JPEG ou PNG.',
       );
     }
 

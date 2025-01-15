@@ -3,7 +3,7 @@ import { RenderContract } from '../../contracts/services/render-contract';
 import { Content } from '../entities/content.entity';
 import { CreateContentDto } from '../dto/create-content.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { Banner } from '../entities/banner.entity';
 import { ObjectId } from 'mongodb';
 import { UpdateContentDto } from '../dto/update-content.dto';
@@ -36,6 +36,10 @@ export class ContentsService implements RenderContract {
   public async findById(id: string): Promise<Content | null> {
     const objectId = new ObjectId(id);
     return this.contentRepository.findOneBy({ _id: objectId });
+  }
+
+  public async where(query:  FindOptionsWhere<Content>[] | FindOptionsWhere<Content>): Promise<Content[]> {
+    return this.contentRepository.find({ where: query });
   }
 
   public async createContent(data: CreateContentDto): Promise<Content> {

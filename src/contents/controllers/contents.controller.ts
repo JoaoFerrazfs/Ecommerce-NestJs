@@ -6,10 +6,11 @@ import { ApiExcludeController } from '@nestjs/swagger';
 @ApiExcludeController()
 @Controller()
 export class ContentsController {
-  constructor(private readonly contentsService: ContentsService) {}
+  constructor(private readonly contentsService: ContentsService) {
+  }
 
-  @Get([''])
-  contents(@Res() res: Response) {
-    return res.render(this.contentsService.getVewPath('home'));
+  @Get(['']) async contents(@Res() res: Response) {
+    const content = await this.contentsService.where({ name: 'Home' });
+    return res.render(this.contentsService.getVewPath('home'), { banners: content[0].banners });
   }
 }
