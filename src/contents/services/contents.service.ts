@@ -38,8 +38,16 @@ export class ContentsService implements RenderContract {
     return this.contentRepository.findOneBy({ _id: objectId });
   }
 
-  public async where(query:  FindOptionsWhere<Content>[] | FindOptionsWhere<Content>): Promise<Content[]> {
+  public async where(
+    query: FindOptionsWhere<Content>[] | FindOptionsWhere<Content>,
+  ): Promise<Content[]> {
     return this.contentRepository.find({ where: query });
+  }
+
+  public async findOne(
+    query: FindOptionsWhere<Content>[] | FindOptionsWhere<Content>,
+  ): Promise<Content | null> {
+    return this.contentRepository.findOne({ where: query });
   }
 
   public async createContent(data: CreateContentDto): Promise<Content> {

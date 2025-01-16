@@ -9,6 +9,7 @@ import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 import { BannerController } from './contents/controllers/api/banners.controller';
 import { ContentsController } from './contents/controllers/api/contents.controller';
 import { ContentsModule } from './contents/contents.module';
+import { NotFoundExceptionFilter } from './filters/not-found-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -48,6 +49,7 @@ async function bootstrap() {
 
   // Validations
   app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalFilters(new NotFoundExceptionFilter());
 
   // Base config
   await app.listen(process.env.PORT ?? 3000);

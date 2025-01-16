@@ -7,11 +7,12 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ContentsService } from '../../services/contents.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Content } from '../../entities/content.entity';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { CreateContentDto } from '../../dto/create-content.dto';
 import { UpdateContentDto } from '../../dto/update-content.dto';
 import {
@@ -21,6 +22,7 @@ import {
   ListContents,
   UpdateContent,
 } from '../../oas/content.oas';
+import { FindByDto } from '../../dto/find-by.dto';
 
 @Controller('api/contents')
 export class ContentsController {
