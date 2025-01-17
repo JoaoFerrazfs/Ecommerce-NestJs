@@ -1,8 +1,9 @@
-  <div class="not-found">
-    <h2>Página não encontrada</h2>
-    <p>O conteúdo que você procura não está disponível.</p>
-    <a href="/" class="btn btn-primary">Voltar para a página inicial</a>
-  </div>
+<div class="not-found">
+  <h2>Página não encontrada</h2>
+  <img src="/public/404-status-code-cropped.png" class="not-found-img" alt="Erro 404">
+  <p>O conteúdo que você procura não está disponível.</p>
+  <a href="/" class="btn btn-success">Voltar para a página inicial</a>
+</div>
 
 <style>
   .not-found {
@@ -11,17 +12,28 @@
   }
 
   .not-found h2 {
-    font-size: 24px;
-    margin-bottom: 10px;
+    font-size: 28px;
+    margin-bottom: 15px;
+    color: #333;
+  }
+
+  .not-found-img {
+    max-width: 100%;
+    height: auto;
+    width: 300px;
+    margin: 20px 0;
+    border-radius: 10px;
   }
 
   .not-found p {
-    font-size: 16px;
-    margin-bottom: 20px;
+    font-size: 18px;
+    margin-bottom: 25px;
+    color: #555;
   }
 
   .not-found .btn {
-    padding: 10px 20px;
-    font-size: 16px;
+    padding: 12px 24px;
+    font-size: 18px;
+    font-weight: bold;
   }
 </style>
