@@ -8,6 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import { ContentsController } from './controllers/contents.controller';
 import { BannerController as ApiBannersController } from './controllers/api/banners.controller';
 import { ContentsController as ApiContentsController } from './controllers/api/contents.controller';
+import { HelpersModule } from '../helpers/helpers.module';
 
 @Module({
   controllers: [
@@ -16,6 +17,6 @@ import { ContentsController as ApiContentsController } from './controllers/api/c
     ApiBannersController,
   ],
   providers: [ContentsService, BannersService, ConfigService],
-  imports: [TypeOrmModule.forFeature([Content, Banner])],
+  imports: [TypeOrmModule.forFeature([Content, Banner]), HelpersModule],
 })
 export class ContentsModule {}

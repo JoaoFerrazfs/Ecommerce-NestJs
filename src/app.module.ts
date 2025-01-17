@@ -7,6 +7,9 @@ import { Content } from './contents/entities/content.entity';
 import { Banner } from './contents/entities/banner.entity';
 import { ContentsModule } from './contents/contents.module';
 import { AdminModule } from './admin/admin.module';
+import { ProductModule } from './product/product.module';
+import { Product } from './product/entities/product.entity';
+import { HelpersModule } from './helpers/helpers.module';
 
 @Module({
   imports: [
@@ -17,7 +20,7 @@ import { AdminModule } from './admin/admin.module';
       host: 'localhost',
       database: 'ecommerce-nest-js',
       synchronize: true,
-      entities: [Content, Banner],
+      entities: [Content, Banner, Product],
       useUnifiedTopology: false,
       logger: 'debug',
       logging: true,
@@ -29,6 +32,8 @@ import { AdminModule } from './admin/admin.module';
     }),
     ConfigModule.forRoot({ isGlobal: true }),
     AdminModule,
+    ProductModule,
+    HelpersModule,
   ],
   controllers: [],
   providers: [],

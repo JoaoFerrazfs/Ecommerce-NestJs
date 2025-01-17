@@ -19,10 +19,10 @@ describe('File Validation Pipe', () => {
     const metadata = {} as ArgumentMetadata;
 
     // Actions
-    const actual = await pipe.transform(file, metadata);
+    const actual = await pipe.transform([file], metadata);
 
     // Assertions
-    expect(actual).toEqual(file);
+    expect(actual).toEqual([file]);
   });
 
   it('should invalidate request without file', async () => {
@@ -31,7 +31,7 @@ describe('File Validation Pipe', () => {
     const metadata = {} as ArgumentMetadata;
 
     // Actions
-    const actual = pipe.transform(file, metadata);
+    const actual = pipe.transform([file], metadata);
 
     // Assertions
     expect(actual).toBeUndefined();
@@ -39,13 +39,13 @@ describe('File Validation Pipe', () => {
 
   it('should throw a BadRequestException for an invalid file type', async () => {
     // Arrange
-    const file = { mimetype: 'image/webp' } as Express.Multer.File;
+    const file = { mimetype: 'image/non-existent' } as Express.Multer.File;
     const metadata = {} as ArgumentMetadata;
 
     // Actions & Assertions
-    expect(() => pipe.transform(file, metadata)).toThrow(BadRequestException);
-    expect(() => pipe.transform(file, metadata)).toThrow(
-      'O arquivo precisa ser um JPG, JPEG ou PNG.',
+    expect(() => pipe.transform([file], metadata)).toThrow(BadRequestException);
+    expect(() => pipe.transform([file], metadata)).toThrow(
+      'O arquivo precisa ser um WEBP, JPG, JPEG ou PNG.',
     );
   });
 });

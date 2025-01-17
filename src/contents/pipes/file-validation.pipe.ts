@@ -5,11 +5,14 @@ import { PipeTransform, ArgumentMetadata } from '@nestjs/common';
 export class FileValidationPipe implements PipeTransform {
   ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
 
-  transform(file: any, metadata: ArgumentMetadata) {
-    if (!file) return undefined;
+  transform(files: any, metadata: ArgumentMetadata) {
+    if (!Array.isArray(files) || files.every((item) => !item)) return undefined;
 
-    const isValidMime = this.ALLOWED_MIME_TYPES.some((mime) => {
-      return file.mimetype === mime;
+    let isValidMime;
+    files.forEach((file) => {
+      isValidMime = this.ALLOWED_MIME_TYPES.some((mime) => {
+        return file.mimetype === mime;
+      });
     });
 
     if (!isValidMime) {
@@ -18,6 +21,6 @@ export class FileValidationPipe implements PipeTransform {
       );
     }
 
-    return file;
+    return files;
   }
 }

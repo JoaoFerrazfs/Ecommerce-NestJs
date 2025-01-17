@@ -6,6 +6,7 @@ import { ContentsService } from './contents.service';
 import { ConfigService } from '@nestjs/config';
 import { UpdateBannerDto } from '../dto/update-banner.dto';
 import { NotFoundException } from '@nestjs/common';
+import { ImageHelper } from '../../helpers/image.helper';
 
 describe('Banner Service', () => {
   let service: BannersService;
@@ -18,6 +19,7 @@ describe('Banner Service', () => {
         BannersRepository,
         BannersService,
         ConfigService,
+        ImageHelper,
       ],
     }).compile();
 

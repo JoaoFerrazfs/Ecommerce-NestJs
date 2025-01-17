@@ -9,13 +9,12 @@ import {
   Param,
   Patch,
   Post,
-  UploadedFile,
+  UploadedFiles,
   UseInterceptors,
-  UsePipes,
 } from '@nestjs/common';
 import { CreateBannerDto } from '../../dto/create-banner.dto';
 import { FileValidationPipe } from '../../pipes/file-validation.pipe';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { BannersService } from '../../services/banners.service';
 import { UpdateBannerDto } from '../../dto/update-banner.dto';
 import multerConfig from '../../../files/multer-config';
@@ -34,16 +33,16 @@ export class BannerController {
   constructor(private readonly bannersService: BannersService) {}
 
   @UpdateBanner()
-  @UseInterceptors(FileInterceptor('image', multerConfig))
+  @UseInterceptors(FilesInterceptor('image', 10, multerConfig))
   @HttpCode(204)
   @Patch('/:id')
   async edit(
     @Param('id') id: string,
-    @UploadedFile(FileValidationPipe) file: Express.Multer.File,
+    @UploadedFiles(FileValidationPipe) files: Array<Express.Multer.File>,
     @Body() { title }: UpdateBannerDto,
   ): Promise<void> {
     let payload: { title: string; filename?: string } = { title };
-    if (file?.filename) payload.filename = file.filename;
+    if (files[0]?.filename) payload.filename = files[0].filename;
 
     await this.bannersService.update(id, payload);
     return;
@@ -61,12 +60,15 @@ export class BannerController {
 
   @CreateBanner()
   @Post('/create')
-  @UseInterceptors(FileInterceptor('image', multerConfig))
+  @UseInterceptors(FilesInterceptor('image', 10, multerConfig))
   async store(
-    @UploadedFile(HasFile, FileValidationPipe) file: Express.Multer.File,
+    @UploadedFiles(HasFile, FileValidationPipe)
+    files: Array<Express.Multer.File>,
     @Body() { title }: CreateBannerDto,
   ): Promise<{ data: Banner }> {
-    return { data: await this.bannersService.saveBanner(file.filename, title) };
+    return {
+      data: await this.bannersService.saveBanner(files[0].filename, title),
+    };
   }
 
   @DeleteBanner()

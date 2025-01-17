@@ -9,6 +9,8 @@ export const CONTENTS_SERVICE = {
     delete: jest.fn().mockResolvedValue(true),
     update: jest.fn().mockResolvedValue(mockedContent),
     findById: jest.fn().mockResolvedValue(mockedContent),
+    findOne: jest.fn().mockResolvedValue(mockedContent),
     list: jest.fn().mockResolvedValue([mockedContent]),
+    getVewPath: jest.fn().mockReturnValue('contents/views/home'),
   },
 };

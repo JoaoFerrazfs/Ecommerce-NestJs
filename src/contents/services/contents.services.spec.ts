@@ -6,6 +6,7 @@ import { ContentsService } from './contents.service';
 import { ConfigService } from '@nestjs/config';
 import { CreateContentDto } from '../dto/create-content.dto';
 import { UpdateContentDto } from '../dto/update-content.dto';
+import { ImageHelper } from '../../helpers/image.helper';
 
 describe('Contents Service', () => {
   let service: ContentsService;
@@ -18,6 +19,7 @@ describe('Contents Service', () => {
         BannersRepository,
         BannersService,
         ConfigService,
+        ImageHelper,
       ],
     }).compile();
 

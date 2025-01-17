@@ -34,7 +34,7 @@ describe('Api Banners Controller', () => {
     const updateBannerDto = { title: 'test' } as UpdateBannerDto;
 
     // Actions
-    controller.edit('123', file, updateBannerDto);
+    controller.edit('123', [file], updateBannerDto);
 
     // Assertions
     expect(bannersServiceMock.update).toHaveBeenCalledWith('123', {
@@ -59,7 +59,7 @@ describe('Api Banners Controller', () => {
     const createBannerDto = { title: 'test' } as CreateBannerDto;
 
     // Actions
-    const actual = await controller.store(file, createBannerDto);
+    const actual = await controller.store([file], createBannerDto);
 
     // Assertions
     expect(actual).toEqual({

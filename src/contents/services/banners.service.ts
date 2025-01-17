@@ -5,13 +5,15 @@ import { UpdateBannerDto } from '../dto/update-banner.dto';
 import { ConfigService } from '@nestjs/config';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ObjectId } from 'mongodb';
+import { ImageHelper } from '../../helpers/image.helper';
 
 @Injectable()
 export class BannersService {
   public constructor(
     @InjectRepository(Banner)
     private readonly bannerRepository: Repository<Banner>,
-    private configService: ConfigService,
+    private readonly configService: ConfigService,
+    private readonly imageHelper: ImageHelper,
   ) {}
 
   public list(): Promise<Banner[]> {
@@ -49,19 +51,13 @@ export class BannersService {
     return Boolean(result.affected);
   }
 
-  private buildImageURL(fileName: string): string {
-    const protocol = this.configService.get('PROTOCOL', 'http');
-    const host = this.configService.get('HOST', 'localhost');
-    const port = this.configService.get('PORT', '3000');
-
-    return `${protocol}://${host}:${port}/public/uploads/files/${fileName}`;
-  }
-
   private buildPayload(
     title?: string,
     filename?: string,
   ): Partial<UpdateBannerDto> & { image: string } {
-    const image = filename ? this.buildImageURL(filename) : undefined;
+    const image = filename
+      ? this.imageHelper.buildImageURL(filename)
+      : undefined;
 
     return { ...(title && { title }), ...(image && { image }) };
   }

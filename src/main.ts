@@ -6,8 +6,6 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { COMPARISON } from './views/helpers/comparison';
 import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
-import { BannerController } from './contents/controllers/api/banners.controller';
-import { ContentsController } from './contents/controllers/api/contents.controller';
 import { ContentsModule } from './contents/contents.module';
 import { NotFoundExceptionFilter } from './filters/not-found-exception.filter';
 
@@ -48,7 +46,7 @@ async function bootstrap() {
   });
 
   // Validations
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useGlobalFilters(new NotFoundExceptionFilter());
 
   // Base config
