@@ -20,11 +20,19 @@ import multerConfig from '../../files/multer-config';
 import { UpdateProductDto } from '../dto/update-product.dto';
 import { ObjectId } from 'mongodb';
 import { Product } from '../entities/product.entity';
+import {
+  CreateProduct,
+  DeleteProduct,
+  FindProduct,
+  ListProduct,
+  UpdateProduct,
+} from '../oas/product.oas';
 
-@Controller('api/product')
+@Controller('api/products')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
+  @ListProduct()
   @Get()
   async list(): Promise<{ data: Product[] }> {
     const product = await this.productService.list();
@@ -33,6 +41,7 @@ export class ProductController {
     return { data: product };
   }
 
+  @CreateProduct()
   @Post()
   @UseInterceptors(FilesInterceptor('files', 10, multerConfig))
   async create(
@@ -40,6 +49,7 @@ export class ProductController {
     files: Array<Express.Multer.File>,
     @Body() createProductDto: CreateProductDto,
   ): Promise<{ data: Product }> {
+    console.log(files);
     const paths = files.map((file) => file.filename);
     return {
       data: await this.productService.create({
@@ -49,6 +59,7 @@ export class ProductController {
     };
   }
 
+  @UpdateProduct()
   @Patch('/:id')
   @UseInterceptors(FilesInterceptor('files', 10, multerConfig))
   async update(
@@ -69,6 +80,7 @@ export class ProductController {
     return { data: product };
   }
 
+  @FindProduct()
   @Get('/:id')
   async findOne(@Param('id') id: string): Promise<{ data: Product }> {
     const product = await this.productService.findOne({
@@ -80,6 +92,7 @@ export class ProductController {
     return { data: product };
   }
 
+  @DeleteProduct()
   @Delete('/:id')
   @HttpCode(204)
   async delete(@Param('id') id: string): Promise<void> {
