@@ -8,7 +8,7 @@ export class AdminController {
 
   @Get('')
   index(@Res() res: Response) {
-    return res.render(this.adminService.getVewPath('adminHome'), {
+    return res.render(this.adminService.getVewPath('home'), {
       layout: 'admin',
     });
   }
@@ -22,7 +22,7 @@ export class AdminController {
 
   @Get('/contents/create')
   content(@Res() res: Response) {
-    return res.render(this.adminService.getVewPath('adminContentsForm'), {
+    return res.render(this.adminService.getVewPath('contentsForm'), {
       layout: 'admin',
     });
   }
@@ -31,14 +31,14 @@ export class AdminController {
     @Res() res: Response,
     @Param('id') id: string,
   ) {
-    return res.render(this.adminService.getVewPath('adminContentsForm'), {
+    return res.render(this.adminService.getVewPath('contentsForm'), {
       layout: 'admin',
       id,
     });
   }
 
   @Get('/banners/create') async banner(@Res() res: Response) {
-    return res.render(this.adminService.getVewPath('adminBannerForm'), {
+    return res.render(this.adminService.getVewPath('bannerForm'), {
       layout: 'admin',
     });
   }
@@ -53,7 +53,7 @@ export class AdminController {
     @Res() res: Response,
     @Param('id') id: string,
   ) {
-    return res.render(this.adminService.getVewPath('adminBannerForm'), {
+    return res.render(this.adminService.getVewPath('bannerForm'), {
       layout: 'admin',
       id,
     });

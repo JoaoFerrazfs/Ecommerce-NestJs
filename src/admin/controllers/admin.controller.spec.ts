@@ -20,10 +20,9 @@ describe('AdminController', () => {
     controller.index(responseMock);
 
     // Assertions
-    expect(responseMock.render).toHaveBeenCalledWith(
-      'contents/views/adminHome',
-      { layout: 'admin' },
-    );
+    expect(responseMock.render).toHaveBeenCalledWith('admin/views/home', {
+      layout: 'admin',
+    });
   });
 
   it('should render a list of contents', () => {
@@ -32,7 +31,7 @@ describe('AdminController', () => {
 
     // Assertions
     expect(responseMock.render).toHaveBeenCalledWith(
-      'contents/views/listContents',
+      'admin/views/listContents',
       { layout: 'admin' },
     );
   });
@@ -43,7 +42,7 @@ describe('AdminController', () => {
 
     // Assertions
     expect(responseMock.render).toHaveBeenCalledWith(
-      'contents/views/adminContentsForm',
+      'admin/views/contentsForm',
       {
         layout: 'admin',
       },
@@ -56,7 +55,7 @@ describe('AdminController', () => {
 
     // Assertions
     expect(responseMock.render).toHaveBeenCalledWith(
-      'contents/views/adminContentsForm',
+      'admin/views/contentsForm',
       {
         id: '1234',
         layout: 'admin',
@@ -69,12 +68,9 @@ describe('AdminController', () => {
     controller.banner(responseMock);
 
     // Assertions
-    expect(responseMock.render).toHaveBeenCalledWith(
-      'contents/views/adminBannerForm',
-      {
-        layout: 'admin',
-      },
-    );
+    expect(responseMock.render).toHaveBeenCalledWith('admin/views/bannerForm', {
+      layout: 'admin',
+    });
   });
 
   it('should render the banner form page in editing mode', () => {
@@ -82,13 +78,10 @@ describe('AdminController', () => {
     controller.editBanner(responseMock, '1234');
 
     // Assertions
-    expect(responseMock.render).toHaveBeenCalledWith(
-      'contents/views/adminBannerForm',
-      {
-        layout: 'admin',
-        id: '1234',
-      },
-    );
+    expect(responseMock.render).toHaveBeenCalledWith('admin/views/bannerForm', {
+      layout: 'admin',
+      id: '1234',
+    });
   });
 
   it('should render a list of banners', () => {
@@ -97,7 +90,7 @@ describe('AdminController', () => {
 
     // Assertions
     expect(responseMock.render).toHaveBeenCalledWith(
-      'contents/views/listBanners',
+      'admin/views/listBanners',
       {
         layout: 'admin',
       },

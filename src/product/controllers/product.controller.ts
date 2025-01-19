@@ -49,7 +49,6 @@ export class ProductController {
     files: Array<Express.Multer.File>,
     @Body() createProductDto: CreateProductDto,
   ): Promise<{ data: Product }> {
-    console.log(files);
     const paths = files.map((file) => file.filename);
     return {
       data: await this.productService.create({

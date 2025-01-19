@@ -17,6 +17,6 @@ describe('AdminService', () => {
     const actual = service.getVewPath('admin');
 
     //Assertions
-    expect(actual).toBe('contents/views/admin');
+    expect(actual).toBe('admin/views/admin');
   });
 });

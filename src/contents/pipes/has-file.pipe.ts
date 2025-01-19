@@ -4,7 +4,6 @@ import { PipeTransform, ArgumentMetadata } from '@nestjs/common';
 @Injectable()
 export class HasFile implements PipeTransform {
   transform(files: any, metadata: ArgumentMetadata) {
-    console.log(files);
     if (!files) {
       throw new BadRequestException('Nenhum arquivo enviado.');
     }

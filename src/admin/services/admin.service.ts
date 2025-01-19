@@ -3,7 +3,7 @@ import { RenderContract } from '../../contracts/services/render-contract';
 
 @Injectable()
 export class AdminService implements RenderContract {
-  PATH_VIEWS = 'contents/views/';
+  PATH_VIEWS = 'admin/views/';
 
   public getVewPath(fileName: string) {
     return this.PATH_VIEWS + fileName;
