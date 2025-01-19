@@ -20,7 +20,6 @@ describe('ProductController', () => {
 
   it('should create a product', async () => {
     // Set
-    const file = [{}] as Array<Express.Multer.File>;
     const createProductDto = {
       cod: 88888888,
       name: 'Escada 12 degraus',
@@ -29,7 +28,7 @@ describe('ProductController', () => {
     } as CreateProductDto;
 
     // Actions
-    const actual = await controller.create(file, createProductDto);
+    const actual = await controller.create(createProductDto);
 
     // Assertions
     expect(actual).toEqual({ data: mockedProduct });
@@ -37,7 +36,6 @@ describe('ProductController', () => {
 
   it('should update a product', async () => {
     // Set
-    const file = [{}] as Array<Express.Multer.File>;
     const createProductDto = {
       cod: 88888888,
       name: 'Escada 12 degraus',
@@ -47,7 +45,6 @@ describe('ProductController', () => {
 
     // Actions
     const actual = await controller.update(
-      file,
       createProductDto,
       '678bddb1a28220251bc2fb84',
     );
@@ -58,7 +55,6 @@ describe('ProductController', () => {
 
   it('should not update a product', async () => {
     // Set
-    const file = [{}] as Array<Express.Multer.File>;
     const createProductDto = {
       cod: 88888888,
       name: 'Escada 12 degraus',
@@ -70,7 +66,6 @@ describe('ProductController', () => {
 
     // Actions
     const actual = controller.update(
-      file,
       createProductDto,
       '678bddb1a28220251bc2fb84',
     );

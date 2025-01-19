@@ -43,36 +43,22 @@ export class ProductController {
 
   @CreateProduct()
   @Post()
-  @UseInterceptors(FilesInterceptor('files', 10, multerConfig))
   async create(
-    @UploadedFiles(HasFile, FileValidationPipe)
-    files: Array<Express.Multer.File>,
     @Body() createProductDto: CreateProductDto,
   ): Promise<{ data: Product }> {
-    const paths = files.map((file) => file.filename);
     return {
-      data: await this.productService.create({
-        ...createProductDto,
-        images: paths,
-      }),
+      data: await this.productService.create(createProductDto),
     };
   }
 
   @UpdateProduct()
   @Patch('/:id')
-  @UseInterceptors(FilesInterceptor('files', 10, multerConfig))
   async update(
-    @UploadedFiles(HasFile, FileValidationPipe)
-    files: Array<Express.Multer.File>,
     @Body() updateProductDto: UpdateProductDto,
     @Param('id') id: string,
   ): Promise<{ data: Product }> {
-    const paths = files.map((file) => file.filename);
+    const product = await this.productService.update(updateProductDto, id);
 
-    const product = await this.productService.update(
-      { ...updateProductDto, images: paths },
-      id,
-    );
     if (!product)
       throw new NotFoundException(`Product with id ${id} not found`);
 

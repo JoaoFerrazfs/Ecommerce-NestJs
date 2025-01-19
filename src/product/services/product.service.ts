@@ -16,41 +16,19 @@ export class ProductService {
     private readonly imageHelper: ImageHelper,
   ) {}
 
-  create(
-    createProductDto: Partial<CreateProductDto> & { images: string[] },
-  ): Promise<Product> {
-    const imagesEntity: Image[] = createProductDto.images.map((path) => {
-      return new Image(
-        createProductDto.name,
-        this.imageHelper.buildImageURL(path),
-      );
-    });
-
-    const product: Product = this.productRepository.create({
-      ...createProductDto,
-      images: imagesEntity,
-    });
+  create(createProductDto: Partial<CreateProductDto>): Promise<Product> {
+    const product: Product = this.productRepository.create(createProductDto);
 
     return this.productRepository.save(product);
   }
 
   async update(
-    updateProductDto: Partial<UpdateProductDto> & { images: string[] },
+    updateProductDto: Partial<UpdateProductDto>,
     id: string,
   ): Promise<Product | null> {
-    const imagesEntity: Image[] = updateProductDto.images.map((path) => {
-      return new Image(
-        updateProductDto.name,
-        this.imageHelper.buildImageURL(path),
-      );
-    });
-
     const updateResult = await this.productRepository.update(
       { _id: new ObjectId(id) },
-      {
-        ...updateProductDto,
-        images: imagesEntity,
-      } as Product,
+      updateProductDto,
     );
 
     if (!updateResult.affected) return null;
@@ -74,5 +52,16 @@ export class ProductService {
     });
 
     return !!result.affected;
+  }
+
+  private buildImages(
+    createProductDto: Partial<CreateProductDto> & { images: string[] },
+  ): Image[] {
+    return createProductDto.images.map((path) => {
+      return new Image(
+        createProductDto.name,
+        this.imageHelper.buildImageURL(path),
+      );
+    });
   }
 }

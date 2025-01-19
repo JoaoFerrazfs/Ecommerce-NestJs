@@ -1,0 +1,154 @@
+{{> admin-navbar }}
+
+<div class="container mt-4">
+  <section id="conteudos">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="mb-0">Lista de Produtos</h2>
+      <a href="/admin/products/create" class="btn btn-info btn-sm">Cadastrar um produto</a>
+    </div>
+
+    <table class="table table-bordered" id="products-table">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Cod</th>
+        <th>Nome</th>
+        <th>Preço</th>
+        <th>Unidade</th>
+        <th>Imagens</th>
+        <th>Ações</th>
+      </tr>
+      </thead>
+      <tbody>
+      <!-- Os products serão carregados aqui dinamicamente -->
+      </tbody>
+    </table>
+  </section>
+</div>
+
+{{> admin-footer }}
+
+<script>
+  // Função principal para inicializar eventos
+  document.addEventListener('DOMContentLoaded', () => {
+    fetchBanners();
+  });
+
+  // Função para fazer a requisição e carregar os products
+  async function fetchBanners() {
+    try {
+      const response = await fetch(`${window.location.origin}/api/products`);
+      const data = await response.json();
+
+      if (data && data.data) {
+        renderBanners(data.data);
+      } else {
+        alert('Não foi possível carregar os products.');
+      }
+    } catch (error) {
+      console.error('Erro ao carregar products:', error);
+      alert('Erro ao carregar os products.');
+    }
+  }
+
+  // Função para renderizar os products na tabela
+  function renderBanners(products) {
+    const tbody = document.querySelector('#products-table tbody');
+    tbody.innerHTML = ''; // Limpa o conteúdo atual da tabela
+
+    products.forEach(product => {
+      const tr = document.createElement('tr');
+      tr.setAttribute('data-id', product._id);
+
+      tr.innerHTML = `
+      <td>${product._id}</td>
+      <td>${product.cod}</td>
+      <td>${product.name}</td>
+      <td>${product.price}</td>
+      <td>${product.unit}</td>
+      <td style="width: 150px; text-align: center; vertical-align: middle;">
+  ${product.images && product.images.length > 0 ? `
+    <div id="carousel-${product._id}" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        ${product.images
+        .map((img, index) => {
+          return `<div class="carousel-item ${index === 0 ? 'active' : ''}">
+                        <img src="${img.path}" class="d-block" alt="${img.alt}" style="width: 50px; height: 80px; object-fit: cover; margin: 0 auto;">
+                      </div>`;
+        })
+        .join('')}
+      </div>
+      <!-- Botões de navegação com setas pretas -->
+      <button class="carousel-control-prev" type="button" data-bs-target="#carousel-${product._id}" data-bs-slide="prev" style="background-color: lightgray; border: none;">
+        <span class="carousel-control-prev-icon" aria-hidden="true" style="background-color: black;"></span>
+      </button>
+
+      <button class="carousel-control-next" type="button" data-bs-target="#carousel-${product._id}" data-bs-slide="next" style="background-color: lightgray; border: none;">
+        <span class="carousel-control-next-icon" aria-hidden="true" style="background-color: black;"></span>
+      </button>
+    </div>
+  ` : `
+    <span>Nenhuma imagem disponível</span>
+  `}
+</td>
+
+
+
+      <td>
+        <form action="/admin/products/edit/${product._id}" method="GET" style="display: inline;">
+          <button type="submit" class="btn btn-warning btn-sm" aria-label="Editar ${product.title}">
+            Editar
+          </button>
+        </form>
+        <button class="btn btn-danger btn-sm delete-btn" aria-label="Excluir ${product.title}">
+          Excluir
+        </button>
+      </td>
+    `;
+
+      tbody.appendChild(tr);
+    });
+
+    initDeleteButtons(); // Inicializa os eventos dos botões de exclusão
+  }
+
+
+  // Inicializa os eventos dos botões de exclusão
+  function initDeleteButtons() {
+    const deleteButtons = document.querySelectorAll('.delete-btn');
+    deleteButtons.forEach(button => {
+      button.addEventListener('click', handleDelete);
+    });
+  }
+
+  // Lógica para lidar com exclusão
+  function handleDelete(event) {
+    const button = event.target;
+    const row = button.closest('tr');
+    const productId = row.getAttribute('data-id');
+
+    if (confirm('Tem certeza que deseja excluir este produto?')) {
+      deleteBanner(productId)
+        .then(() => {
+          row.remove();
+          alert('Produto excluído com sucesso!');
+        })
+        .catch(error => {
+          console.error('Erro:', error);
+          alert('Falha ao excluir o produto. Tente novamente.');
+        });
+    }
+  }
+
+  // Faz a requisição DELETE para a API
+  async function deleteBanner(productId) {
+    const response = await fetch(`${window.location.origin}/api/products/${productId}`, {
+      method: 'DELETE',
+    });
+
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(errorMessage || 'Erro ao excluir o product.');
+    }
+  }
+</script>

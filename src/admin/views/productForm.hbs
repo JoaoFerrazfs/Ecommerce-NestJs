@@ -1,0 +1,108 @@
+{{> admin-navbar }}
+
+<div class="container mt-4">
+  <section id="conteudos">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="mb-0">{{#if id}}Editar Produto{{else}}Cadastro de Produto{{/if}}</h2>
+      <a href="/admin/products" class="btn btn-info btn-sm">Listar produtos</a>
+    </div>
+
+    <form id="productForm" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label for="cod" class="form-label">Código</label>
+        <input type="text" class="form-control" id="cod" name="cod" placeholder="Digite o código">
+      </div>
+      <div class="mb-3">
+        <label for="name" class="form-label">Nome</label>
+        <input type="text" class="form-control" id="name" name="name" placeholder="Digite o nome">
+      </div>
+      <div class="mb-3">
+        <label for="price" class="form-label">Preço</label>
+        <input type="text" class="form-control" id="price" name="price" placeholder="Digite o preço">
+      </div>
+      <div class="mb-3">
+        <label for="unit">Escolha a unidade:</label>
+        <select id="unit" name="unit" class="form-select">
+          <option value="kg">KG</option>
+          <option value="L">L</option>
+          <option value="un">UN</option>
+          <option value="m">M</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">{{#if product}}Salvar Alterações{{else}}Cadastrar{{/if}}</button>
+    </form>
+    <div id="current-image-container" style="display: none;">
+      <img id="current-image" class="img-fluid" />
+    </div>
+
+  </section>
+</div>
+
+{{> admin-footer }}
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const productId = window.location.pathname.split('/').pop(); // Obtém o ID do produto da URL (se disponível)
+    if (productId !== 'create') {
+      fetchProduct(productId); // Chama a função para buscar os dados do produto
+    }
+  });
+
+  // Função para buscar os dados do produto
+  async function fetchProduct(productId) {
+    try {
+      const response = await fetch(`${window.location.origin}/api/products/${productId}`);
+      const data = await response.json();
+
+      if (data && data.data) {
+        const product = data.data;
+
+        // Preenche os campos de input
+        document.getElementById('name').value = product.name;
+        document.getElementById('cod').value = product.cod;
+        document.getElementById('price').value = product.price;
+        document.getElementById('unit').value = product.unit;
+      } else {
+        alert('Não foi possível carregar os dados do produto.');
+      }
+    } catch (error) {
+      console.error('Erro ao carregar os dados do produto:', error);
+      alert('Erro ao carregar os dados do produto.');
+    }
+  }
+
+  // Função para lidar com o envio do formulário
+  document.getElementById('productForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const data = {};
+    const formData = new FormData(this);
+    formData.forEach((value, key) => {
+      data[key] = value;
+    });
+
+    console.log(data);
+
+    const isEditing = {{#if id}}true{{else}}false{{/if}};
+    const url = isEditing ? `/api/products/{{id}}` : '/api/products';
+    const method = isEditing ? 'PATCH' : 'POST';
+
+    fetch(url, {
+      method: method, body: JSON.stringify(data), headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => {
+        if (response.ok) return response.json();
+        return response.json().then(({ message }) => Promise.reject(new Error(message.join('\n'))));
+      })
+      .then(() => {
+        alert(isEditing ? 'Produto atualizado com sucesso!' : 'Produto cadastrado com sucesso!');
+        if (!isEditing) document.getElementById('productForm').reset();
+      })
+      .catch(error => {
+        console.error('Erro:', error);
+        alert(error.message);
+      });
+  });
+</script>

@@ -67,14 +67,8 @@ const baseProductBody = {
           Unit.M.toString(),
           Unit.L.toString(),
           Unit.M.toString(),
+          Unit.UN.toString(),
         ],
-      },
-      files: {
-        type: 'array',
-        items: {
-          type: 'string',
-          format: 'binary',
-        },
       },
     },
   },

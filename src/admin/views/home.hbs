@@ -6,33 +6,51 @@
       <h1>Bem-vindo ao Painel Administrativo</h1>
       <p class="lead">Gerencie seu conteúdo, banners e configurações com facilidade.</p>
     </div>
-    <div class="row mt-4">
-      <div class="col-md-4 d-flex">
+    <div class="row g-3 mt-4">
+      <div class="col-12 col-sm-6 col-md-4 d-flex">
         <div class="card text-center h-100">
-          <div class="card-body">
+          <div class="card-body d-flex flex-column">
             <h5 class="card-title">Banners</h5>
             <p class="card-text">Visualize, edite e adicione novos banners para o site.</p>
-            <a href="/admin/banners" class="btn btn-primary">Lista de Banners</a>
-            <a href="/admin/banners/create" class="btn btn-primary">Crie um Banner</a>
+            <div class="mt-auto">
+              <a href="/admin/banners" class="btn btn-primary">Lista de Banners</a>
+              <a href="/admin/banners/create" class="btn btn-primary">Crie um Banner</a>
+            </div>
           </div>
         </div>
       </div>
-      <div class="col-md-4 d-flex">
+      <div class="col-12 col-sm-6 col-md-4 d-flex">
         <div class="card text-center h-100">
-          <div class="card-body">
+          <div class="card-body d-flex flex-column">
             <h5 class="card-title">Conteúdos</h5>
             <p class="card-text">Visualize, edite e adicione novos conteúdos/Páginas para o site.</p>
-            <a href="/admin/contents" class="btn btn-primary">Lista de Conteúdos</a>
-            <a href="/admin/contents/create" class="btn btn-primary">Crie um Conteúdo</a>
+            <div class="mt-auto">
+              <a href="/admin/contents" class="btn btn-primary">Lista de Conteúdos</a>
+              <a href="/admin/contents/create" class="btn btn-primary">Crie um Conteúdo</a>
+            </div>
           </div>
         </div>
       </div>
-      <div class="col-md-4 d-flex">
+      <div class="col-12 col-sm-6 col-md-4 d-flex">
+        <div class="card text-center h-100">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">Produtos</h5>
+            <p class="card-text">Visualize, edite e adicione novos produtos para o site.</p>
+            <div class="mt-auto">
+              <a href="/admin/products" class="btn btn-primary">Lista de Produtos</a>
+              <a href="/admin/products/create" class="btn btn-primary">Cadastrar um produto</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-4 d-flex">
         <div class="card text-center h-100 bg-light" style="opacity: 0.6; pointer-events: none;">
-          <div class="card-body">
+          <div class="card-body d-flex flex-column">
             <h5 class="card-title text-muted">Usuários</h5>
             <p class="card-text text-muted">Gerencie as permissões e os dados dos usuários do sistema.</p>
-            <button class="btn btn-secondary" disabled>Gerenciar Usuários</button>
+            <div class="mt-auto">
+              <button class="btn btn-secondary" disabled>Gerenciar Usuários</button>
+            </div>
           </div>
         </div>
       </div>
@@ -47,3 +65,26 @@
     console.log('Página de boas-vindas carregada!');
   });
 </script>
+
+<style>
+  .card {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .mt-auto {
+    margin-top: auto;
+  }
+
+  .btn{
+    margin: 10px;
+  }
+
+</style>
