@@ -1,10 +1,7 @@
-import { BaseEntity } from 'typeorm';
-
-export class Image extends BaseEntity {
+export class Image {
   constructor(
-    private readonly alt: string,
-    private readonly path: string,
-  ) {
-    super();
-  }
+    public readonly alt: string,
+    public readonly path: string,
+    public readonly name: string,
+  ) {}
 }

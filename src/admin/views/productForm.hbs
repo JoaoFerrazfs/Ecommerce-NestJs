@@ -81,8 +81,6 @@
       data[key] = value;
     });
 
-    console.log(data);
-
     const isEditing = {{#if id}}true{{else}}false{{/if}};
     const url = isEditing ? `/api/products/{{id}}` : '/api/products';
     const method = isEditing ? 'PATCH' : 'POST';

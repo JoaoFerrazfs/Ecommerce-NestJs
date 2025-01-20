@@ -1,13 +1,14 @@
 import { ProductService } from '../../../src/product/services/product.service';
-import { mockedProduct } from '../entities/mock.product.entity';
 
-export const PRODUCT_SERVICE = {
+export const productService = {
   provide: ProductService,
   useValue: {
-    create: jest.fn().mockResolvedValue(mockedProduct),
-    findOne: jest.fn().mockResolvedValue(mockedProduct),
-    update: jest.fn().mockResolvedValue(mockedProduct),
-    list: jest.fn().mockResolvedValue([mockedProduct]),
-    delete: jest.fn().mockResolvedValue(true),
+    create: jest.fn(),
+    findOne: jest.fn(),
+    update: jest.fn(),
+    list: jest.fn(),
+    delete: jest.fn(),
+    addImage: jest.fn(),
+    removeImage: jest.fn(),
   },
 };

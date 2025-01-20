@@ -1,9 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ContentsService } from '../../services/contents.service';
-import { CONTENTS_REPOSITORY as MockContentsRepository } from '../../../../test/mocks/repositores/mock.contentsRepository';
-import { BANNERS_REPOSITORY as MockBannersRepository } from '../../../../test/mocks/repositores/mock.bannersRepository';
-import { BANNERS_SERVICE as MockBannerService } from '../../../../test/mocks/services/mock.bannerService';
-import { CONTENTS_SERVICE as MockContentsService } from '../../../../test/mocks/services/mock.contentsService';
+import { contentsRepository } from '../../../../test/mocks/repositores/mock.contentsRepository';
+import { bannersRepository } from '../../../../test/mocks/repositores/mock.bannersRepository';
+import { bannersService } from '../../../../test/mocks/services/mock.bannerService';
+import { contentsService } from '../../../../test/mocks/services/mock.contentsService';
 import { ContentsController } from './contents.controller';
 import { CreateContentDto } from '../../dto/create-content.dto';
 import { UpdateContentDto } from '../../dto/update-content.dto';
@@ -15,10 +14,10 @@ describe('Api Banners Controller', () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ContentsController],
       providers: [
-        MockBannerService,
-        MockContentsRepository,
-        MockBannersRepository,
-        MockContentsService,
+        bannersService,
+        contentsRepository,
+        bannersRepository,
+        contentsService,
       ],
     }).compile();
 

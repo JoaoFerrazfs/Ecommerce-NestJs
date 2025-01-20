@@ -2,7 +2,7 @@ import { Content } from '../../../src/contents/entities/content.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { mockedContent } from '../entities/mock.content.entity';
 
-export const CONTENTS_REPOSITORY = {
+export const contentsRepository = {
   provide: getRepositoryToken(Content),
   useValue: {
     update: jest.fn().mockResolvedValue(true),

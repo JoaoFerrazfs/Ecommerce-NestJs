@@ -1,7 +1,7 @@
 import { ContentsService } from '../../../src/contents/services/contents.service';
 import { mockedContent } from '../entities/mock.content.entity';
 
-export const CONTENTS_SERVICE = {
+export const contentsService = {
   provide: ContentsService,
   useValue: {
     createContent: jest.fn().mockResolvedValue(mockedContent),

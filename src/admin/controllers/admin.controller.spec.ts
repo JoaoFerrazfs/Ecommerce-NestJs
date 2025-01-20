@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AdminController } from './admin.controller';
 import { AdminService } from '../services/admin.service';
-import { EXPRESS_RESPONSE as responseMock } from '../../../test/mocks/mock.responses';
+import { expressResponse } from '../../../test/mocks/mock.responses';
 
 describe('AdminController', () => {
   let controller: AdminController;
@@ -17,20 +17,20 @@ describe('AdminController', () => {
 
   it('should render the admin welcome page', () => {
     // Actions
-    controller.index(responseMock);
+    controller.index(expressResponse);
 
     // Assertions
-    expect(responseMock.render).toHaveBeenCalledWith('admin/views/home', {
+    expect(expressResponse.render).toHaveBeenCalledWith('admin/views/home', {
       layout: 'admin',
     });
   });
 
   it('should render a list of contents', () => {
     // Actions
-    controller.contents(responseMock);
+    controller.contents(expressResponse);
 
     // Assertions
-    expect(responseMock.render).toHaveBeenCalledWith(
+    expect(expressResponse.render).toHaveBeenCalledWith(
       'admin/views/listContents',
       { layout: 'admin' },
     );
@@ -38,10 +38,10 @@ describe('AdminController', () => {
 
   it('should render the contents form page in creation mode', () => {
     // Actions
-    controller.content(responseMock);
+    controller.content(expressResponse);
 
     // Assertions
-    expect(responseMock.render).toHaveBeenCalledWith(
+    expect(expressResponse.render).toHaveBeenCalledWith(
       'admin/views/contentsForm',
       {
         layout: 'admin',
@@ -51,10 +51,10 @@ describe('AdminController', () => {
 
   it('should render the contents form page in editing mode', () => {
     // Actions
-    controller.edit(responseMock, '1234');
+    controller.edit(expressResponse, '1234');
 
     // Assertions
-    expect(responseMock.render).toHaveBeenCalledWith(
+    expect(expressResponse.render).toHaveBeenCalledWith(
       'admin/views/contentsForm',
       {
         id: '1234',
@@ -65,20 +65,20 @@ describe('AdminController', () => {
 
   it('should render the banner form page in creation mode', () => {
     // Actions
-    controller.banner(responseMock);
+    controller.banner(expressResponse);
 
     // Assertions
-    expect(responseMock.render).toHaveBeenCalledWith('admin/views/bannerForm', {
+    expect(expressResponse.render).toHaveBeenCalledWith('admin/views/bannerForm', {
       layout: 'admin',
     });
   });
 
   it('should render the banner form page in editing mode', () => {
     // Actions
-    controller.editBanner(responseMock, '1234');
+    controller.editBanner(expressResponse, '1234');
 
     // Assertions
-    expect(responseMock.render).toHaveBeenCalledWith('admin/views/bannerForm', {
+    expect(expressResponse.render).toHaveBeenCalledWith('admin/views/bannerForm', {
       layout: 'admin',
       id: '1234',
     });
@@ -86,10 +86,10 @@ describe('AdminController', () => {
 
   it('should render a list of banners', () => {
     // Actions
-    controller.banners(responseMock);
+    controller.banners(expressResponse);
 
     // Assertions
-    expect(responseMock.render).toHaveBeenCalledWith(
+    expect(expressResponse.render).toHaveBeenCalledWith(
       'admin/views/listBanners',
       {
         layout: 'admin',

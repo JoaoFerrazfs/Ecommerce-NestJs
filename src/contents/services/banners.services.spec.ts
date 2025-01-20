@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CONTENTS_REPOSITORY as ContentsRepository } from '../../../test/mocks/repositores/mock.contentsRepository';
-import { BANNERS_REPOSITORY as BannersRepository } from '../../../test/mocks/repositores/mock.bannersRepository';
+import { contentsRepository } from '../../../test/mocks/repositores/mock.contentsRepository';
+import { bannersRepository as BannersRepository } from '../../../test/mocks/repositores/mock.bannersRepository';
 import { BannersService } from './banners.service';
 import { ContentsService } from './contents.service';
 import { ConfigService } from '@nestjs/config';
@@ -15,7 +15,7 @@ describe('Banner Service', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ContentsService,
-        ContentsRepository,
+        contentsRepository,
         BannersRepository,
         BannersService,
         ConfigService,

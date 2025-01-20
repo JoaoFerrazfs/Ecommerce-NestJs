@@ -6,7 +6,7 @@ import { Product } from '../entities/product.entity';
 import { Image } from '../entities/image-product.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ImageHelper } from '../../helpers/image.helper';
-import { ObjectId, UpdateResult } from 'mongodb';
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class ProductService {
@@ -36,6 +36,24 @@ export class ProductService {
     return await this.productRepository.findOneBy({ _id: new ObjectId(id) });
   }
 
+  async addImage(
+    product: Product,
+    files: Array<Express.Multer.File>,
+  ): Promise<Product | null> {
+    const newImages = this.buildImages(files, product.name);
+    product.images = [...(product.images || []), ...newImages];
+
+    return await this.productRepository.save(product);
+  }
+
+  async removeImage(product: Product, imageName: string): Promise<Product> {
+    product.images = product.images.filter(
+      (image: Image) => image.name !== imageName,
+    );
+
+    return await this.productRepository.save(product);
+  }
+
   public async findOne(
     query: FindOptionsWhere<Product> | FindOptionsWhere<Product>[],
   ): Promise<Product> {
@@ -55,12 +73,14 @@ export class ProductService {
   }
 
   private buildImages(
-    createProductDto: Partial<CreateProductDto> & { images: string[] },
+    images: Array<Express.Multer.File>,
+    alt: string,
   ): Image[] {
-    return createProductDto.images.map((path) => {
+    return images.map((image) => {
       return new Image(
-        createProductDto.name,
-        this.imageHelper.buildImageURL(path),
+        alt,
+        this.imageHelper.buildImageURL(image.path),
+        image.filename,
       );
     });
   }

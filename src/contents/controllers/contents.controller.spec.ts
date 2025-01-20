@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ContentsController } from './contents.controller';
-import { EXPRESS_RESPONSE as responseMock } from '../../../test/mocks/mock.responses';
-import { CONTENTS_REPOSITORY as ContentsRepository } from '../../../test/mocks/repositores/mock.contentsRepository';
-import { BANNERS_REPOSITORY as BannersRepository } from '../../../test/mocks/repositores/mock.bannersRepository';
-import { CONTENTS_SERVICE } from '../../../test/mocks/services/mock.contentsService';
+import { expressResponse as responseMock } from '../../../test/mocks/mock.responses';
+import { contentsRepository } from '../../../test/mocks/repositores/mock.contentsRepository';
+import { bannersRepository } from '../../../test/mocks/repositores/mock.bannersRepository';
+import { contentsService } from '../../../test/mocks/services/mock.contentsService';
 
 describe('Contents Controller', () => {
   let controller: ContentsController;
@@ -11,7 +11,7 @@ describe('Contents Controller', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ContentsController],
-      providers: [CONTENTS_SERVICE, ContentsRepository, BannersRepository],
+      providers: [contentsService, contentsRepository, bannersRepository],
     }).compile();
 
     controller = module.get(ContentsController);

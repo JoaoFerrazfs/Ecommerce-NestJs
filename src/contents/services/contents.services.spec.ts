@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CONTENTS_REPOSITORY as ContentsRepository } from '../../../test/mocks/repositores/mock.contentsRepository';
-import { BANNERS_REPOSITORY as BannersRepository } from '../../../test/mocks/repositores/mock.bannersRepository';
+import { contentsRepository } from '../../../test/mocks/repositores/mock.contentsRepository';
+import { bannersRepository } from '../../../test/mocks/repositores/mock.bannersRepository';
 import { BannersService } from './banners.service';
 import { ContentsService } from './contents.service';
 import { ConfigService } from '@nestjs/config';
@@ -15,8 +15,8 @@ describe('Contents Service', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ContentsService,
-        ContentsRepository,
-        BannersRepository,
+        contentsRepository,
+        bannersRepository,
         BannersService,
         ConfigService,
         ImageHelper,
@@ -102,7 +102,7 @@ describe('Contents Service', () => {
     await service.createContent(data);
 
     // Assertions
-    expect(ContentsRepository.useValue.save).toBeCalledWith(expectedCall);
+    expect(contentsRepository.useValue.save).toBeCalledWith(expectedCall);
   });
 
   it('should update a content', async () => {
@@ -131,6 +131,6 @@ describe('Contents Service', () => {
     await service.update(data, '677ec5eeb8fc6b91ab73fed1');
 
     // Assertions
-    expect(ContentsRepository.useValue.save).toBeCalledWith(expectedCall);
+    expect(contentsRepository.useValue.save).toBeCalledWith(expectedCall);
   });
 });

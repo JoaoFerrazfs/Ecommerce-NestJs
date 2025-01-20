@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ContentsService } from '../../services/contents.service';
-import { CONTENTS_REPOSITORY as MockContentsRepository } from '../../../../test/mocks/repositores/mock.contentsRepository';
-import { BANNERS_REPOSITORY as MockBannersRepository } from '../../../../test/mocks/repositores/mock.bannersRepository';
+import { contentsRepository  } from '../../../../test/mocks/repositores/mock.contentsRepository';
+import { bannersRepository } from '../../../../test/mocks/repositores/mock.bannersRepository';
 import { BannerController as ApiBannersController } from './banners.controller';
 import { UpdateBannerDto } from '../../dto/update-banner.dto';
-import { BANNERS_SERVICE as MockBannerService } from '../../../../test/mocks/services/mock.bannerService';
+import { bannersService as MockBannerService } from '../../../../test/mocks/services/mock.bannerService';
 import { Banner } from '../../entities/banner.entity';
 import { CreateBannerDto } from '../../dto/create-banner.dto';
 import { NotFoundException } from '@nestjs/common';
@@ -19,8 +19,8 @@ describe('Api Banners Controller', () => {
       providers: [
         ContentsService,
         MockBannerService,
-        MockContentsRepository,
-        MockBannersRepository,
+        contentsRepository,
+        bannersRepository,
       ],
     }).compile();
 

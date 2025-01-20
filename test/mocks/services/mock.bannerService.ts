@@ -1,7 +1,7 @@
 import { BannersService } from '../../../src/contents/services/banners.service';
 import { mockedBanner } from '../entities/mock.banner.entity';
 
-export const BANNERS_SERVICE = {
+export const bannersService = {
   provide: BannersService,
   useValue: {
     update: jest.fn().mockResolvedValue(true),

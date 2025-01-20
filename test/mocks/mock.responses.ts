@@ -1,3 +1,3 @@
 import { Response } from 'express';
 
-export const EXPRESS_RESPONSE = { render: jest.fn() } as unknown as Response;
+export const expressResponse = { render: jest.fn() } as unknown as Response;
