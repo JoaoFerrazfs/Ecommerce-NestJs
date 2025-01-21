@@ -80,4 +80,12 @@ export class AdminController {
       id,
     });
   }
+
+  @Get('products/edit/:id/images')
+  editProductImages(@Res() res: Response, @Param('id') id: string) {
+    return res.render(this.adminService.getVewPath('listProductImages'), {
+      layout: 'admin',
+      id,
+    });
+  }
 }

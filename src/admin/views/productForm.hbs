@@ -29,7 +29,13 @@
           <option value="m">M</option>
         </select>
       </div>
+
+      {{#if id}}
+        <a href="/admin/products/edit/{{id}}/images" class="btn btn-info">Gerenciar imagens</a>
+      {{/if}}
+
       <button type="submit" class="btn btn-primary">{{#if product}}Salvar Alterações{{else}}Cadastrar{{/if}}</button>
+
     </form>
     <div id="current-image-container" style="display: none;">
       <img id="current-image" class="img-fluid" />

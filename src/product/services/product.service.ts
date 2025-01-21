@@ -79,7 +79,7 @@ export class ProductService {
     return images.map((image) => {
       return new Image(
         alt,
-        this.imageHelper.buildImageURL(image.path),
+        this.imageHelper.buildImageURL(image.filename),
         image.filename,
       );
     });

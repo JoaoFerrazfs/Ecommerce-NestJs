@@ -68,9 +68,12 @@ describe('AdminController', () => {
     controller.banner(expressResponse);
 
     // Assertions
-    expect(expressResponse.render).toHaveBeenCalledWith('admin/views/bannerForm', {
-      layout: 'admin',
-    });
+    expect(expressResponse.render).toHaveBeenCalledWith(
+      'admin/views/bannerForm',
+      {
+        layout: 'admin',
+      },
+    );
   });
 
   it('should render the banner form page in editing mode', () => {
@@ -78,10 +81,13 @@ describe('AdminController', () => {
     controller.editBanner(expressResponse, '1234');
 
     // Assertions
-    expect(expressResponse.render).toHaveBeenCalledWith('admin/views/bannerForm', {
-      layout: 'admin',
-      id: '1234',
-    });
+    expect(expressResponse.render).toHaveBeenCalledWith(
+      'admin/views/bannerForm',
+      {
+        layout: 'admin',
+        id: '1234',
+      },
+    );
   });
 
   it('should render a list of banners', () => {

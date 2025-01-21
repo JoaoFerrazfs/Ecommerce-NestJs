@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ContentsService } from '../../services/contents.service';
-import { contentsRepository  } from '../../../../test/mocks/repositores/mock.contentsRepository';
+import { contentsRepository } from '../../../../test/mocks/repositores/mock.contentsRepository';
 import { bannersRepository } from '../../../../test/mocks/repositores/mock.bannersRepository';
 import { BannerController as ApiBannersController } from './banners.controller';
 import { UpdateBannerDto } from '../../dto/update-banner.dto';

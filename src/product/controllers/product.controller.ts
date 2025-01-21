@@ -112,7 +112,7 @@ export class ProductController {
       _id: new ObjectId(id),
     });
 
-    if (!product){
+    if (!product) {
       throw new NotFoundException(`Product with id ${id} not found`);
     }
 
@@ -131,9 +131,7 @@ export class ProductController {
       throw new NotFoundException(`Product with id ${id} not found`);
     }
 
-    const isValidImage = product.images.find(
-      (image) => image.name === name,
-    );
+    const isValidImage = product.images.find((image) => image.name === name);
 
     if (!isValidImage) {
       throw new NotFoundException(`Image not found: ${name}`);

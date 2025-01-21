@@ -12,13 +12,11 @@ import { Product } from '../entities/product.entity';
 describe('ProductController', () => {
   let controller: ProductController;
   beforeEach(async () => {
-
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ProductController],
       providers: [productService],
     }).compile();
     controller = await module.resolve(ProductController);
-
   });
 
   it('should create a product', async () => {
@@ -38,7 +36,9 @@ describe('ProductController', () => {
 
     // Assertions
     expect(actual).toEqual({ data: mockedProduct });
-    expect(productService.useValue.create).toHaveBeenCalledWith(createProductDto);
+    expect(productService.useValue.create).toHaveBeenCalledWith(
+      createProductDto,
+    );
   });
 
   it('should update a product', async () => {
@@ -61,7 +61,10 @@ describe('ProductController', () => {
 
     // Assertions
     expect(actual).toEqual({ data: mockedProduct });
-    expect(productService.useValue.update).toHaveBeenCalledWith(updateProductDto, '678bddb1a28220251bc2fb84');
+    expect(productService.useValue.update).toHaveBeenCalledWith(
+      updateProductDto,
+      '678bddb1a28220251bc2fb84',
+    );
   });
 
   it('should not update a product', async () => {
@@ -84,7 +87,10 @@ describe('ProductController', () => {
 
     // Assertions
     await expect(actual).rejects.toBeInstanceOf(NotFoundException);
-    expect(productService.useValue.update).toBeCalledWith(createProductDto, '678bddb1a28220251bc2fb84');
+    expect(productService.useValue.update).toBeCalledWith(
+      createProductDto,
+      '678bddb1a28220251bc2fb84',
+    );
   });
 
   it('should find a product', async () => {
@@ -96,7 +102,9 @@ describe('ProductController', () => {
 
     // Assertions
     expect(actual).toEqual({ data: mockedProduct });
-    expect(productService.useValue.findOne).toBeCalledWith({ _id: new ObjectId('678bddb1a28220251bc2fb84') });
+    expect(productService.useValue.findOne).toBeCalledWith({
+      _id: new ObjectId('678bddb1a28220251bc2fb84'),
+    });
   });
 
   it('should not find a product', async () => {
@@ -108,7 +116,9 @@ describe('ProductController', () => {
 
     // Assertions
     await expect(actual).rejects.toBeInstanceOf(NotFoundException);
-    expect(productService.useValue.findOne).toBeCalledWith({ _id: new ObjectId('678bddb1a28220251bc2fb84') });
+    expect(productService.useValue.findOne).toBeCalledWith({
+      _id: new ObjectId('678bddb1a28220251bc2fb84'),
+    });
   });
 
   it('should list all products', async () => {
@@ -144,7 +154,9 @@ describe('ProductController', () => {
 
     // Assertions
     await expect(actual).toBeUndefined();
-    expect(productService.useValue.delete).toHaveBeenCalledWith('678bddb1a28220251bc2fb84');
+    expect(productService.useValue.delete).toHaveBeenCalledWith(
+      '678bddb1a28220251bc2fb84',
+    );
   });
 
   it('should not delete a product', async () => {
@@ -156,12 +168,16 @@ describe('ProductController', () => {
 
     // Assertions
     await expect(actual).rejects.toBeInstanceOf(NotFoundException);
-    expect(productService.useValue.delete).toHaveBeenCalledWith('678bddb1a28220251bc2fb84');
+    expect(productService.useValue.delete).toHaveBeenCalledWith(
+      '678bddb1a28220251bc2fb84',
+    );
   });
 
   it('should add add images in a product', async () => {
     // Set
-    const files = [{ filename: 'fileName', path: 'https://image.jpg' }] as Express.Multer.File[];
+    const files = [
+      { filename: 'fileName', path: 'https://image.jpg' },
+    ] as Express.Multer.File[];
 
     // Expectations
     productService.useValue.findOne.mockResolvedValue(mockedProduct);
@@ -172,27 +188,34 @@ describe('ProductController', () => {
 
     // Assertions
     expect(actual).toEqual({ data: mockedProduct });
-    expect(productService.useValue.findOne).toHaveBeenCalledWith({ _id: new ObjectId('678bddb1a28220251bc2fb84') });
-    expect(productService.useValue.addImage).toHaveBeenCalledWith(mockedProduct, files);
+    expect(productService.useValue.findOne).toHaveBeenCalledWith({
+      _id: new ObjectId('678bddb1a28220251bc2fb84'),
+    });
+    expect(productService.useValue.addImage).toHaveBeenCalledWith(
+      mockedProduct,
+      files,
+    );
   });
 
   it('should not add images in a non-existent product', async () => {
     // Expectations
     productService.useValue.findOne.mockResolvedValue(null);
 
-    const files = [{ filename: 'fileName', path: 'https://image.jpg' }] as Express.Multer.File[];
+    const files = [
+      { filename: 'fileName', path: 'https://image.jpg' },
+    ] as Express.Multer.File[];
 
     // Actions
     const actual = controller.addImage(files, '678bddb1a28220251bc2fb84');
 
     // Assertions
     await expect(actual).rejects.toBeInstanceOf(NotFoundException);
-    expect(productService.useValue.findOne).toHaveBeenCalledWith({ _id: new ObjectId('678bddb1a28220251bc2fb84') });
-
+    expect(productService.useValue.findOne).toHaveBeenCalledWith({
+      _id: new ObjectId('678bddb1a28220251bc2fb84'),
+    });
   });
 
   it('should return images found in a product', async () => {
-
     // Expectations
     productService.useValue.findOne.mockResolvedValue(mockedProduct);
 
@@ -201,7 +224,9 @@ describe('ProductController', () => {
 
     // Assertions
     expect(actual).toEqual({ data: mockedProduct.images });
-    expect(productService.useValue.findOne).toHaveBeenCalledWith({_id: new ObjectId('678bddb1a28220251bc2fb84')})
+    expect(productService.useValue.findOne).toHaveBeenCalledWith({
+      _id: new ObjectId('678bddb1a28220251bc2fb84'),
+    });
   });
 
   it('should not return images if the product was not found', async () => {
@@ -213,8 +238,9 @@ describe('ProductController', () => {
 
     // Assertions
     await expect(actual).rejects.toBeInstanceOf(NotFoundException);
-    expect(productService.useValue.findOne).toHaveBeenCalledWith({_id: new ObjectId('678bddb1a28220251bc2fb84')})
-
+    expect(productService.useValue.findOne).toHaveBeenCalledWith({
+      _id: new ObjectId('678bddb1a28220251bc2fb84'),
+    });
   });
 
   it('should remove a image from a product', async () => {
@@ -228,16 +254,21 @@ describe('ProductController', () => {
     productService.useValue.removeImage.mockResolvedValue(expectedImage);
 
     // Actions
-    const actual = await controller.deleteImage('678bddb1a28220251bc2fb84', removeImageError);
+    const actual = await controller.deleteImage(
+      '678bddb1a28220251bc2fb84',
+      removeImageError,
+    );
 
     // Assertions
-    expect(productService.useValue.findOne).toHaveBeenCalledWith({_id: new ObjectId('678bddb1a28220251bc2fb84')})
+    expect(productService.useValue.findOne).toHaveBeenCalledWith({
+      _id: new ObjectId('678bddb1a28220251bc2fb84'),
+    });
 
     expect(actual).toEqual({
       data: {
-        'name': 'escada',
-        'price': 19.99,
-        'unit': 'kg',
+        name: 'escada',
+        price: 19.99,
+        unit: 'kg',
       },
     });
   });
@@ -252,11 +283,16 @@ describe('ProductController', () => {
     productService.useValue.findOne.mockResolvedValue(mockedProduct);
 
     // Actions
-    const actual = controller.deleteImage('678bddb1a28220251bc2fb84', removeImageError);
+    const actual = controller.deleteImage(
+      '678bddb1a28220251bc2fb84',
+      removeImageError,
+    );
 
     // Assertions
-    expect(productService.useValue.findOne).toHaveBeenCalledWith({_id: new ObjectId('678bddb1a28220251bc2fb84')})
-    await expect(actual).rejects.toBeInstanceOf(NotFoundException)
+    expect(productService.useValue.findOne).toHaveBeenCalledWith({
+      _id: new ObjectId('678bddb1a28220251bc2fb84'),
+    });
+    await expect(actual).rejects.toBeInstanceOf(NotFoundException);
   });
 
   it('should not remove a image from a not found product', async () => {
@@ -267,10 +303,15 @@ describe('ProductController', () => {
     productService.useValue.findOne.mockResolvedValue(null);
 
     // Actions
-    const actual =  controller.deleteImage('678bddb1a28220251bc2fb84', removeImageError);
+    const actual = controller.deleteImage(
+      '678bddb1a28220251bc2fb84',
+      removeImageError,
+    );
 
     // Assertions
-    expect(productService.useValue.findOne).toHaveBeenCalledWith({_id: new ObjectId('678bddb1a28220251bc2fb84')})
-    await expect(actual).rejects.toBeInstanceOf(NotFoundException)
+    expect(productService.useValue.findOne).toHaveBeenCalledWith({
+      _id: new ObjectId('678bddb1a28220251bc2fb84'),
+    });
+    await expect(actual).rejects.toBeInstanceOf(NotFoundException);
   });
 });

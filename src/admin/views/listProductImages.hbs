@@ -1,0 +1,177 @@
+{{> admin-navbar }}
+
+<div class="container">
+  <h2 class="mt-3">Imagens do Produto</h2>
+
+  <button class="btn btn-primary mb-3 mt-3 " data-bs-toggle="modal" data-bs-target="#uploadModal">
+    Adicionar Imagens
+  </button>
+
+  <hr class="custom-line">
+
+  <div id="images-container" class="row row-cols-1 row-cols-md-3 g-4"></div>
+</div>
+
+
+<!-- Modal para Upload -->
+<div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="uploadModalLabel">Adicionar Imagens</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="uploadForm">
+          <input type="file" id="imageInput" multiple accept="image/*" class="form-control">
+          <div id="preview-container" class="d-flex flex-wrap mt-3"></div>
+          <button type="submit" class="btn btn-success mt-3">Enviar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{> admin-footer }}
+
+<script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    const pathParts = window.location.pathname.split("/");
+    const productId = pathParts[pathParts.indexOf("edit") + 1];
+    const container = document.getElementById("images-container");
+    const previewContainer = document.getElementById("preview-container");
+    const imageInput = document.getElementById("imageInput");
+    const uploadForm = document.getElementById("uploadForm");
+
+    async function fetchImages() {
+      try {
+        const response = await fetch(`/api/products/${productId}/images`);
+        const result = await response.json();
+
+        container.innerHTML = "";
+        if (result.data && Array.isArray(result.data)) {
+          result.data.forEach(image => {
+            const col = document.createElement("div");
+            col.classList.add("col");
+
+            const card = document.createElement("div");
+            card.classList.add("card", "h-100");
+
+            const img = document.createElement("img");
+            img.src = image.path;
+            img.alt = image.alt;
+            img.classList.add("card-img-top");
+
+            const cardBody = document.createElement("div");
+            cardBody.classList.add("card-body", "text-center");
+
+            const button = document.createElement("button");
+            button.innerText = "Excluir";
+            button.classList.add("btn", "btn-danger");
+            button.addEventListener("click", async () => {
+              if (confirm("Tem certeza que deseja excluir esta imagem?")) {
+                try {
+                  const deleteResponse = await fetch(`/api/products/${productId}/images/remove`, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name: image.name })
+                  });
+
+                  if (deleteResponse.ok) {
+                    col.remove();
+                  } else {
+                    alert("Erro ao excluir a imagem");
+                  }
+                } catch (error) {
+                  console.error("Erro ao excluir a imagem:", error);
+                }
+              }
+            });
+
+            cardBody.appendChild(button);
+            card.appendChild(img);
+            card.appendChild(cardBody);
+            col.appendChild(card);
+            container.appendChild(col);
+          });
+        }
+      } catch (error) {
+        console.error("Erro ao buscar imagens:", error);
+      }
+    }
+
+    imageInput.addEventListener("change", () => {
+      previewContainer.innerHTML = "";
+      Array.from(imageInput.files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = document.createElement("img");
+          img.src = e.target.result;
+          img.classList.add("preview-image");
+          previewContainer.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    uploadForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData();
+      Array.from(imageInput.files).forEach(file => {
+        formData.append("files", file);
+      });
+
+      console.log(formData);
+      try {
+        const response = await fetch(`/api/products/${productId}/images`, {
+          method: "PATCH",
+          body: formData
+        });
+        if (response.ok) {
+          fetchImages();
+          imageInput.value = "";
+          previewContainer.innerHTML = "";
+        } else {
+          alert("Erro ao enviar imagens");
+        }
+      } catch (error) {
+        console.error("Erro ao enviar imagens:", error);
+      }
+    });
+
+    fetchImages();
+  });
+</script>
+
+<style>
+  .card-img-top {
+    height: 200px;
+    object-fit: contain;
+  }
+  .row-cols-md-3 > .col {
+    display: flex;
+  }
+  .card {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .preview-image {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    margin: 5px;
+    border: 1px solid #ccc;
+    padding: 5px;
+  }
+
+  .custom-line {
+    border: none;
+    height: 4px;
+    background-color: #000; /* Cor preta para destacar */
+    margin: 20px 0;
+  }
+
+
+</style>
