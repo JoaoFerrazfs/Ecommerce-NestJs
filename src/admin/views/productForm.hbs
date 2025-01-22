@@ -21,6 +21,14 @@
         <input type="text" class="form-control" id="price" name="price" placeholder="Digite o preço">
       </div>
       <div class="mb-3">
+        <label for="stock" class="form-label">Estoque</label>
+        <input type="number" step="0.01" class="form-control" id="stock" name="stock" placeholder="Digite o estoque">
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">Descrição</label>
+        <textarea class="form-control" id="description" name="description" placeholder="Digite a descrição"></textarea>
+      </div>
+      <div class="mb-3">
         <label for="unit">Escolha a unidade:</label>
         <select id="unit" name="unit" class="form-select">
           <option value="kg">KG</option>
@@ -68,6 +76,8 @@
         document.getElementById('cod').value = product.cod;
         document.getElementById('price').value = product.price;
         document.getElementById('unit').value = product.unit;
+        document.getElementById('stock').value = product.stock;
+        document.getElementById('description').value = product.description;
       } else {
         alert('Não foi possível carregar os dados do produto.');
       }

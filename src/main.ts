@@ -8,7 +8,7 @@ import { COMPARISON } from './views/helpers/comparison';
 import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 import { ContentsModule } from './contents/contents.module';
 import { NotFoundExceptionFilter } from './filters/not-found-exception.filter';
-import { ProductModule } from './product/product.module';
+import { ProductModule } from './products/product.module';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);

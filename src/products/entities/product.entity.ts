@@ -8,7 +8,7 @@ export class Product extends BaseEntity {
   @ObjectIdColumn()
   _id: ObjectId;
 
-  @Column()
+  @Column({unique: true})
   cod: number;
 
   @Column()
@@ -22,6 +22,9 @@ export class Product extends BaseEntity {
 
   @Column({ type: 'string', enum: Unit })
   unit: Unit;
+
+  @Column({ type: 'double' })
+  stock: number;
 
   @Column()
   images: Image[];

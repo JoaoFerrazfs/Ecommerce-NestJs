@@ -1,10 +1,47 @@
 <header class="container py-4">
-  <nav class="navbar bg-body-tertiary">
+  <nav class="navbar navbar-expand-lg navbar-light bg-success">
     <div class="container">
-      <a class="navbar-brand text-decoration-underline" style="color: crimson" href="#">
+      <a class="navbar-brand text-decoration-underline" style="color: white;" href="#">
         <strong>Ecommerce Nest JS</strong>
-        <img src="/public/nestJs.svg" alt="Bootstrap" width="30" height="24">
+        <img src="/public/nestJs.svg" alt="NestJS" width="30" height="24">
       </a>
+
+      <!-- Botão para expandir o menu em telas pequenas -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Barra de Navegação -->
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <!-- Barra de Busca -->
+          <li class="nav-item">
+            <form class="d-flex w-100 mt-3 mt-lg-0" role="search">
+              <input class="form-control me-2" type="search" placeholder="Buscar produtos..." aria-label="Search">
+              <button class="btn btn-outline-light" type="submit">Buscar</button>
+            </form>
+          </li>
+
+          <!-- Botão de Perfil -->
+          <li class="nav-item dropdown ms-3 mt-3 mt-lg-0">
+            <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="https://via.placeholder.com/30" class="rounded-circle" alt="Foto do usuário"> <span class="d-none d-lg-inline">Meu Perfil</span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="userDropdown">
+              <li><a class="dropdown-item" href="#">Meu Perfil</a></li>
+              <li><a class="dropdown-item" href="#">Configurações</a></li>
+              <li><a class="dropdown-item" href="#">Sair</a></li>
+            </ul>
+          </li>
+
+          <!-- Carrinho de Compras -->
+          <li class="nav-item ms-3 mt-3 mt-lg-0">
+            <button class="btn btn-outline-light" type="button">
+              <i class="bi bi-cart"></i> <span class="badge bg-danger">3</span>
+            </button>
+          </li>
+        </ul>
+      </div>
     </div>
   </nav>
 </header>

@@ -1,0 +1,124 @@
+<main class="container mt-5">
+  <div id="product-container" class="row">
+    <p>Carregando produto...</p>
+  </div>
+
+  <script>
+    async function fetchProduct() {
+      const productId = '88888888';
+
+      if (!productId) {
+        document.getElementById('product-container').innerHTML = '<p>Produto não encontrado.</p>';
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/products/${productId}`);
+        const { data } = await response.json();
+
+        document.getElementById('product-container').innerHTML = `
+
+        <hr>
+          <div class="row">
+            <!-- Carrossel de imagens -->
+            <div class="col-md-6">
+              <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                  ${data.images.map((image, index) => `
+                    <div class="carousel-item ${index === 0 ? 'active' : ''}">
+                      <div class="carousel-image-container">
+                        <img src="${image.path}" class="carousel-image" alt="${image.alt}">
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Detalhes do produto -->
+          <div class="col-md-6">
+            <h1 class="fw-bold fs-2">${data.name}</h1>
+            <p class="text-muted small">Código: ${data.cod}</p>
+            <p class="text-success fw-bold display-6">R$ ${data.price.toFixed(2)}</p>
+            <p><strong>Unidade:</strong> ${data.unit} | <strong>Estoque:</strong> ${data.stock}</p>
+            <button class="btn btn-primary btn-lg w-100 mt-3">Comprar Agora</button>
+          </div>
+
+          </div>
+
+        <hr>
+
+          <!-- Descrição do produto -->
+          <div class="col-md-12 mt-4">
+            <h3 class="fw-bold">Descrição</h3>
+            <div class="border rounded p-3 bg-light" style="max-height: 200px; overflow-y: auto;">
+              <p class="text-secondary">${data.description}</p>
+            </div>
+          </div>
+
+        `;
+      } catch (error) {
+        document.getElementById('product-container').innerHTML = '<p>Erro ao carregar o produto.</p>';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchProduct);
+  </script>
+
+  <style>
+    .carousel-image-container {
+      width: 100%;
+      height: 300px; /* Define um tamanho fixo para todas as imagens */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden; /* Garante que a imagem não ultrapasse os limites */
+      background-color: #f8f9fa; /* Cor de fundo para caso a imagem tenha transparência */
+    }
+
+    .carousel-image {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain; /* Mantém a proporção e evita cortes */
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+      width: 50px; /* Define o tamanho do círculo */
+      height: 50px; /* Define o tamanho do círculo */
+      background-color: rgba(169, 169, 169, 0.5); /* Cinza claro com transparência */
+      border-radius: 50%; /* Torna o fundo circular */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 1; /* Garante que a seta tenha boa visibilidade */
+      margin-top: 20%;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+      width: 30px; /* Tamanho da seta */
+      height: 30px; /* Tamanho da seta */
+    }
+
+    .carousel-control-prev:hover,
+    .carousel-control-next:hover {
+      background-color: rgba(169, 169, 169, 0.8); /* Altera a opacidade ao passar o mouse */
+    }
+
+    /* Media query para dispositivos móveis */
+    @media (max-width: 768px) {
+      .carousel-control-prev,
+      .carousel-control-next {
+        margin-top: 35%; /* Ajusta a margem superior em telas menores */
+      }
+    }
+  </style>
+
+</main>

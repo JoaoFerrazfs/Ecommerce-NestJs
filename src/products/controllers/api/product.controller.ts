@@ -11,24 +11,24 @@ import {
   Delete,
   HttpCode,
 } from '@nestjs/common';
-import { ProductService } from '../services/product.service';
-import { CreateProductDto } from '../dto/create-product.dto';
-import { HasFile } from '../../contents/pipes/has-file.pipe';
-import { FileValidationPipe } from '../../contents/pipes/file-validation.pipe';
+import { ProductService } from '../../services/product.service';
+import { CreateProductDto } from '../../dto/create-product.dto';
+import { HasFile } from '../../../contents/pipes/has-file.pipe';
+import { FileValidationPipe } from '../../../contents/pipes/file-validation.pipe';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import multerConfig from '../../files/multer-config';
-import { UpdateProductDto } from '../dto/update-product.dto';
+import multerConfig from '../../../files/multer-config';
+import { UpdateProductDto } from '../../dto/update-product.dto';
 import { ObjectId } from 'mongodb';
-import { Product } from '../entities/product.entity';
+import { Product } from '../../entities/product.entity';
 import {
   CreateProduct,
   DeleteProduct,
   FindProduct,
   ListProduct,
   UpdateProduct,
-} from '../oas/product.oas';
-import { Image } from '../entities/image-product.entity';
-import { RemoveImageError } from '../dto/remove-product-image.dto';
+} from '../../oas/product.oas';
+import { Image } from '../../entities/image-product.entity';
+import { RemoveImageError } from '../../dto/remove-product-image.dto';
 
 @Controller('api/products')
 export class ProductController {
@@ -70,9 +70,10 @@ export class ProductController {
   @FindProduct()
   @Get('/:id')
   async findOne(@Param('id') id: string): Promise<{ data: Product }> {
-    const product = await this.productService.findOne({
-      _id: new ObjectId(id),
-    });
+    const query =
+      id.length === 24 ? { _id: new ObjectId(id) } : { cod: Number(id) };
+    const product = await this.productService.findOne(query);
+
     if (!product)
       throw new NotFoundException(`Product with id ${id} not found`);
 

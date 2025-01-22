@@ -1,13 +1,13 @@
 import { ProductController } from './product.controller';
 import { Test, TestingModule } from '@nestjs/testing';
-import { CreateProductDto } from '../dto/create-product.dto';
-import { productService } from '../../../test/mocks/services/mock.productService';
-import { mockedProduct } from '../../../test/mocks/entities/mock.product.entity';
-import { UpdateProductDto } from '../dto/update-product.dto';
+import { CreateProductDto } from '../../dto/create-product.dto';
+import { productService } from '../../../../test/mocks/services/mock.productService';
+import { mockedProduct } from '../../../../test/mocks/entities/mock.product.entity';
+import { UpdateProductDto } from '../../dto/update-product.dto';
 import { NotFoundException } from '@nestjs/common';
-import { RemoveImageError } from '../dto/remove-product-image.dto';
+import { RemoveImageError } from '../../dto/remove-product-image.dto';
 import { ObjectId } from 'mongodb';
-import { Product } from '../entities/product.entity';
+import { Product } from '../../entities/product.entity';
 
 describe('ProductController', () => {
   let controller: ProductController;
@@ -19,7 +19,7 @@ describe('ProductController', () => {
     controller = await module.resolve(ProductController);
   });
 
-  it('should create a product', async () => {
+  it('should create a products', async () => {
     // Set
     const createProductDto = {
       cod: 88888888,
@@ -41,7 +41,7 @@ describe('ProductController', () => {
     );
   });
 
-  it('should update a product', async () => {
+  it('should update a products', async () => {
     // Set
     const updateProductDto = {
       cod: 88888888,
@@ -67,7 +67,7 @@ describe('ProductController', () => {
     );
   });
 
-  it('should not update a product', async () => {
+  it('should not update a products', async () => {
     // Set
     const createProductDto = {
       cod: 88888888,
@@ -93,7 +93,7 @@ describe('ProductController', () => {
     );
   });
 
-  it('should find a product', async () => {
+  it('should find a products', async () => {
     // Expectations
     productService.useValue.findOne.mockResolvedValue(mockedProduct);
 
@@ -107,7 +107,7 @@ describe('ProductController', () => {
     });
   });
 
-  it('should not find a product', async () => {
+  it('should not find a products', async () => {
     // Expectations
     productService.useValue.findOne.mockResolvedValue(null);
 
@@ -145,7 +145,7 @@ describe('ProductController', () => {
     expect(productService.useValue.list).toHaveBeenCalled();
   });
 
-  it('should delete a product', async () => {
+  it('should delete a products', async () => {
     // Expectations
     productService.useValue.delete.mockResolvedValue(true);
 
@@ -159,7 +159,7 @@ describe('ProductController', () => {
     );
   });
 
-  it('should not delete a product', async () => {
+  it('should not delete a products', async () => {
     // Expectations
     productService.useValue.delete.mockResolvedValue(false);
 
@@ -173,7 +173,7 @@ describe('ProductController', () => {
     );
   });
 
-  it('should add add images in a product', async () => {
+  it('should add add images in a products', async () => {
     // Set
     const files = [
       { filename: 'fileName', path: 'https://image.jpg' },
@@ -197,7 +197,7 @@ describe('ProductController', () => {
     );
   });
 
-  it('should not add images in a non-existent product', async () => {
+  it('should not add images in a non-existent products', async () => {
     // Expectations
     productService.useValue.findOne.mockResolvedValue(null);
 
@@ -215,7 +215,7 @@ describe('ProductController', () => {
     });
   });
 
-  it('should return images found in a product', async () => {
+  it('should return images found in a products', async () => {
     // Expectations
     productService.useValue.findOne.mockResolvedValue(mockedProduct);
 
@@ -229,7 +229,7 @@ describe('ProductController', () => {
     });
   });
 
-  it('should not return images if the product was not found', async () => {
+  it('should not return images if the products was not found', async () => {
     // Expectations
     productService.useValue.findOne.mockResolvedValue(null);
 
@@ -243,7 +243,7 @@ describe('ProductController', () => {
     });
   });
 
-  it('should remove a image from a product', async () => {
+  it('should remove a image from a products', async () => {
     // Set
     const removeImageError = { name: 'image' } as RemoveImageError;
     const expectedImage = { ...mockedProduct } as Product;
@@ -273,7 +273,7 @@ describe('ProductController', () => {
     });
   });
 
-  it('should not remove a non-existent image from a product', async () => {
+  it('should not remove a non-existent image from a products', async () => {
     // Set
     const removeImageError = { name: 'wrong-image' } as RemoveImageError;
     const expectedImage = { ...mockedProduct } as Product;
@@ -295,7 +295,7 @@ describe('ProductController', () => {
     await expect(actual).rejects.toBeInstanceOf(NotFoundException);
   });
 
-  it('should not remove a image from a not found product', async () => {
+  it('should not remove a image from a not found products', async () => {
     // Set
     const removeImageError = { name: 'image' } as RemoveImageError;
 

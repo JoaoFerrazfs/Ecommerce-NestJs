@@ -7,9 +7,12 @@ import { Image } from '../entities/image-product.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ImageHelper } from '../../helpers/image.helper';
 import { ObjectId } from 'mongodb';
+import { RenderContract } from '../../contracts/services/render-contract';
 
 @Injectable()
-export class ProductService {
+export class ProductService implements RenderContract {
+  PATH_VIEWS = 'products/views/';
+
   public constructor(
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
@@ -83,5 +86,9 @@ export class ProductService {
         image.filename,
       );
     });
+  }
+
+  getVewPath(fileName: string): string {
+    return this.PATH_VIEWS + fileName;
   }
 }

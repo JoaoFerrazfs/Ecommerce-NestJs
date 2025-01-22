@@ -22,7 +22,7 @@ export class CreateProductDto {
   name: string;
 
   @IsOptional()
-  @MinLength(10, { message: 'O description precisa ter no mínimo 3 letras' })
+  @MinLength(10, { message: 'O description precisa ter no mínimo 10 letras' })
   description: string;
 
   @Transform(({ value }) => parseFloat(value))
@@ -34,6 +34,12 @@ export class CreateProductDto {
   @IsPositive()
   @Min(0.01)
   price: number;
+
+  @IsNotEmpty({ message: 'O stock é um campo obrigatório' })
+  @Transform(({ value }) => parseFloat(value))
+  @IsPositive()
+  @Min(0.01)
+  stock: number;
 
   @IsEnum(Unit, {
     message:
