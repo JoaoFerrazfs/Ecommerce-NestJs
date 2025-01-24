@@ -1,14 +1,22 @@
-import { BaseEntity, Column, Entity, ObjectIdColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  ObjectIdColumn,
+} from 'typeorm';
 import { ObjectId } from 'mongodb';
 import { Unit } from '../enums/unit-enum';
 import { Image } from './image-product.entity';
+import { Offer } from '../../offers/entities/offer.entity';
 
 @Entity('products')
 export class Product extends BaseEntity {
   @ObjectIdColumn()
   _id: ObjectId;
 
-  @Column({unique: true})
+  @Column({ unique: true })
   cod: number;
 
   @Column()
