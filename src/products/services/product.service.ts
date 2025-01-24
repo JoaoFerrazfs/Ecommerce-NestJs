@@ -19,13 +19,16 @@ export class ProductService implements RenderContract {
     private readonly imageHelper: ImageHelper,
   ) {}
 
-  create(createProductDto: Partial<CreateProductDto>): Promise<Product> {
-    const product: Product = this.productRepository.create(createProductDto);
+  public async create(
+    createProductDto: Partial<CreateProductDto>,
+  ): Promise<Product> {
+    const product: Product =
+      await this.productRepository.create(createProductDto);
 
-    return this.productRepository.save(product);
+    return await this.productRepository.save(product);
   }
 
-  async update(
+  public async update(
     updateProductDto: Partial<UpdateProductDto>,
     id: string,
   ): Promise<Product | null> {
@@ -39,7 +42,7 @@ export class ProductService implements RenderContract {
     return await this.productRepository.findOneBy({ _id: new ObjectId(id) });
   }
 
-  async addImage(
+  public async addImage(
     product: Product,
     files: Array<Express.Multer.File>,
   ): Promise<Product | null> {
@@ -49,7 +52,10 @@ export class ProductService implements RenderContract {
     return await this.productRepository.save(product);
   }
 
-  async removeImage(product: Product, imageName: string): Promise<Product> {
+  public async removeImage(
+    product: Product,
+    imageName: string,
+  ): Promise<Product> {
     product.images = product.images.filter(
       (image: Image) => image.name !== imageName,
     );

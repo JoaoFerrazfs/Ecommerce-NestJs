@@ -10,5 +10,6 @@ export const productService = {
     delete: jest.fn(),
     addImage: jest.fn(),
     removeImage: jest.fn(),
+    getVewPath: jest.fn(),
   },
 };
