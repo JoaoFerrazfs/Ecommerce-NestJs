@@ -18,5 +18,6 @@ import { HelpersModule } from '../helpers/helpers.module';
   ],
   providers: [ContentsService, BannersService, ConfigService],
   imports: [TypeOrmModule.forFeature([Content, Banner]), HelpersModule],
+  exports: [BannersService],
 })
 export class ContentsModule {}

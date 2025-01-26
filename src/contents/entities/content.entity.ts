@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, ObjectIdColumn, OneToMany } from 'typeorm';
+import { BaseEntity, Column, Entity, ObjectIdColumn } from 'typeorm';
 import { Banner } from './banner.entity';
 import { ObjectId } from 'mongodb';
 

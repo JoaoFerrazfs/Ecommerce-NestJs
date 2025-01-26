@@ -1,7 +1,7 @@
 import { ProductController } from './product.controller';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CreateProductDto } from '../../dto/create-product.dto';
-import { productService } from '../../../../test/mocks/services/mock.productService';
+import { productService } from '../../../../test/mocks/services/mock.product-service';
 import { mockedProduct } from '../../../../test/mocks/entities/mock.product.entity';
 import { UpdateProductDto } from '../../dto/update-product.dto';
 import { NotFoundException } from '@nestjs/common';

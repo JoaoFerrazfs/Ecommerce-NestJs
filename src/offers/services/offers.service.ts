@@ -50,8 +50,10 @@ export class OffersService {
     return await this.offerRepository.save(updatedOffer);
   }
 
-  public async findOneBy(id: string): Promise<Offer | null> {
-    return this.offerRepository.findOneBy({ _id: new ObjectId(id) });
+  public async findOneBy(id: string | ObjectId): Promise<Offer | null> {
+    return id instanceof ObjectId
+      ? this.offerRepository.findOneBy({ _id: id })
+      : this.offerRepository.findOneBy({ _id: new ObjectId(id) });
   }
 
   private async loadProducts(...offers: Offer[]): Promise<LoadedOffer[]> {

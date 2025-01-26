@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ProductController } from './products.controller';
-import { productService } from '../../../test/mocks/services/mock.productService';
+import { productService } from '../../../test/mocks/services/mock.product-service';
 import { expressResponse } from '../../../test/mocks/mock.responses';
 
 describe('ProductController', () => {

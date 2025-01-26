@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { contentsRepository } from '../../../../test/mocks/repositores/mock.contentsRepository';
 import { bannersRepository } from '../../../../test/mocks/repositores/mock.bannersRepository';
-import { bannersService } from '../../../../test/mocks/services/mock.bannerService';
-import { contentsService } from '../../../../test/mocks/services/mock.contentsService';
+import { bannersService } from '../../../../test/mocks/services/mock.banner-service';
+import { contentsService } from '../../../../test/mocks/services/mock.contents-service';
 import { ContentsController } from './contents.controller';
 import { CreateContentDto } from '../../dto/create-content.dto';
 import { UpdateContentDto } from '../../dto/update-content.dto';

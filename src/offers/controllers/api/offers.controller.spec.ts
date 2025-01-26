@@ -3,7 +3,7 @@ import { OffersController } from './offers.controller';
 import { CreateOfferDto } from '../../dto/create-offer.dto';
 import { productsRepository } from '../../../../test/mocks/repositores/mock.ProductsRepository';
 import { offersRepository } from '../../../../test/mocks/repositores/mock.OffersRepository';
-import { offerService } from '../../../../test/mocks/services/mock.OfferstService';
+import { offerService } from '../../../../test/mocks/services/mock.offers-service';
 import { mockedOffer } from '../../../../test/mocks/entities/mock.offer.entity';
 import { NotFoundException } from '@nestjs/common';
 

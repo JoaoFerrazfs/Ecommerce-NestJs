@@ -13,7 +13,7 @@ import {
 import { OffersService } from '../../services/offers.service';
 import { CreateOfferDto } from '../../dto/create-offer.dto';
 import { LoadedOffer, Offer } from '../../entities/offer.entity';
-import { IdValidationPipe } from '../../../pipes/id-validation.pipe';
+import { IdValidationPipe } from '../../../custom-decorators/pipes/id-validation.pipe';
 
 @Controller('api/offers')
 export class OffersController {

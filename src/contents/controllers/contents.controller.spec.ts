@@ -3,7 +3,7 @@ import { ContentsController } from './contents.controller';
 import { expressResponse as responseMock } from '../../../test/mocks/mock.responses';
 import { contentsRepository } from '../../../test/mocks/repositores/mock.contentsRepository';
 import { bannersRepository } from '../../../test/mocks/repositores/mock.bannersRepository';
-import { contentsService } from '../../../test/mocks/services/mock.contentsService';
+import { contentsService } from '../../../test/mocks/services/mock.contents-service';
 
 describe('Contents Controller', () => {
   let controller: ContentsController;

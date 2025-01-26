@@ -20,8 +20,12 @@ export class BannersService {
     return this.bannerRepository.find();
   }
 
-  public findById(id: string): Promise<Banner | null> {
-    return this.bannerRepository.findOneBy({ _id: new ObjectId(id) });
+  public async findById(id: string | ObjectId): Promise<Banner> {
+    if (typeof id === 'string') {
+      return await this.bannerRepository.findOneBy({ _id: new ObjectId(id) });
+    }
+
+    return await this.bannerRepository.findOneBy({ _id: id });
   }
 
   public async update(

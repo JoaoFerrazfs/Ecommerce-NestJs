@@ -12,6 +12,8 @@ import { Product } from './products/entities/product.entity';
 import { HelpersModule } from './helpers/helpers.module';
 import { OffersModule } from './offers/offers.module';
 import { Offer } from './offers/entities/offer.entity';
+import { ModulesModule } from './modules/modules.module';
+import { ModuleEntity } from './modules/entities/module.entity';
 
 @Module({
   imports: [
@@ -22,7 +24,7 @@ import { Offer } from './offers/entities/offer.entity';
       host: 'localhost',
       database: 'ecommerce-nest-js',
       synchronize: true,
-      entities: [Content, Banner, Product, Offer],
+      entities: [Content, Banner, Product, Offer, ModuleEntity],
       useUnifiedTopology: false,
       logger: 'debug',
       logging: true,
@@ -37,6 +39,7 @@ import { Offer } from './offers/entities/offer.entity';
     ProductModule,
     HelpersModule,
     OffersModule,
+    ModulesModule,
   ],
   controllers: [],
   providers: [],
