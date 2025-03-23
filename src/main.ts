@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
-import * as hbs from 'express-handlebars';
+import { create } from 'express-handlebars';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { COMPARISON } from './views/helpers/comparison';
@@ -17,17 +17,16 @@ async function bootstrap() {
   app.useStaticAssets(join(__dirname, '..', 'public'));
 
   // HandleBars
+  const hbs = create({
+    extname: 'hbs',
+    partialsDir: join(__dirname, '..', 'src', 'views', 'partials'),
+    defaultLayout: join(__dirname, '..', 'src', 'views', 'layouts', 'main'),
+    layoutsDir: join(__dirname, '..', 'src', 'views', 'layouts'),
+    helpers: COMPARISON,
+  });
+
   app.setBaseViewsDir(join(__dirname, '..', 'src'));
-  app.engine(
-    'hbs',
-    hbs({
-      extname: 'hbs',
-      partialsDir: join(__dirname, '..', 'src', 'views', 'partials'),
-      defaultLayout: join(__dirname, '..', 'src', 'views', 'layouts', 'main'),
-      layoutsDir: join(__dirname, '..', 'src', 'views', 'layouts'),
-      helpers: COMPARISON,
-    }),
-  );
+  app.engine('hbs', hbs.engine); 
   app.setViewEngine('hbs');
 
   // Swagguer
