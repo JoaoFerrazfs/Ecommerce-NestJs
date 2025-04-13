@@ -14,6 +14,8 @@ import { OffersModule } from './offers/offers.module';
 import { Offer } from './offers/entities/offer.entity';
 import { ModulesModule } from './modules/modules.module';
 import { ModuleEntity } from './modules/entities/module.entity';
+import { KafkaModule } from './kafka/kafka.module';
+import { ConsumerService } from './kafka/consumer/consumer.service';
 
 @Module({
   imports: [
@@ -40,8 +42,9 @@ import { ModuleEntity } from './modules/entities/module.entity';
     HelpersModule,
     OffersModule,
     ModulesModule,
+    KafkaModule
   ],
+  // providers: [ConsumerService],
   controllers: [],
-  providers: [],
 })
 export class AppModule {}

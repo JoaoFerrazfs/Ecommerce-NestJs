@@ -9,6 +9,7 @@ import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 import { ContentsModule } from './contents/contents.module';
 import { NotFoundExceptionFilter } from './filters/not-found-exception.filter';
 import { ProductModule } from './products/product.module';
+import { Transport, MicroserviceOptions } from '@nestjs/microservices';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -26,7 +27,7 @@ async function bootstrap() {
   });
 
   app.setBaseViewsDir(join(__dirname, '..', 'src'));
-  app.engine('hbs', hbs.engine); 
+  app.engine('hbs', hbs.engine);
   app.setViewEngine('hbs');
 
   // Swagguer
@@ -50,6 +51,24 @@ async function bootstrap() {
   // Validations
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useGlobalFilters(new NotFoundExceptionFilter());
+
+
+  const kafka = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
+    transport: Transport.KAFKA,
+    options: {
+      client: {
+        brokers: ['localhost:9092'],
+      },
+      consumer: {
+        groupId: 'nestjs-consumer-group',
+      },
+    }
+  });
+
+  // await kafka.listen();
+
+  app.connectMicroservice(kafka);
+  await app.startAllMicroservices();
 
   // Base config
   await app.listen(process.env.PORT ?? 3000);

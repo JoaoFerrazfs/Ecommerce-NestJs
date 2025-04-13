@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   mongo-ecommerce-nest:
     image: mongo:latest
@@ -7,12 +9,36 @@ services:
     volumes:
       - mongo-data:/data/db
     networks:
-      - mongo-network
+      - app-network
     command: ["mongod", "--noauth"]
+
+  zookeeper-nest:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper-nest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - app-network
+
+  kafka-nest:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka-nest
+    depends_on:
+      - zookeeper-nest
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-nest:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - app-network
 
 volumes:
   mongo-data:
 
 networks:
-  mongo-network:
+  app-network:
     driver: bridge
