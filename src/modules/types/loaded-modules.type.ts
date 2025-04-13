@@ -4,7 +4,7 @@ import { ObjectId } from 'mongodb';
 
 export type moduleGroup = (Banner | LoadedOffer | [])[];
 
-export type LoadedModules = {
+export type LoadedModulesType = {
   _id: ObjectId;
   modulesGroup: moduleGroup;
 };

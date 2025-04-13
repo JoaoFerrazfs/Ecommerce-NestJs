@@ -8,7 +8,7 @@ import { ObjectId } from 'mongodb';
 import { ModuleBuilderService } from './module-builder.service';
 import { Banner } from '../../contents/entities/banner.entity';
 import { LoadedOffer } from '../../offers/entities/offer.entity';
-import { LoadedModules } from '../types/loadedModules';
+import { LoadedModulesType } from '../types/loaded-modules.type';
 
 @Injectable()
 export class ModulesService {
@@ -40,7 +40,7 @@ export class ModulesService {
     return await this.modulesRepository.find();
   }
 
-  public async findAllLoaded(): Promise<LoadedModules[]> {
+  public async findAllLoaded(): Promise<LoadedModulesType[]> {
     const modules = await this.modulesRepository.find();
 
     return await this.moduleBuilderService.loadModules(modules);

@@ -6,7 +6,7 @@ import { AllowedModuleType } from '../enums/modules-type.enum';
 import { ObjectId } from 'mongodb';
 import { BannersService } from '../../contents/services/banners.service';
 import { OffersService } from '../../offers/services/offers.service';
-import { LoadedModules, moduleGroup } from '../types/loadedModules';
+import { LoadedModulesType, moduleGroup } from '../types/loaded-modules.type';
 
 @Injectable()
 export class ModuleBuilderService {
@@ -15,8 +15,8 @@ export class ModuleBuilderService {
     private readonly offerService: OffersService,
   ) {}
 
-  public async loadModules(modules: ModuleEntity[]): Promise<LoadedModules[]> {
-    const loadedModules: LoadedModules[] = [];
+  public async loadModules(modules: ModuleEntity[]): Promise<LoadedModulesType[]> {
+    const loadedModules: LoadedModulesType[] = [];
 
     for (const module of modules) {
       const modulesGroup = await this.loadModuleComponents(module);
