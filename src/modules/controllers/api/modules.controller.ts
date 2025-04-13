@@ -18,11 +18,13 @@ import { UpdateModuleDto } from '../../dto/update-module.dto';
 import { IdValidationPipe } from '../../../custom-decorators/pipes/id-validation.pipe';
 import { ModuleEntity } from '../../entities/module.entity';
 import { ValidateStoredIdPipe } from '../../pipes/validate-stored-id.pipe';
+import { CreateModule, DeleteModule, FindAllModule, FindOneModule, UpdateModule } from '../../oas/module.oas';
 
 @Controller('api/modules')
 export class ModulesController {
   public constructor(private readonly modulesService: ModulesService) {}
 
+  @CreateModule()
   @UsePipes(ValidateStoredIdPipe)
   @Post()
   public async create(
@@ -31,6 +33,7 @@ export class ModulesController {
     return { data: await this.modulesService.create(createModuleDto) };
   }
 
+  @UpdateModule()
   @HttpCode(HttpStatus.NO_CONTENT)
   @UsePipes(ValidateStoredIdPipe)
   @Patch('/:id')
@@ -48,6 +51,7 @@ export class ModulesController {
     return;
   }
 
+  @FindAllModule()
   @Get()
   public async findAll(): Promise<{ data: ModuleEntity[] }> {
     return { data: await this.modulesService.findAll() };
@@ -58,6 +62,7 @@ export class ModulesController {
     return { data: await this.modulesService.findAllLoaded() };
   }
 
+  @FindOneModule()
   @Get(':id')
   public async findOne(
     @Param('id', IdValidationPipe) id: string,
@@ -68,6 +73,7 @@ export class ModulesController {
     return { data: module };
   }
 
+  @DeleteModule()
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
   public async delete(

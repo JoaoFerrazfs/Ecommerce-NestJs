@@ -9,6 +9,7 @@ import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 import { ContentsModule } from './contents/contents.module';
 import { NotFoundExceptionFilter } from './filters/not-found-exception.filter';
 import { ProductModule } from './products/product.module';
+import { ModulesModule } from './modules/modules.module';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -38,7 +39,7 @@ async function bootstrap() {
 
   const documentFactory = (): OpenAPIObject =>
     SwaggerModule.createDocument(app, config, {
-      include: [ContentsModule, ProductModule],
+      include: [ContentsModule, ProductModule, ModulesModule],
     });
 
   SwaggerModule.setup('oas', app, documentFactory, {
