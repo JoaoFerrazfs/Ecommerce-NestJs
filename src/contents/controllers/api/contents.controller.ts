@@ -7,12 +7,11 @@ import {
   Param,
   Patch,
   Post,
-  Query,
 } from '@nestjs/common';
 import { ContentsService } from '../../services/contents.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Content } from '../../entities/content.entity';
-import { FindOptionsWhere, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateContentDto } from '../../dto/create-content.dto';
 import { UpdateContentDto } from '../../dto/update-content.dto';
 import {
@@ -22,14 +21,18 @@ import {
   ListContents,
   UpdateContent,
 } from '../../oas/content.oas';
-import { FindByDto } from '../../dto/find-by.dto';
+import { ProducerService } from '../../../kafka/producer/producer.service';
 
 @Controller('api/contents')
 export class ContentsController {
+
+  readonly KAFKA_TOPIC: string = 'contents_creation';
+
   public constructor(
     @InjectRepository(Content)
     private readonly contentRepository: Repository<Content>,
     private readonly contentsService: ContentsService,
+    private readonly kafkaProducerService: ProducerService,
   ) {}
 
   @CreateContent()
@@ -37,7 +40,10 @@ export class ContentsController {
   public async createContent(
     @Body() data: CreateContentDto,
   ): Promise<{ data: Content }> {
-    return { data: await this.contentsService.createContent(data) };
+    const content = await this.contentsService.createContent(data);
+    await this.kafkaProducerService.sendMessage(this.KAFKA_TOPIC, content);
+
+    return { data: content};
   }
 
   @ListContents()

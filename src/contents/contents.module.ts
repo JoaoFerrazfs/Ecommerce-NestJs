@@ -9,6 +9,7 @@ import { ContentsController } from './controllers/contents.controller';
 import { BannerController as ApiBannersController } from './controllers/api/banners.controller';
 import { ContentsController as ApiContentsController } from './controllers/api/contents.controller';
 import { HelpersModule } from '../helpers/helpers.module';
+import { KafkaModule } from '../kafka/kafka.module';
 
 @Module({
   controllers: [
@@ -17,7 +18,7 @@ import { HelpersModule } from '../helpers/helpers.module';
     ApiBannersController,
   ],
   providers: [ContentsService, BannersService, ConfigService],
-  imports: [TypeOrmModule.forFeature([Content, Banner]), HelpersModule],
+  imports: [TypeOrmModule.forFeature([Content, Banner]), HelpersModule, KafkaModule],
   exports: [BannersService],
 })
 export class ContentsModule {}
