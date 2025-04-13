@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { contentsRepository } from '../../../../test/mocks/repositores/mock.contentsRepository';
 import { bannersRepository } from '../../../../test/mocks/repositores/mock.bannersRepository';
-import { bannersService } from '../../../../test/mocks/services/mock.banner-service';
+import { mockedBannersService } from '../../../../test/mocks/services/mock.banner-service';
 import { contentsService } from '../../../../test/mocks/services/mock.contents-service';
 import { ContentsController } from './contents.controller';
 import { CreateContentDto } from '../../dto/create-content.dto';
@@ -14,7 +14,7 @@ describe('Api Banners Controller', () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ContentsController],
       providers: [
-        bannersService,
+        mockedBannersService,
         contentsRepository,
         bannersRepository,
         contentsService,

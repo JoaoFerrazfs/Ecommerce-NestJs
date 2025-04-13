@@ -1,11 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { CreateModulesDto } from '../dto/create-module.dto';
 import { UpdateModuleDto } from '../dto/update-module.dto';
-import { LoadedModules, ModuleEntity } from '../entities/module.entity';
+import { ModuleEntity } from '../entities/module.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ObjectId } from 'mongodb';
 import { ModuleBuilderService } from './module-builder.service';
+import { Banner } from '../../contents/entities/banner.entity';
+import { LoadedOffer } from '../../offers/entities/offer.entity';
+import { LoadedModules } from '../types/loadedModules';
 
 @Injectable()
 export class ModulesService {

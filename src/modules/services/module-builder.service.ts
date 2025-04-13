@@ -1,17 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import {
-  LoadedModules,
-  ModuleEntity,
-  ModulesGroup,
-} from '../entities/module.entity';
-import { InjectRepository } from '@nestjs/typeorm';
+import { ModuleEntity } from '../entities/module.entity';
 import { Banner } from '../../contents/entities/banner.entity';
-import { Offer } from '../../offers/entities/offer.entity';
+import { LoadedOffer } from '../../offers/entities/offer.entity';
 import { AllowedModuleType } from '../enums/modules-type.enum';
 import { ObjectId } from 'mongodb';
 import { BannersService } from '../../contents/services/banners.service';
 import { OffersService } from '../../offers/services/offers.service';
-import * as module from 'node:module';
+import { LoadedModules, moduleGroup } from '../types/loadedModules';
 
 @Injectable()
 export class ModuleBuilderService {
@@ -21,18 +16,24 @@ export class ModuleBuilderService {
   ) {}
 
   public async loadModules(modules: ModuleEntity[]): Promise<LoadedModules[]> {
-    return await Promise.all(
-      modules.map(async (module) => {
-        return {
-          _id: module._id,
-          modulesGroup: await this.loadModuleComponents(module),
-        };
-      }),
-    );
+    const loadedModules: LoadedModules[] = [];
+
+    for (const module of modules) {
+      const modulesGroup = await this.loadModuleComponents(module);
+
+      loadedModules.push({
+        _id: module._id,
+        modulesGroup,
+      });
+    }
+
+    return loadedModules;
   }
 
-  private async loadModuleComponents({ modulesGroup }: ModuleEntity) {
-    const loadedModules: (Banner | Offer)[] = [];
+  private async loadModuleComponents({
+    modulesGroup,
+  }: ModuleEntity): Promise<moduleGroup> {
+    const loadedModules: moduleGroup = [];
     for (const module of modulesGroup) {
       const loadedModule = await this.findEntity(module.type, module._id);
 
@@ -46,9 +47,9 @@ export class ModuleBuilderService {
   private async findEntity(
     type: AllowedModuleType,
     id: ObjectId,
-  ): Promise<Banner | Offer | null> {
+  ): Promise<Banner | LoadedOffer | null> {
     if (type == 'offer') {
-      return await this.offerService.findOneBy(id);
+      return await this.offerService.findAndLoadOneBy(id);
     }
 
     return await this.bannerService.findById(id);

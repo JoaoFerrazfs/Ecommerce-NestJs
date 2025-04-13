@@ -1,6 +1,15 @@
 import { OffersService } from '../../../src/offers/services/offers.service';
+import { LoadedOffer } from '../../../src/offers/entities/offer.entity';
+import { ObjectId } from 'mongodb';
+import { mockedProduct } from '../entities/mock.product.entity';
 
-export const offerService = {
+export const loadedOffer: LoadedOffer = {
+  _id: new ObjectId('6795315ba07479c68c2e67dd'),
+  title: 'test',
+  products: [mockedProduct],
+} as LoadedOffer;
+
+export const mockedOfferService = {
   provide: OffersService,
   useValue: {
     create: jest.fn(),
@@ -9,5 +18,6 @@ export const offerService = {
     delete: jest.fn(),
     findOneBy: jest.fn(),
     update: jest.fn(),
+    findAndLoadOneBy: jest.fn().mockResolvedValue(loadedOffer),
   },
 };

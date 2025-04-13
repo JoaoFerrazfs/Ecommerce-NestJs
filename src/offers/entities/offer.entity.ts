@@ -1,11 +1,4 @@
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  ManyToOne,
-  ObjectIdColumn,
-  OneToMany,
-} from 'typeorm';
+import { BaseEntity, Column, Entity, ObjectIdColumn } from 'typeorm';
 import { ObjectId } from 'mongodb';
 import { Product } from '../../products/entities/product.entity';
 

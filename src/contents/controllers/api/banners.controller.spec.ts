@@ -4,7 +4,7 @@ import { contentsRepository } from '../../../../test/mocks/repositores/mock.cont
 import { bannersRepository } from '../../../../test/mocks/repositores/mock.bannersRepository';
 import { BannerController as ApiBannersController } from './banners.controller';
 import { UpdateBannerDto } from '../../dto/update-banner.dto';
-import { bannersService as MockBannerService } from '../../../../test/mocks/services/mock.banner-service';
+import { mockedBannersService as MockBannerService } from '../../../../test/mocks/services/mock.banner-service';
 import { Banner } from '../../entities/banner.entity';
 import { CreateBannerDto } from '../../dto/create-banner.dto';
 import { NotFoundException } from '@nestjs/common';

@@ -56,6 +56,16 @@ export class OffersService {
       : this.offerRepository.findOneBy({ _id: new ObjectId(id) });
   }
 
+  public async findAndLoadOneBy(
+    id: string | ObjectId,
+  ): Promise<LoadedOffer | null> {
+    const offer = await this.findOneBy(id);
+
+    if (!offer) return null;
+
+    return (await this.loadProducts(offer))[0];
+  }
+
   private async loadProducts(...offers: Offer[]): Promise<LoadedOffer[]> {
     let transformedOffers: LoadedOffer[] = [];
 

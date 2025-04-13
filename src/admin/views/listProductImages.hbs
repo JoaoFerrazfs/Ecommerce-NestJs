@@ -121,7 +121,6 @@
         formData.append("files", file);
       });
 
-      console.log(formData);
       try {
         const response = await fetch(`/api/products/${productId}/images`, {
           method: "PATCH",

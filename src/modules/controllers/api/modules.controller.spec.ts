@@ -2,9 +2,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ModulesController } from './modules.controller';
 import { modulesService } from '../../../../test/mocks/services/mock.modules-service';
 import { CreateModulesDto } from '../../dto/create-module.dto';
-import { mockedModule } from '../../../../test/mocks/entities/mock.module.entity';
-import { bannersService } from '../../../../test/mocks/services/mock.banner-service';
-import { offerService } from '../../../../test/mocks/services/mock.offers-service';
+import { mockedModuleWithBanner } from '../../../../test/mocks/entities/mock.module.entity';
+import { mockedBannersService } from '../../../../test/mocks/services/mock.banner-service';
+import { mockedOfferService } from '../../../../test/mocks/services/mock.offers-service';
 import { moduleBuilderService } from '../../../../test/mocks/services/mock.modules-builder-service';
 import { UpdateModuleDto } from '../../dto/update-module.dto';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
@@ -17,8 +17,8 @@ describe('ModulesController', () => {
       controllers: [ModulesController],
       providers: [
         modulesService,
-        bannersService,
-        offerService,
+        mockedBannersService,
+        mockedOfferService,
         moduleBuilderService,
       ],
     }).compile();
@@ -31,13 +31,13 @@ describe('ModulesController', () => {
     const createModuleDto = {} as CreateModulesDto;
 
     //Expectations
-    modulesService.useValue.create.mockResolvedValue(mockedModule);
+    modulesService.useValue.create.mockResolvedValue(mockedModuleWithBanner);
 
     // Actions
     const actual = await controller.create(createModuleDto);
 
     // Assertions
-    expect(actual).toEqual({ data: mockedModule });
+    expect(actual).toEqual({ data: mockedModuleWithBanner });
     expect(modulesService.useValue.create).toBeCalledWith(createModuleDto);
   });
 
@@ -47,7 +47,7 @@ describe('ModulesController', () => {
     const updateModuleDto = {} as UpdateModuleDto;
 
     //Expectations
-    modulesService.useValue.findOne.mockResolvedValue(mockedModule);
+    modulesService.useValue.findOne.mockResolvedValue(mockedModuleWithBanner);
     modulesService.useValue.update.mockResolvedValue(true);
 
     // Actions
@@ -81,7 +81,7 @@ describe('ModulesController', () => {
     const updateModuleDto = {} as UpdateModuleDto;
 
     //Expectations
-    modulesService.useValue.findOne.mockResolvedValue(mockedModule);
+    modulesService.useValue.findOne.mockResolvedValue(mockedModuleWithBanner);
     modulesService.useValue.update.mockResolvedValue(false);
 
     // Actions
@@ -95,37 +95,39 @@ describe('ModulesController', () => {
 
   it('should find all modules', async () => {
     //Expectations
-    modulesService.useValue.findAll.mockResolvedValue([mockedModule]);
+    modulesService.useValue.findAll.mockResolvedValue([mockedModuleWithBanner]);
 
     // Actions
     const actual = await controller.findAll();
 
     // Assertions
-    expect(actual).toEqual({ data: [mockedModule] });
+    expect(actual).toEqual({ data: [mockedModuleWithBanner] });
   });
 
   it('should find all loaded modules', async () => {
     //Expectations
-    modulesService.useValue.findAllLoaded.mockResolvedValue([mockedModule]);
+    modulesService.useValue.findAllLoaded.mockResolvedValue([
+      mockedModuleWithBanner,
+    ]);
 
     // Actions
     const actual = await controller.findAllLoaded();
 
     // Assertions
-    expect(actual).toEqual({ data: [mockedModule] });
+    expect(actual).toEqual({ data: [mockedModuleWithBanner] });
   });
 
   it('should find a module', async () => {
     // Set
     const id = '6795315ba07479c68c2e67dc';
     //Expectations
-    modulesService.useValue.findOne.mockResolvedValue(mockedModule);
+    modulesService.useValue.findOne.mockResolvedValue(mockedModuleWithBanner);
 
     // Actions
     const actual = await controller.findOne(id);
 
     // Assertions
-    expect(actual).toEqual({ data: mockedModule });
+    expect(actual).toEqual({ data: mockedModuleWithBanner });
     expect(modulesService.useValue.findOne).toBeCalledWith(id);
   });
 

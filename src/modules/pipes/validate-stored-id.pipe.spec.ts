@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing';
-import { offerService } from '../../../test/mocks/services/mock.offers-service';
-import { bannersService } from '../../../test/mocks/services/mock.banner-service';
+import { mockedOfferService } from '../../../test/mocks/services/mock.offers-service';
+import { mockedBannersService } from '../../../test/mocks/services/mock.banner-service';
 import { ValidateStoredIdPipe } from './validate-stored-id.pipe';
 import { ArgumentMetadata, UnprocessableEntityException } from '@nestjs/common';
 import { mockedOffer } from '../../../test/mocks/entities/mock.offer.entity';
@@ -14,7 +14,11 @@ describe('Validate stored id', () => {
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       controllers: [],
-      providers: [bannersService, offerService, ValidateStoredIdPipe],
+      providers: [
+        mockedBannersService,
+        mockedOfferService,
+        ValidateStoredIdPipe,
+      ],
     }).compile();
 
     validateStoredIdPipe = await moduleRef.resolve(ValidateStoredIdPipe);
@@ -33,8 +37,8 @@ describe('Validate stored id', () => {
     const metadata = {} as ArgumentMetadata;
 
     // Expectation
-    offerService.useValue.findOneBy.mockResolvedValue(mockedOffer);
-    bannersService.useValue.findById.mockResolvedValue(null);
+    mockedOfferService.useValue.findOneBy.mockResolvedValue(mockedOffer);
+    mockedBannersService.useValue.findById.mockResolvedValue(null);
 
     // Actions
     const actual = await validateStoredIdPipe.transform(payload, metadata);
@@ -56,8 +60,8 @@ describe('Validate stored id', () => {
     const metadata = {} as ArgumentMetadata;
 
     // Expectation
-    offerService.useValue.findOneBy.mockResolvedValue(null);
-    bannersService.useValue.findById.mockResolvedValue(null);
+    mockedOfferService.useValue.findOneBy.mockResolvedValue(null);
+    mockedBannersService.useValue.findById.mockResolvedValue(null);
 
     // Actions
     const actual = validateStoredIdPipe.transform(payload, metadata);

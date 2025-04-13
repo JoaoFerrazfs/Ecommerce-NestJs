@@ -3,7 +3,7 @@ import { OffersController } from './offers.controller';
 import { CreateOfferDto } from '../../dto/create-offer.dto';
 import { productsRepository } from '../../../../test/mocks/repositores/mock.ProductsRepository';
 import { offersRepository } from '../../../../test/mocks/repositores/mock.OffersRepository';
-import { offerService } from '../../../../test/mocks/services/mock.offers-service';
+import { mockedOfferService } from '../../../../test/mocks/services/mock.offers-service';
 import { mockedOffer } from '../../../../test/mocks/entities/mock.offer.entity';
 import { NotFoundException } from '@nestjs/common';
 
@@ -13,7 +13,7 @@ describe('OffersController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [OffersController],
-      providers: [offerService, productsRepository, offersRepository],
+      providers: [mockedOfferService, productsRepository, offersRepository],
     }).compile();
 
     controller = module.get(OffersController);
@@ -30,26 +30,28 @@ describe('OffersController', () => {
     } as CreateOfferDto;
 
     // Expectations
-    offerService.useValue.create.mockResolvedValue(mockedOffer);
+    mockedOfferService.useValue.create.mockResolvedValue(mockedOffer);
 
     // Actions
     const actual = await controller.create(data);
 
     // Assertions
     expect(actual).toBe(mockedOffer);
-    expect(offerService.useValue.create).toBeCalledWith(data);
+    expect(mockedOfferService.useValue.create).toBeCalledWith(data);
   });
 
   it('should get all offers', async () => {
     // Expectations
-    offerService.useValue.getAllLoadedOffers.mockResolvedValue([mockedOffer]);
+    mockedOfferService.useValue.getAllLoadedOffers.mockResolvedValue([
+      mockedOffer,
+    ]);
 
     // Actions
     const actual = await controller.list();
 
     // Assertions
     expect(actual).toEqual({ data: [mockedOffer] });
-    expect(offerService.useValue.getAllLoadedOffers).toBeCalledWith();
+    expect(mockedOfferService.useValue.getAllLoadedOffers).toBeCalledWith();
   });
 
   it('should get an offer', async () => {
@@ -57,14 +59,14 @@ describe('OffersController', () => {
     const id = '679271f302e8562ae6ce2484';
 
     // Expectations
-    offerService.useValue.getLoadedOffer.mockResolvedValue(mockedOffer);
+    mockedOfferService.useValue.getLoadedOffer.mockResolvedValue(mockedOffer);
 
     // Actions
     const actual = await controller.get(id);
 
     // Assertions
     expect(actual).toEqual({ data: mockedOffer });
-    expect(offerService.useValue.getLoadedOffer).toBeCalledWith(id);
+    expect(mockedOfferService.useValue.getLoadedOffer).toBeCalledWith(id);
   });
 
   it('should get an offer', async () => {
@@ -72,14 +74,14 @@ describe('OffersController', () => {
     const id = '679271f302e8562ae6ce2484';
 
     // Expectations
-    offerService.useValue.getLoadedOffer.mockResolvedValue(mockedOffer);
+    mockedOfferService.useValue.getLoadedOffer.mockResolvedValue(mockedOffer);
 
     // Actions
     const actual = await controller.get(id);
 
     // Assertions
     expect(actual).toEqual({ data: mockedOffer });
-    expect(offerService.useValue.getLoadedOffer).toBeCalledWith(id);
+    expect(mockedOfferService.useValue.getLoadedOffer).toBeCalledWith(id);
   });
 
   it('should delete an offer', async () => {
@@ -87,13 +89,13 @@ describe('OffersController', () => {
     const id = '679271f302e8562ae6ce2484';
 
     // Expectations
-    offerService.useValue.delete.mockResolvedValue(true);
+    mockedOfferService.useValue.delete.mockResolvedValue(true);
 
     // Actions
     await controller.delete(id);
 
     // Assertions
-    expect(offerService.useValue.delete).toBeCalledWith(id);
+    expect(mockedOfferService.useValue.delete).toBeCalledWith(id);
   });
 
   it('should not delete an offer', async () => {
@@ -101,14 +103,14 @@ describe('OffersController', () => {
     const id = '679271f302e8562ae6ce2484';
 
     // Expectations
-    offerService.useValue.delete.mockResolvedValue(false);
+    mockedOfferService.useValue.delete.mockResolvedValue(false);
 
     // Actions
     const actual = controller.delete(id);
 
     // Assertions
     await expect(actual).rejects.toThrow(NotFoundException);
-    expect(offerService.useValue.delete).toBeCalledWith(id);
+    expect(mockedOfferService.useValue.delete).toBeCalledWith(id);
   });
 
   it('should update an offer', async () => {
@@ -117,15 +119,15 @@ describe('OffersController', () => {
     const data = {} as CreateOfferDto;
 
     // Expectations
-    offerService.useValue.findOneBy.mockResolvedValue(mockedOffer);
-    offerService.useValue.update.mockResolvedValue(mockedOffer);
+    mockedOfferService.useValue.findOneBy.mockResolvedValue(mockedOffer);
+    mockedOfferService.useValue.update.mockResolvedValue(mockedOffer);
 
     // Actions
     const actual = await controller.update(data, id);
 
     // Assertions
     expect(actual).toEqual(mockedOffer);
-    expect(offerService.useValue.update).toHaveBeenCalledWith(
+    expect(mockedOfferService.useValue.update).toHaveBeenCalledWith(
       mockedOffer,
       data,
     );
@@ -137,14 +139,14 @@ describe('OffersController', () => {
     const data = {} as CreateOfferDto;
 
     // Expectations
-    offerService.useValue.findOneBy.mockResolvedValue(null);
-    offerService.useValue.update.mockResolvedValue(null);
+    mockedOfferService.useValue.findOneBy.mockResolvedValue(null);
+    mockedOfferService.useValue.update.mockResolvedValue(null);
 
     // Actions
     const actual = controller.update(data, id);
 
     // Assertions
     await expect(actual).rejects.toThrow(NotFoundException);
-    expect(offerService.useValue.update).not.toHaveBeenCalled();
+    expect(mockedOfferService.useValue.update).not.toHaveBeenCalled();
   });
 });

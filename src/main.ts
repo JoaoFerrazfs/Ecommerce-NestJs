@@ -26,7 +26,7 @@ async function bootstrap() {
   });
 
   app.setBaseViewsDir(join(__dirname, '..', 'src'));
-  app.engine('hbs', hbs.engine); 
+  app.engine('hbs', hbs.engine);
   app.setViewEngine('hbs');
 
   // Swagguer
