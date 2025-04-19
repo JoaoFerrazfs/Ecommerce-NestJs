@@ -15,7 +15,9 @@ export class ModuleBuilderService {
     private readonly offerService: OffersService,
   ) {}
 
-  public async loadModules(modules: ModuleEntity[]): Promise<LoadedModulesType[]> {
+  public async loadModules(
+    modules: ModuleEntity[],
+  ): Promise<LoadedModulesType[]> {
     const loadedModules: LoadedModulesType[] = [];
 
     for (const module of modules) {
@@ -23,6 +25,7 @@ export class ModuleBuilderService {
 
       loadedModules.push({
         _id: module._id,
+        name: module.name,
         modulesGroup,
       });
     }

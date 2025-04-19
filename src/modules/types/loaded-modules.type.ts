@@ -7,4 +7,5 @@ export type moduleGroup = (Banner | LoadedOffer | [])[];
 export type LoadedModulesType = {
   _id: ObjectId;
   modulesGroup: moduleGroup;
+  name: string;
 };

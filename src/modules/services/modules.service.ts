@@ -6,8 +6,6 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ObjectId } from 'mongodb';
 import { ModuleBuilderService } from './module-builder.service';
-import { Banner } from '../../contents/entities/banner.entity';
-import { LoadedOffer } from '../../offers/entities/offer.entity';
 import { LoadedModulesType } from '../types/loaded-modules.type';
 
 @Injectable()
@@ -21,6 +19,7 @@ export class ModulesService {
   public async create(data: CreateModulesDto): Promise<ModuleEntity> {
     const modules = await this.modulesRepository.create({
       modulesGroup: data.modules,
+      name: data.name,
     });
 
     return await this.modulesRepository.save(modules);

@@ -10,7 +10,7 @@ import {
   NotFoundException,
   BadRequestException,
   HttpStatus,
-  HttpCode,
+  HttpCode, ParseArrayPipe,
 } from '@nestjs/common';
 import { ModulesService } from '../../services/modules.service';
 import { CreateModulesDto } from '../../dto/create-module.dto';
@@ -18,7 +18,14 @@ import { UpdateModuleDto } from '../../dto/update-module.dto';
 import { IdValidationPipe } from '../../../custom-decorators/pipes/id-validation.pipe';
 import { ModuleEntity } from '../../entities/module.entity';
 import { ValidateStoredIdPipe } from '../../pipes/validate-stored-id.pipe';
-import { CreateModule, DeleteModule, FindAllModule, FindOneModule, UpdateModule } from '../../oas/module.oas';
+import {
+  CreateModule,
+  DeleteModule,
+  FindAllLoadedModules,
+  FindAllModule,
+  FindOneModule,
+  UpdateModule,
+} from '../../oas/module.oas';
 
 @Controller('api/modules')
 export class ModulesController {
@@ -57,6 +64,7 @@ export class ModulesController {
     return { data: await this.modulesService.findAll() };
   }
 
+  @FindAllLoadedModules()
   @Get('/loadedModules')
   public async findAllLoaded() {
     return { data: await this.modulesService.findAllLoaded() };

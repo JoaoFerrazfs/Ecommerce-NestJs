@@ -9,6 +9,9 @@ export class ModuleEntity extends BaseEntity {
 
   @Column()
   modulesGroup: ModulesGroup[];
+
+  @Column()
+  name: string;
 }
 
 export type ModulesGroup = { type: AllowedModuleType; _id: ObjectId };
