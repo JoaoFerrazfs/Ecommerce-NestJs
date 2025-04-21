@@ -3,19 +3,18 @@
 <div class="container mt-4">
   <section id="conteudos">
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <h2 class="mb-0">Lista de Conteúdos</h2>
-      <a href="/admin/contents/create" class="btn btn-info btn-sm">Criar um conteúdo</a>
+      <h2 class="mb-0">Lista de Módulos</h2>
+      <a href="/admin/modules/create" class="btn btn-info btn-sm">Criar um Módulo</a>
     </div>
 
     <table class="table table-bordered" id="content-table">
       <thead>
       <tr>
         <th>ID</th>
-        <th>Título</th>
-        <th>Ações</th>
+        <th>Nome</th>
       </tr>
       </thead>
-      <tbody id="content-list">
+      <tbody id="modules-list">
       </tbody>
     </table>
   </section>
@@ -33,36 +32,36 @@
   // Carrega os conteúdos da API
   async function loadContents() {
     try {
-      const response = await fetch(`${window.location.origin}/api/contents/list`);
+      const response = await fetch(`${window.location.origin}/api/modules`);
       if (!response.ok) {
-        throw new Error('Erro ao carregar os conteúdos');
+        throw new Error('Erro ao carregar os módulos');
       }
       const data = await response.json();
-      renderContents(data.data);
+      renderModules(data.data);
     } catch (error) {
       console.error('Erro:', error);
-      alert('Falha ao carregar os conteúdos.');
+      alert('Falha ao carregar os módules.');
     }
   }
 
   // Renderiza os conteúdos na tabela
-  function renderContents(contents) {
-    const contentList = document.getElementById('content-list');
-    contentList.innerHTML = '';  // Limpar o conteúdo anterior
+  function renderModules(modules) {
+    const contentList = document.getElementById('modules-list');
+    contentList.innerHTML = '';
 
-    contents.forEach(content => {
+    modules.forEach(module => {
       const row = document.createElement('tr');
-      row.setAttribute('data-id', content._id);
+      row.setAttribute('data-id', module._id);
 
       // Coluna ID
       const idCell = document.createElement('td');
       idCell.className = 'd-flex justify-content-center align-items-center';
-      idCell.textContent = content._id;
+      idCell.textContent = module._id;
       row.appendChild(idCell);
 
       // Coluna Título
       const titleCell = document.createElement('td');
-      titleCell.textContent = content.name;
+      titleCell.textContent = module.name;
       row.appendChild(titleCell);
 
       // Coluna Ações
@@ -71,14 +70,14 @@
       const editButton = document.createElement('button');
       editButton.className = 'btn btn-warning btn-sm';
       editButton.textContent = 'Editar';
-      editButton.onclick = () => window.location.href = `/admin/contents/edit/${content._id}`;
+      editButton.onclick = () => window.location.href = `/admin/modules/edit/${module._id}`;
 
       editButton.style.marginRight = '10px';
 
       const deleteButton = document.createElement('button');
       deleteButton.className = 'btn btn-danger btn-sm delete-btn';
       deleteButton.textContent = 'Excluir';
-      deleteButton.onclick = () => handleDelete(content._id, row);
+      deleteButton.onclick = () => handleDelete(module._id, row);
 
       actionsCell.appendChild(editButton);
       actionsCell.appendChild(deleteButton);
@@ -89,9 +88,9 @@
   }
 
   // Lógica para lidar com exclusão
-  function handleDelete(contentId, row) {
+  function handleDelete(modulesId, row) {
     if (confirm('Tem certeza que deseja excluir este conteúdo?')) {
-      deleteContent(contentId)
+      deleteModule(modulesId)
         .then(() => {
           row.remove();
           alert('Conteúdo excluído com sucesso!');
@@ -104,14 +103,14 @@
   }
 
   // Faz a requisição DELETE para a API
-  async function deleteContent(contentId) {
-    const response = await fetch(`${window.location.origin}/api/contents/${contentId}`, {
+  async function deleteModule(modulesId) {
+    const response = await fetch(`${window.location.origin}/api/modules/${modulesId}`, {
       method: 'DELETE',
     });
 
     if (!response.ok) {
       const errorMessage = await response.text();
-      throw new Error(errorMessage || 'Erro ao excluir o conteúdo.');
+      throw new Error(errorMessage || 'Erro ao excluir o módulo.');
     }
   }
 </script>

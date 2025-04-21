@@ -13,12 +13,13 @@ export class ModuleBuilderService {
   public constructor(
     private readonly bannerService: BannersService,
     private readonly offerService: OffersService,
-  ) {}
+  ) {
+  }
 
   public async loadModules(
     modules: ModuleEntity[],
   ): Promise<LoadedModulesType[]> {
-    const loadedModules: LoadedModulesType[] = [];
+    const loadedModules = [];
 
     for (const module of modules) {
       const modulesGroup = await this.loadModuleComponents(module);
@@ -33,28 +34,37 @@ export class ModuleBuilderService {
     return loadedModules;
   }
 
-  private async loadModuleComponents({
-    modulesGroup,
-  }: ModuleEntity): Promise<moduleGroup> {
-    const loadedModules: moduleGroup = [];
-    for (const module of modulesGroup) {
-      const loadedModule = await this.findEntity(module.type, module._id);
+  private async loadModuleComponents(modulesGroup: ModuleEntity): Promise<any[]> {
+
+    const loadedModules = [];
+
+    if (!modulesGroup.modulesGroup) return [];
+
+    for (const module of modulesGroup.modulesGroup) {
+
+      let loadedModule = await this.findEntity(module.type, module._id);
 
       if (!loadedModule) continue;
 
       loadedModules.push(loadedModule);
     }
+
     return loadedModules.filter(Boolean);
   }
 
   private async findEntity(
     type: AllowedModuleType,
     id: ObjectId,
-  ): Promise<Banner | LoadedOffer | null> {
+  ): Promise<moduleGroup | null> {
     if (type == 'offer') {
-      return await this.offerService.findAndLoadOneBy(id);
+      const offer = await this.offerService.findAndLoadOneBy(id);
+      if (!offer) return null;
+      return { ...offer, type: 'offer' };
     }
 
-    return await this.bannerService.findById(id);
+    const banner = await this.bannerService.findById(id);
+    if (!banner) return null;
+
+    return { ...banner, type: 'banner' };
   }
 }

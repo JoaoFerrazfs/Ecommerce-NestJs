@@ -14,6 +14,7 @@ export class ContentsController {
 
     return res.render(this.contentsService.getVewPath('home'), {
       banners: content.banners,
+      modules: content.modules,
     });
   }
 

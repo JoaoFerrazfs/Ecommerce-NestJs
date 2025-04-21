@@ -55,8 +55,39 @@
       </ul>
     </div>
 
+    <!-- Seleção de Modulos -->
+    <div class="mb-3">
+      <label for="modules" class="form-label">Adicionar modulos:</label>
+      <select id="modules" class="form-select">
+        <option value="">Selecione um modulo</option>
+      </select>
+      <button type="button" class="btn btn-secondary mt-2" id="add-module">Adicionar modulo</button>
+    </div>
+
+    <!-- Lista de Modulos Selecionados -->
+    <div class="mb-3">
+      <label class="form-label">Modulos Selecionados (Arraste para ordenar):</label>
+      <ul id="selected-modules" class="list-group">
+        {{#if id}}
+          {{#each content.modules}}
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center"
+              data-module-id="{{id}}"
+            >
+              <img src="{{image}}" alt="{{name}}" class="me-3" style="width: 50px; height: auto;" />
+              <span>{{name}}</span>
+              <button type="button" class="btn btn-danger btn-sm remove-modules">Remover</button>
+            </li>
+          {{/each}}
+        {{/if}}
+      </ul>
+    </div>
+
     <!-- Campo Oculto para Submeter os Banners Selecionados -->
     <input type="hidden" name="banners" id="selected-banners-input" />
+
+    <!-- Campo Oculto para Submeter os modulos Selecionados -->
+    <input type="hidden" name="modules" id="selected-modules-input" />
 
     <!-- Botão de Submissão -->
     <button type="submit" class="btn btn-primary">
@@ -70,9 +101,13 @@
   document.addEventListener('DOMContentLoaded', async () => {
     const form = document.querySelector('form');
     const bannersSelect = document.getElementById('banners');
+    const modulesSelect = document.getElementById('modules');
     const addBannerButton = document.getElementById('add-banner');
+    const addModuleButton = document.getElementById('add-module');
     const bannersList = document.getElementById('selected-banners');
     const bannersInput = document.getElementById('selected-banners-input');
+    const modulesList = document.getElementById('selected-modules');
+    const modulesInput = document.getElementById('selected-modules-input');
     const nameInput = document.getElementById('content-name');
     const contentId = "{{id}}"; // Pegamos o ID do conteúdo, se houver
 
@@ -95,6 +130,18 @@
       }
     }
 
+    async function fetchModules() {
+      const response = await fetch(`${window.location.origin}/api/modules`);
+      const data = await response.json();
+      return data.data;
+    }
+
+    async function fetchModuleById(id) {
+      const response = await fetch(`${window.location.origin}/api/modules/${id}`);
+      const data = await response.json();
+      return data.data;
+    }
+
     // Preenche o select com banners disponíveis
     const banners = await fetchBanners();
     banners.forEach((banner) => {
@@ -104,22 +151,36 @@
       bannersSelect.appendChild(option);
     });
 
-    // Preenche os campos do formulário caso estejamos editando
+
+    // Preenche o select com banners disponíveis
+    const modules = await fetchModules();
+    modules.forEach((module) => {
+      const option = document.createElement('option');
+      option.value = module._id;
+      option.textContent = module.name;
+      modulesSelect.appendChild(option);
+    });
+
     if (contentId) {
       const { data } = await fetchContentById(contentId);
 
       if (data) {
-        nameInput.value = data.name; // Preenche o nome do conteúdo
+        nameInput.value = data.name;
 
         data.banners.forEach((banner) => {
           if (banner) {
             addBannerToList(banner);
           }
         });
+
+        for (const module of data.modules) {
+          if (module) {
+            addModuleToList( await fetchModuleById(module));
+          }
+        }
       }
     }
 
-    // Adiciona um banner selecionado à lista
     addBannerButton.addEventListener('click', () => {
       const selectedBannerId = bannersSelect.value;
       const selectedBanner = banners.find((b) => b._id === selectedBannerId);
@@ -135,7 +196,21 @@
       addBannerToList(selectedBanner);
     });
 
-    // Função para adicionar um banner à lista visual e ao campo oculto
+    addModuleButton.addEventListener('click', () => {
+      const selectedModuleId = modulesSelect.value;
+      const selectedModule = modules.find((b) => b._id === selectedModuleId);
+
+      if (!selectedModule) return alert('Selecione um modulo válido!');
+
+      // Verifica se o banner já foi adicionado
+      const alreadyAdded = Array.from(modulesList.children).some(
+        (li) => li.dataset.moduleId === selectedModuleId,
+      );
+      if (alreadyAdded) return alert('Este modulo já foi adicionado!');
+
+      addModuleToList(selectedModule);
+    });
+
     function addBannerToList(banner) {
 
       const listItem = document.createElement('li');
@@ -157,12 +232,40 @@
       updateHiddenInput();
     }
 
+    function addModuleToList(module) {
+
+      const listModuleItem = document.createElement('li');
+      listModuleItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+      listModuleItem.dataset.moduleId = module._id;
+      listModuleItem.dataset.moduleName = module.name;
+      listModuleItem.innerHTML = `
+        <span>${module.name}</span>
+        <button type="button" class="btn btn-danger btn-sm remove-modules">Remover</button>
+      `;
+
+      // Adiciona funcionalidade de remoção
+      listModuleItem.querySelector('.remove-modules').addEventListener('click', () => {
+        listModuleItem.remove();
+        updateHiddenInputModule();
+      });
+
+      modulesList.appendChild(listModuleItem);
+      updateHiddenInputModule();
+    }
+
     // Atualiza o campo oculto com a ordem dos banners selecionados
     function updateHiddenInput() {
       const bannerIds = Array.from(bannersList.children).map(
         (li) => li.dataset.bannerId,
       );
       bannersInput.value = JSON.stringify(bannerIds);
+    }
+
+    function updateHiddenInputModule() {
+      const moduleIds = Array.from(modulesList.children).map(
+        (li) => li.dataset.moduleId,
+      );
+      modulesInput.value = JSON.stringify(moduleIds);
     }
 
     // Habilita arrastar e ordenar os banners
@@ -177,11 +280,16 @@
 
       const bannerIds = Array.from(bannersList.children).map(
         (li) => li.dataset.bannerId,
-      ); // IDs dos banners selecionados
+      );
+
+      const moduleIds = Array.from(modulesList.children).map(
+        (li) => li.dataset.moduleId
+      );
 
       const data = {
         name: nameInput.value,
         banners: bannerIds,
+        modules: moduleIds,
       };
 
       const endpoint = contentId

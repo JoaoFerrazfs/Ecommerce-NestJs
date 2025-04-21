@@ -22,6 +22,7 @@ export class CreateModulesDto {
 
   @IsArray()
   @ValidateNested({ each: true })
+  @IsNotEmpty()
   @Type(() => CreateModuleDto)
   modules: CreateModuleDto[];
 }
