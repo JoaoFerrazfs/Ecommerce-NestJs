@@ -88,4 +88,19 @@ export class AdminController {
       id,
     });
   }
+
+  @Get('modules')
+  modules(@Res() res: Response) {
+    return res.render(this.adminService.getVewPath('listModules'), {
+      layout: 'admin',
+    });
+  }
+
+  @Get('modules/edit/:id')
+  editModules(@Res() res: Response, @Param('id') id: string) {
+    return res.render(this.adminService.getVewPath('moduleForm'), {
+      layout: 'admin',
+      id,
+    });
+  }
 }

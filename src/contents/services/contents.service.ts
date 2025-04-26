@@ -62,6 +62,7 @@ export class ContentsService implements RenderContract {
     const content = new Content();
     content.banners = banners;
     content.name = data.name;
+    content.modules = data.modules;
 
     return await this.contentRepository.save(content);
   }
@@ -81,7 +82,7 @@ export class ContentsService implements RenderContract {
 
     content.name = data.name;
     content.banners = banners;
-
+    content.modules = data.modules;
     return await this.contentRepository.save(content);
   }
 }

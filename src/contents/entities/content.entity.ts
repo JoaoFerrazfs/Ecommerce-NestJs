@@ -12,4 +12,7 @@ export class Content extends BaseEntity {
 
   @Column()
   banners: Banner[];
+
+  @Column()
+  modules: string[];
 }

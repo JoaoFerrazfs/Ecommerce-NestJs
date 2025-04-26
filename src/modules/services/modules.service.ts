@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateModulesDto } from '../dto/create-module.dto';
 import { UpdateModuleDto } from '../dto/update-module.dto';
 import { ModuleEntity } from '../entities/module.entity';
@@ -28,11 +28,14 @@ export class ModulesService {
   public async update(
     id: string,
     updateModuleDto: UpdateModuleDto,
-  ): Promise<boolean> {
-    const result = await this.modulesRepository.update(new ObjectId(id), {
-      modulesGroup: updateModuleDto.modules,
-    });
-    return !!result.affected;
+  ): Promise<ModuleEntity | null> {
+
+    const module = await this.modulesRepository.findOne({where: {_id: new ObjectId(id)}})
+    if(!module) return null;
+
+    module.modulesGroup = updateModuleDto.modules
+
+    return await this.modulesRepository.save(module);
   }
 
   public async findAll(): Promise<ModuleEntity[]> {
@@ -47,6 +50,14 @@ export class ModulesService {
 
   public async findOne(id: string): Promise<ModuleEntity | null> {
     return await this.modulesRepository.findOneBy({ _id: new ObjectId(id) });
+  }
+
+  public async findOneLoadedModule(id: string): Promise<LoadedModulesType[]> {
+   const module  = await this.modulesRepository.findOneBy({ _id: new ObjectId(id) });
+
+   if(!module) throw new NotFoundException();
+
+    return await this.moduleBuilderService.loadModules([module]);
   }
 
   public async delete(id: string): Promise<boolean> {

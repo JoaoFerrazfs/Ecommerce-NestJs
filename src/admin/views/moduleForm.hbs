@@ -1,0 +1,175 @@
+{{> admin-navbar }}
+
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-4">{{#if id}}Editar módulo {{else}}Cadastrar módulo{{/if}}</h1>
+    <a href="/admin/modules" class="btn btn-info btn-sm">Lista de módulos</a>
+  </div>
+
+  <form method="POST">
+    {{#if id}}
+      <input type="hidden" name="moduleId" value="{{module.id}}" />
+    {{/if}}
+
+    <div class="mb-3">
+      <label for="module-name" class="form-label">Nome do módulo:</label>
+      <input
+        type="text"
+        id="module-name"
+        name="name"
+        class="form-control"
+        value="{{#if id}}{{module.name}}{{/if}}"
+        placeholder="Digite o nome do módulo"
+        required
+      />
+    </div>
+
+    <!-- Seção: Adicionar Componentes -->
+    <div class="mb-3">
+      <label for="components" class="form-label">Adicionar Componente:</label>
+      <select id="components" class="form-select">
+        <option value="">Selecione um componente</option>
+      </select>
+      <button type="button" class="btn btn-secondary mt-2" id="add-component">Adicionar componente</button>
+    </div>
+
+    <!-- Lista de Componentes -->
+    <div class="mb-3">
+      <label class="form-label">Componentes Selecionados:</label>
+      <ul id="selected-components" class="list-group"></ul>
+    </div>
+
+    <!-- Campo oculto -->
+    <input type="hidden" name="components" id="selected-components-input" />
+
+    <button type="submit" class="btn btn-primary">
+      {{#if id}}Salvar Alterações{{else}}Criar Página{{/if}}
+    </button>
+  </form>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    const form = document.querySelector('form');
+    const nameInput = document.getElementById('module-name');
+    const moduleId = "{{id}}";
+
+    const componentsSelect = document.getElementById('components');
+    const addComponentButton = document.getElementById('add-component');
+    const componentsList = document.getElementById('selected-components');
+    const componentsInput = document.getElementById('selected-components-input');
+
+    async function fetchData(url) {
+      const res = await fetch(url);
+      const json = await res.json();
+      return json.data;
+    }
+
+    const banners = await fetchData(`${window.location.origin}/api/banners/list`);
+    const offers = await fetchData(`${window.location.origin}/api/offers`);
+
+    const allComponents = [
+      ...banners.map((b) => ({ ...b, type: 'banner', displayName: b.title })),
+      ...offers.map((o) => ({ ...o, type: 'offer', displayName: o.title }))
+    ];
+
+    allComponents.forEach((item) => {
+      const option = document.createElement('option');
+      option.value = `${item._id}|${item.type}`;
+      option.textContent = `[${item.type}] ${item.displayName}`;
+      componentsSelect.appendChild(option);
+    });
+
+    if (moduleId) {
+      const res = await fetch(`${window.location.origin}/api/modules/${moduleId}/loaded`);
+      const { data } = await res.json();
+
+      nameInput.value = data[0].name;
+      const modules = data[0].modulesGroup;
+
+      modules.forEach((component) => {
+        addComponentToList(component, componentsList, componentsInput);
+      });
+    }
+
+    function addComponentToList(item, list, input) {
+      const alreadyAdded = Array.from(list.children).some(
+        (li) => li.dataset.componentId === item._id
+      );
+      if (alreadyAdded) return alert(`Este componente já foi adicionado!`);
+
+      const li = document.createElement('li');
+      li.className = 'list-group-item d-flex justify-content-between align-items-center';
+      li.dataset.componentId = item._id;
+      li.dataset.type = item.type;
+
+      const label = item.title || item.name || item.displayName;
+
+      li.innerHTML = `
+        <span>${item.type} -  ${label}</span>
+        <button type="button" class="btn btn-danger btn-sm remove-item">Remover</button>
+      `;
+
+      li.querySelector('.remove-item').addEventListener('click', () => {
+        li.remove();
+        updateHiddenInput(list, input);
+      });
+
+      list.appendChild(li);
+      updateHiddenInput(list, input);
+    }
+
+    addComponentButton.addEventListener('click', () => {
+      const selectedValue = componentsSelect.value;
+      if (!selectedValue) return alert('Selecione um componente válido!');
+
+      const [id, type] = selectedValue.split('|');
+      const selected = allComponents.find((c) => c._id === id && c.type === type);
+      if (!selected) return alert('Componente não encontrado!');
+      addComponentToList(selected, componentsList, componentsInput);
+    });
+
+    function updateHiddenInput(list, input) {
+      const components = Array.from(list.children).map(li => ({
+        _id: li.dataset.componentId,
+        type: li.dataset.type
+      }));
+      input.value = JSON.stringify(components);
+    }
+
+    new Sortable(componentsList, {
+      animation: 150,
+      onEnd: () => updateHiddenInput(componentsList, componentsInput)
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const data = {
+        name: nameInput.value,
+        modules: JSON.parse(componentsInput.value),
+      };
+
+      const endpoint = moduleId
+        ? `${window.location.origin}/api/modules/${moduleId}`
+        : `${window.location.origin}/api/modules/create`;
+
+      const response = await fetch(endpoint, {
+        method: moduleId ? 'PATCH' : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        alert('Módulo salvo com sucesso!');
+        window.location.href = '/admin/modules';
+      } else {
+        const result = await response.json();
+
+        alert('Erro ao salvar módulo: ' + (result.message || ''));
+      }
+    });
+  });
+</script>
+
+{{> admin-footer }}

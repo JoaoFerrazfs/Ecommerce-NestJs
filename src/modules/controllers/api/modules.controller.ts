@@ -10,7 +10,7 @@ import {
   NotFoundException,
   BadRequestException,
   HttpStatus,
-  HttpCode, ParseArrayPipe,
+  HttpCode,
 } from '@nestjs/common';
 import { ModulesService } from '../../services/modules.service';
 import { CreateModulesDto } from '../../dto/create-module.dto';
@@ -26,6 +26,7 @@ import {
   FindOneModule,
   UpdateModule,
 } from '../../oas/module.oas';
+import { LoadedModulesType } from '../../types/loaded-modules.type';
 
 @Controller('api/modules')
 export class ModulesController {
@@ -76,6 +77,16 @@ export class ModulesController {
     @Param('id', IdValidationPipe) id: string,
   ): Promise<{ data: ModuleEntity }> {
     const module = await this.modulesService.findOne(id);
+    if (!module) throw new NotFoundException();
+    return { data: module };
+  }
+
+  @FindOneModule()
+  @Get(':id/loaded')
+  public async findOneLoadedModule(
+    @Param('id', IdValidationPipe) id: string,
+  ): Promise<{ data: LoadedModulesType[] }> {
+    const module = await this.modulesService.findOneLoadedModule(id);
     if (!module) throw new NotFoundException();
 
     return { data: module };
