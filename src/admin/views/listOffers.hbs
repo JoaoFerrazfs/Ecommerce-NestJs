@@ -1,0 +1,129 @@
+{{> admin-navbar }}
+
+<div class="container mt-4">
+  <section id="conteudos">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="mb-0">Lista de Módulos</h2>
+      <a href="/admin/offers/create" class="btn btn-info btn-sm">Criar um Módulo</a>
+    </div>
+
+    <table class="table table-bordered" id="content-table">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Titulo</th>
+        <th>Produtos</th>
+        <th>Ações</th>
+      </tr>
+      </thead>
+      <tbody id="modules-list">
+      </tbody>
+    </table>
+  </section>
+</div>
+
+{{> admin-footer }}
+
+<script>
+  // Função principal para inicializar a página
+  document.addEventListener('DOMContentLoaded', () => {
+    loadOffers();
+    initDeleteButtons();
+  });
+
+  // Carrega os conteúdos da API
+  async function loadOffers() {
+    try {
+      const response = await fetch(`${window.location.origin}/api/offers`);
+      if (!response.ok) {
+        throw new Error('Erro ao carregar os carrosséis de ofertas cadastrados');
+      }
+      const data = await response.json();
+      renderModules(data.data);
+    } catch (error) {
+      console.error('Erro:', error);
+      alert('Falha ao carregar os módules.');
+    }
+  }
+
+  // Renderiza os conteúdos na tabela
+  function renderModules(modules) {
+    const contentList = document.getElementById('modules-list');
+    contentList.innerHTML = '';
+
+    modules.forEach(offer => {
+      const row = document.createElement('tr');
+      row.setAttribute('data-id', offer._id);
+
+      // Coluna ID
+      const idCell = document.createElement('td');
+      idCell.className = 'd-flex justify-content-center align-items-center';
+      idCell.textContent = offer._id;
+      row.appendChild(idCell);
+
+      // Coluna Título
+      const titleCell = document.createElement('td');
+      titleCell.textContent = offer.title;
+      row.appendChild(titleCell);
+
+      const modulesCell = document.createElement('td');
+
+      offer.products.forEach(function(product) {
+        const li = document.createElement('li');
+        li.textContent = product.cod;
+        modulesCell.appendChild(li);
+      });
+
+      row.appendChild(modulesCell);
+
+
+      // Coluna Ações
+      const actionsCell = document.createElement('td');
+      actionsCell.className = 'd-flex justify-content-center align-items-center';
+      const editButton = document.createElement('button');
+      editButton.className = 'btn btn-warning btn-sm';
+      editButton.textContent = 'Editar';
+      editButton.onclick = () => window.location.href = `/admin/offer/edit/${offer._id}`;
+
+      editButton.style.marginRight = '10px';
+
+      const deleteButton = document.createElement('button');
+      deleteButton.className = 'btn btn-danger btn-sm delete-btn';
+      deleteButton.textContent = 'Excluir';
+      deleteButton.onclick = () => handleDelete(offer._id, row);
+
+      actionsCell.appendChild(editButton);
+      actionsCell.appendChild(deleteButton);
+      row.appendChild(actionsCell);
+
+      contentList.appendChild(row);
+    });
+  }
+
+  // Lógica para lidar com exclusão
+  function handleDelete(modulesId, row) {
+    if (confirm('Tem certeza que deseja excluir este conteúdo?')) {
+      deleteModule(modulesId)
+        .then(() => {
+          row.remove();
+          alert('Conteúdo excluído com sucesso!');
+        })
+        .catch(error => {
+          console.error('Erro:', error);
+          alert('Falha ao excluir o conteúdo. Tente novamente.');
+        });
+    }
+  }
+
+  // Faz a requisição DELETE para a API
+  async function deleteModule(modulesId) {
+    const response = await fetch(`${window.location.origin}/api/offer/${modulesId}`, {
+      method: 'DELETE',
+    });
+
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(errorMessage || 'Erro ao excluir o módulo.');
+    }
+  }
+</script>

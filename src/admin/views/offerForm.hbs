@@ -1,0 +1,173 @@
+{{> admin-navbar }}
+
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-4">{{#if id}}Editar carrossel de ofertas {{else}}Cadastrar carrossel de ofertas{{/if}}</h1>
+    <a href="/admin/offers" class="btn btn-info btn-sm">Lista de carrossel de ofertass</a>
+  </div>
+
+  <form method="POST">
+    {{#if id}}
+      <input type="hidden" name="offerId" value="{{offer.id}}" />
+    {{/if}}
+
+    <div class="mb-3">
+      <label for="offer-name" class="form-label">Nome do carrossel de ofertas:</label>
+      <input
+        type="text"
+        id="offer-name"
+        name="name"
+        class="form-control"
+        value="{{#if id}}{{offer.name}}{{/if}}"
+        placeholder="Digite o nome do carrossel de ofertas"
+        required
+      />
+    </div>
+
+    <!-- Seção: Adicionar Produtos -->
+    <div class="mb-3">
+      <label for="components" class="form-label">Adicionar Produto:</label>
+      <select id="components" class="form-select">
+        <option value="">Selecione um produto</option>
+      </select>
+      <button type="button" class="btn btn-secondary mt-2" id="add-component">Adicionar produto</button>
+    </div>
+
+    <!-- Lista de Produtos -->
+    <div class="mb-3">
+      <label class="form-label">Produtos Selecionados:</label>
+      <ul id="selected-components" class="list-group"></ul>
+    </div>
+
+    <!-- Campo oculto -->
+    <input type="hidden" name="components" id="selected-components-input" />
+
+    <button type="submit" class="btn btn-primary">
+      {{#if id}}Salvar Alterações{{else}}Criar Página{{/if}}
+    </button>
+  </form>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    const form = document.querySelector('form');
+    const nameInput = document.getElementById('offer-name');
+    const offerId = "{{id}}";
+
+    const componentsSelect = document.getElementById('components');
+    const addComponentButton = document.getElementById('add-component');
+    const componentsList = document.getElementById('selected-components');
+    const componentsInput = document.getElementById('selected-components-input');
+
+    async function fetchData(url) {
+      const res = await fetch(url);
+      const json = await res.json();
+      return json.data;
+    }
+
+    const products = await fetchData(`${window.location.origin}/api/products`);
+
+    const allComponents = products.map((p) => ({
+      ...p,
+      displayName: p.name // ou p.title, depende do seu objeto de produto
+    }));
+
+
+    allComponents.forEach((item) => {
+      const option = document.createElement('option');
+      option.value = `${item._id}`;
+      option.textContent = `${item.displayName}`;
+      componentsSelect.appendChild(option);
+    });
+
+    if (offerId) {
+      const res = await fetch(`${window.location.origin}/api/offers/${offerId}`);
+      const { data } = await res.json();
+
+      nameInput.value = data.title;
+      const products = data.products;
+      products.forEach((product) => {
+
+        addComponentToList(product, componentsList, componentsInput);
+      });
+    }
+
+    function addComponentToList(item, list, input) {
+      const alreadyAdded = Array.from(list.children).some(
+        (li) => li.dataset.componentId === item._id
+      );
+
+      if (alreadyAdded) return alert(`Este produto já foi adicionado!`);
+
+      const li = document.createElement('li');
+      li.className = 'list-group-item d-flex justify-content-between align-items-center';
+      li.dataset.componentId = item._id;
+
+      li.innerHTML = `
+        <span>${item.name}</span>
+        <button type="button" class="btn btn-danger btn-sm remove-item">Remover</button>
+      `;
+
+      li.querySelector('.remove-item').addEventListener('click', () => {
+        li.remove();
+        updateHiddenInput(list, input);
+      });
+
+      list.appendChild(li);
+      updateHiddenInput(list, input);
+    }
+
+    addComponentButton.addEventListener('click', () => {
+      const selectedValue = componentsSelect.value;
+      if (!selectedValue) return alert('Selecione um produto válido!');
+
+      const [id] = selectedValue.split('|');
+      const selected = allComponents.find((c) => c._id === id);
+      if (!selected) return alert('Produto não encontrado!');
+      addComponentToList(selected, componentsList, componentsInput);
+    });
+
+    function updateHiddenInput(list, input) {
+      const components = Array.from(list.children).map(li => (
+       li.dataset.componentId
+      ));
+      input.value = JSON.stringify(components);
+    }
+
+    new Sortable(componentsList, {
+      animation: 150,
+      onEnd: () => updateHiddenInput(componentsList, componentsInput)
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+
+      const data = {
+        title: nameInput.value,
+        products: JSON.parse(componentsInput.value),
+      };
+
+      const endpoint = offerId
+        ? `${window.location.origin}/api/offers/${offerId}`
+        : `${window.location.origin}/api/offers`;
+
+      const response = await fetch(endpoint, {
+        method: offerId ? 'PATCH' : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        alert('Módulo salvo com sucesso!');
+        window.location.href = '/admin/offers';
+      } else {
+        const result = await response.json();
+
+        alert('Erro ao salvar carrossel de ofertas: ' + (result.message || ''));
+      }
+    });
+  });
+</script>
+
+{{> admin-footer }}

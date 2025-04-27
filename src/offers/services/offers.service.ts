@@ -33,6 +33,7 @@ export class OffersService {
     const offers: Offer = await this.offerRepository.findOneBy({
       _id: new ObjectId(id),
     });
+
     const offer = await this.loadProducts(offers);
 
     return offer[0];
@@ -73,8 +74,9 @@ export class OffersService {
       const products: Product[] = [];
       for (const productId of offer.products) {
         const product = await this.productRepository.findOneBy({
-          _id: productId,
+          _id: new ObjectId(productId),
         });
+
         products.push(product);
       }
 

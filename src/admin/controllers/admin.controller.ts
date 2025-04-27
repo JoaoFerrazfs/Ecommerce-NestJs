@@ -103,4 +103,26 @@ export class AdminController {
       id,
     });
   }
+
+  @Get('offers')
+  offers(@Res() res: Response) {
+    return res.render(this.adminService.getVewPath('listOffers'), {
+      layout: 'admin',
+    });
+  }
+
+  @Get('offers/create')
+  createOffers(@Res() res: Response) {
+    return res.render(this.adminService.getVewPath('offerForm'), {
+      layout: 'admin',
+    });
+  }
+
+  @Get('offer/edit/:id')
+  editOffers(@Res() res: Response, @Param('id') id: string) {
+    return res.render(this.adminService.getVewPath('offerForm'), {
+      layout: 'admin',
+      id,
+    });
+  }
 }
