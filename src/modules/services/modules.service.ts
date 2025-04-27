@@ -29,11 +29,12 @@ export class ModulesService {
     id: string,
     updateModuleDto: UpdateModuleDto,
   ): Promise<ModuleEntity | null> {
+    const module = await this.modulesRepository.findOne({
+      where: { _id: new ObjectId(id) },
+    });
+    if (!module) return null;
 
-    const module = await this.modulesRepository.findOne({where: {_id: new ObjectId(id)}})
-    if(!module) return null;
-
-    module.modulesGroup = updateModuleDto.modules
+    module.modulesGroup = updateModuleDto.modules;
 
     return await this.modulesRepository.save(module);
   }
@@ -53,9 +54,11 @@ export class ModulesService {
   }
 
   public async findOneLoadedModule(id: string): Promise<LoadedModulesType[]> {
-   const module  = await this.modulesRepository.findOneBy({ _id: new ObjectId(id) });
+    const module = await this.modulesRepository.findOneBy({
+      _id: new ObjectId(id),
+    });
 
-   if(!module) throw new NotFoundException();
+    if (!module) throw new NotFoundException();
 
     return await this.moduleBuilderService.loadModules([module]);
   }

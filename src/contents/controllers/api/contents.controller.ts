@@ -23,6 +23,7 @@ import {
   UpdateContent,
 } from '../../oas/content.oas';
 import { FindByDto } from '../../dto/find-by.dto';
+import { ObjectId } from 'mongodb';
 
 @Controller('api/contents')
 export class ContentsController {
@@ -47,11 +48,18 @@ export class ContentsController {
   }
 
   @FindContent()
-  @Get('/:id')
+  @Get('/:identifier')
   public async find(
-    @Param('id') id: string,
+    @Param('identifier') identifier: string,
   ): Promise<{ data: Content } | null> {
-    return { data: await this.contentsService.findById(id) };
+    try {
+      const objectId = new ObjectId(identifier);
+      if (objectId) {
+        return { data: await this.contentsService.findById(objectId) };
+      }
+    } catch (error) {
+      return { data: await this.contentsService.findOne({ name: identifier }) };
+    }
   }
 
   @UpdateContent()

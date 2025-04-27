@@ -1,0 +1,194 @@
+<main class="container">
+
+  <script>
+    const path = window.location.pathname === '/' ? 'Home' : window.location.pathname;
+
+    function buildBanner(data) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'mb-5'; // adiciona espaço embaixo
+
+      const banner = document.createElement('img');
+      banner.src = data.image;
+      banner.alt = data.title;
+      banner.style.width = '100%';
+      banner.style.display = 'block';
+
+      wrapper.appendChild(banner);
+      document.querySelector('main.container').appendChild(wrapper);
+    }
+
+    function buildOffers(data) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'mb-5';
+
+      const section = document.createElement('section');
+      section.className = 'product-carrocel';
+
+      const title = document.createElement('h2');
+      title.className = 'mb-4';
+      title.innerText = data.title || 'Ofertas';
+
+      const carouselWrapper = document.createElement('div');
+      carouselWrapper.className = 'd-flex align-items-center'; // flex para setas e carousel lado a lado
+
+      const prevButton = document.createElement('button');
+      prevButton.className = 'carousel-control-prev position-static'; // position-static remove sobreposição
+      prevButton.type = 'button';
+      prevButton.setAttribute('data-bs-target', '#offersCarousel');
+      prevButton.setAttribute('data-bs-slide', 'prev');
+      prevButton.innerHTML = `
+    <span class="carousel-control-prev-icon"></span>
+    <span class="visually-hidden">Previous</span>
+  `;
+
+      const carousel = document.createElement('div');
+      carousel.id = 'offersCarousel';
+      carousel.className = 'carousel slide flex-grow-1'; // flex-grow ocupa o espaço que sobra
+      carousel.setAttribute('data-bs-ride', 'carousel');
+
+      const inner = document.createElement('div');
+      inner.className = 'carousel-inner';
+
+      const productsPerSlide = 4;
+      let slide;
+      data.products.forEach((product, index) => {
+        if (index % productsPerSlide === 0) {
+          slide = document.createElement('div');
+          slide.className = 'carousel-item';
+          if (index === 0) {
+            slide.classList.add('active');
+          }
+          const row = document.createElement('div');
+          row.className = 'row';
+          slide.appendChild(row);
+          inner.appendChild(slide);
+        }
+
+        const col = document.createElement('div');
+        col.className = 'col-md-3';
+
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        const link = document.createElement('a'); // <-- novo LINK
+        link.href = `/produto/${product.slug}`; // <-- link para página do produto
+        link.style.textDecoration = 'none'; // remove sublinhado
+
+        const img = document.createElement('img');
+        img.src = product.images[0].path;
+        img.className = 'card-img-top';
+        img.alt = product.name;
+
+        link.appendChild(img); // link envolvendo a imagem
+
+        const cardBody = document.createElement('div');
+        cardBody.className = 'card-body';
+
+        const cardTitle = document.createElement('h5');
+        cardTitle.className = 'card-title';
+        cardTitle.innerText = product.name;
+
+        const cardText = document.createElement('p');
+        cardText.className = 'card-text';
+        cardText.innerText = `R$ ${product.price}`;
+
+        cardBody.appendChild(cardTitle);
+        cardBody.appendChild(cardText);
+        card.appendChild(link);
+        card.appendChild(cardBody);
+        col.appendChild(card);
+
+        slide.querySelector('.row').appendChild(col);
+      });
+
+      carousel.appendChild(inner);
+
+      const nextButton = document.createElement('button');
+      nextButton.className = 'carousel-control-next position-static';
+      nextButton.type = 'button';
+      nextButton.setAttribute('data-bs-target', '#offersCarousel');
+      nextButton.setAttribute('data-bs-slide', 'next');
+      nextButton.innerHTML = `
+    <span class="carousel-control-next-icon"></span>
+    <span class="visually-hidden">Next</span>
+  `;
+
+      // Montando a linha: seta | carousel | seta
+      carouselWrapper.appendChild(prevButton);
+      carouselWrapper.appendChild(carousel);
+      carouselWrapper.appendChild(nextButton);
+
+      section.appendChild(title);
+      section.appendChild(carouselWrapper);
+
+      wrapper.appendChild(section);
+      document.querySelector('main.container').appendChild(wrapper);
+    }
+
+    function buildComponent(data) {
+      switch (data.type) {
+        case 'banner':
+          return buildBanner(data);
+
+        case 'offer':
+          return buildOffers(data);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const res = await fetch(`${window.location.origin}/api/contents/${path}`);
+      const { data } = await res.json();
+
+      for (const module of data.modules) {
+        const moduleLoadedResponde = await fetch(`${window.location.origin}/api/modules/${module}/loaded`);
+        const moduleLoadedData = await moduleLoadedResponde.json();
+        const modules = moduleLoadedData.data[0];
+
+        for (const moduleLoaded of modules.modulesGroup) {
+          buildComponent(moduleLoaded);
+        }
+      }
+
+
+    });
+
+  </script>
+
+  <script src="/js/script.js"></script>
+
+  <style>
+    .carousel-control-prev, .carousel-control-next {
+      width: 5%; /* ocupa só 5% da largura */
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+      background-size: 50%, 50%; /* diminui o tamanho do ícone */
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+      width: auto;
+      background: none;
+      border: none;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+      width: 2rem;
+      height: 2rem;
+      background-size: 100% 100%;
+      filter: brightness(0) saturate(100%) invert(90%) sepia(0%) saturate(0%) hue-rotate(180deg) brightness(95%) contrast(85%);
+      /* cinza claro */
+    }
+
+    .carousel-control-prev:hover .carousel-control-prev-icon,
+    .carousel-control-next:hover .carousel-control-next-icon {
+      filter: brightness(0) saturate(100%) invert(20%) sepia(0%) saturate(0%) hue-rotate(180deg) brightness(95%) contrast(85%);
+      /* cinza escuro no hover */
+    }
+
+  </style>
+
+
+</main>

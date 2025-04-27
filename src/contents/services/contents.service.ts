@@ -33,9 +33,8 @@ export class ContentsService implements RenderContract {
     return Boolean(result.affected);
   }
 
-  public async findById(id: string): Promise<Content | null> {
-    const objectId = new ObjectId(id);
-    return this.contentRepository.findOneBy({ _id: objectId });
+  public async findById(id: ObjectId): Promise<Content | null> {
+    return this.contentRepository.findOneBy({ _id: id });
   }
 
   public async where(

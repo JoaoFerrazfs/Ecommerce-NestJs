@@ -9,24 +9,7 @@ import { NOT_FOUND_VIEW_PATH } from '../../filters/not-found-exception.filter';
 export class ContentsController {
   constructor(private readonly contentsService: ContentsService) {}
 
-  @Get(['']) async contents(@Res() res: Response): Promise<void> {
-    const content = await this.contentsService.findOne({ name: 'Home' });
-
-    return res.render(this.contentsService.getVewPath('home'), {
-      banners: content.banners,
-      modules: content.modules,
-    });
-  }
-
-  @Get(['modular/content/:name']) async modular(
-    @Param('name') name: string,
-    @Res() res: Response,
-  ) {
-    const content = await this.contentsService.findOne({ name });
-    if (!content) return res.render(NOT_FOUND_VIEW_PATH);
-
-    return res.render(this.contentsService.getVewPath('home'), {
-      banners: content.banners,
-    });
+  @Get(['', 'modular/content/:name']) async contents(@Res() res: Response): Promise<void> {
+    return res.render(this.contentsService.getVewPath('modular_pages'));
   }
 }

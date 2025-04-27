@@ -15,7 +15,6 @@ export class Offer extends BaseEntity {
 
   @Column()
   products: ObjectId[];
-
 }
 
 export type LoadedOffer = {

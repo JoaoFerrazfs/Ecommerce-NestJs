@@ -13,8 +13,7 @@ export class ModuleBuilderService {
   public constructor(
     private readonly bannerService: BannersService,
     private readonly offerService: OffersService,
-  ) {
-  }
+  ) {}
 
   public async loadModules(
     modules: ModuleEntity[],
@@ -34,14 +33,14 @@ export class ModuleBuilderService {
     return loadedModules;
   }
 
-  private async loadModuleComponents(modulesGroup: ModuleEntity): Promise<any[]> {
-
+  private async loadModuleComponents(
+    modulesGroup: ModuleEntity,
+  ): Promise<any[]> {
     const loadedModules = [];
 
     if (!modulesGroup.modulesGroup) return [];
 
     for (const module of modulesGroup.modulesGroup) {
-
       let loadedModule = await this.findEntity(module.type, module._id);
 
       if (!loadedModule) continue;

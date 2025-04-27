@@ -1,5 +1,11 @@
 import { Transform, Type } from 'class-transformer';
-import { IsArray, IsEnum, IsNotEmpty, Length, ValidateNested } from 'class-validator';
+import {
+  IsArray,
+  IsEnum,
+  IsNotEmpty,
+  Length,
+  ValidateNested,
+} from 'class-validator';
 import { ObjectId } from 'mongodb';
 import { AllowedModuleType } from '../enums/modules-type.enum';
 import { transformeID } from '../../custom-decorators/transformers/id.tranformer';
@@ -15,10 +21,9 @@ export class CreateModuleDto {
 }
 
 export class CreateModulesDto {
-
   @Length(3)
   @IsNotEmpty()
-  name: string
+  name: string;
 
   @IsArray()
   @ValidateNested({ each: true })
