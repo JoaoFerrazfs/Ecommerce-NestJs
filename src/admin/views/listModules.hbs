@@ -12,6 +12,8 @@
       <tr>
         <th>ID</th>
         <th>Nome</th>
+        <th>Componentes</th>
+        <th>Ações</th>
       </tr>
       </thead>
       <tbody id="modules-list">
@@ -63,6 +65,17 @@
       const titleCell = document.createElement('td');
       titleCell.textContent = module.name;
       row.appendChild(titleCell);
+
+      const modulesCell = document.createElement('td');
+
+      module.modulesGroup.forEach(function(group) {
+        const li = document.createElement('li');
+        li.textContent = group.type + ' = ' + group._id;
+        modulesCell.appendChild(li);
+      });
+
+      row.appendChild(modulesCell);
+
 
       // Coluna Ações
       const actionsCell = document.createElement('td');
