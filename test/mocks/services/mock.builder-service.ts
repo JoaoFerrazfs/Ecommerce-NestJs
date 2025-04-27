@@ -5,7 +5,8 @@ import { mockedBanner } from '../entities/mock.banner.entity';
 
 export const mockedLoadedModule: LoadedModulesType = {
   _id: new ObjectId('6795315ba07479c68c2e67dc'),
-  modulesGroup: [mockedBanner],
+  modulesGroup: { ...mockedBanner, type: 'object' },
+  name: 'test',
 };
 
 export const mockBuilderService = {

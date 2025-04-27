@@ -17,13 +17,11 @@ describe('Contents Controller', () => {
     controller = module.get(ContentsController);
   });
 
-  it('should render ecommerce homne page', async () => {
+  it('should render ecommerce home page', async () => {
     // Actions
     await controller.contents(responseMock);
 
     // Assertions
-    expect(responseMock.render).toHaveBeenCalledWith('contents/views/home', {
-      banners: [{ image: 'https://localhost/image.jpg', title: 'test' }],
-    });
+    expect(responseMock.render).toHaveBeenCalledWith('contents/views/home');
   });
 });

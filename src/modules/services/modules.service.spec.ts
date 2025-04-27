@@ -60,9 +60,12 @@ describe('ModulesService', () => {
     const actual = await service.update(id, updateModulesDto);
 
     // Assertions
-    expect(mockModuleRepository.useValue.update).toBeCalledWith(
-      new ObjectId(id),
-      { modulesGroup: updateModulesDto.modules },
+    expect(mockModuleRepository.useValue.findOne).toBeCalledWith({
+      where: { _id: new ObjectId(id) },
+    });
+
+    expect(mockModuleRepository.useValue.save).toBeCalledWith(
+      mockedModuleWithBanner,
     );
     expect(actual).toBeTruthy();
   });

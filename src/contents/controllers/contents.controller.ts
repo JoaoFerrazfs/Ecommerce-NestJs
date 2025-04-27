@@ -9,7 +9,9 @@ import { NOT_FOUND_VIEW_PATH } from '../../filters/not-found-exception.filter';
 export class ContentsController {
   constructor(private readonly contentsService: ContentsService) {}
 
-  @Get(['', 'modular/content/:name']) async contents(@Res() res: Response): Promise<void> {
+  @Get(['', 'modular/content/:name']) async contents(
+    @Res() res: Response,
+  ): Promise<void> {
     return res.render(this.contentsService.getVewPath('modular_pages'));
   }
 }

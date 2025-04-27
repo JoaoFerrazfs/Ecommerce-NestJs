@@ -7,6 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import { CreateContentDto } from '../dto/create-content.dto';
 import { UpdateContentDto } from '../dto/update-content.dto';
 import { ImageHelper } from '../../helpers/image.helper';
+import { ObjectId } from 'mongodb';
 
 describe('Contents Service', () => {
   let service: ContentsService;
@@ -62,7 +63,9 @@ describe('Contents Service', () => {
 
   it('should find content by id', async () => {
     // Actions
-    const actual = await service.findById('677ec5eeb8fc6b91ab73fede');
+    const actual = await service.findById(
+      new ObjectId('677ec5eeb8fc6b91ab73fede'),
+    );
 
     // Assertions
     expect(actual).toEqual({

@@ -47,7 +47,10 @@ describe('ModuleBuilderService', () => {
     const expected = [
       {
         _id: id,
-        modulesGroup: [mockedBanner, loadedOffer],
+        modulesGroup: [
+          { ...mockedBanner, type: 'banner' },
+          { ...loadedOffer, type: 'offer' },
+        ],
       },
     ];
 

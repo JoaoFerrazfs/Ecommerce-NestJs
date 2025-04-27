@@ -6,6 +6,7 @@ import { contentsService } from '../../../../test/mocks/services/mock.contents-s
 import { ContentsController } from './contents.controller';
 import { CreateContentDto } from '../../dto/create-content.dto';
 import { UpdateContentDto } from '../../dto/update-content.dto';
+import { ObjectId } from 'mongodb';
 
 describe('Api Banners Controller', () => {
   let controller: ContentsController;
@@ -65,27 +66,39 @@ describe('Api Banners Controller', () => {
     });
   });
 
-  it('should find a banner', async () => {
-    // Actions
-    const actual = await controller.find('123');
+  it.each([['6793c558ee32f0ee4b17e1a5'], ['home']])(
+    'should find a banner',
+    async (identifier: string) => {
+      // Actions
+      const actual = await controller.find(identifier);
 
-    // Assertions
-    expect(actual).toEqual({
-      data: {
-        banners: [
-          {
-            image: 'https://localhost/image.jpg',
-            title: 'test',
-          },
-        ],
-        name: 'test',
-      },
-    });
-  });
+      // Assertions
+      identifier.length === 24
+        ? expect(contentsService.useValue.findById).toHaveBeenCalledWith(
+            new ObjectId(identifier),
+          )
+        : expect(contentsService.useValue.findOne).toHaveBeenCalledWith({
+            name: identifier,
+          });
+
+      expect(actual).toEqual({
+        data: {
+          banners: [
+            {
+              image: 'https://localhost/image.jpg',
+              title: 'test',
+            },
+          ],
+          name: 'test',
+        },
+      });
+    },
+  );
 
   it('should update a banners', async () => {
     // Set
     const updateContentDto = { name: 'test' } as UpdateContentDto;
+
     // Actions
     const actual = await controller.update(updateContentDto, '123');
 

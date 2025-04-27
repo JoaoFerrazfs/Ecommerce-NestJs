@@ -10,6 +10,7 @@ export const mockModuleRepository = {
   useValue: {
     find: jest.fn().mockResolvedValue([mockedModuleWithBanner]),
     findOneBy: jest.fn().mockResolvedValue([mockedModuleWithBanner]),
+    findOne: jest.fn().mockResolvedValue(mockedModuleWithBanner),
     create: jest.fn().mockResolvedValue(mockedModuleWithBanner),
     save: jest.fn().mockResolvedValue(mockedModuleWithBanner),
     update: jest.fn().mockResolvedValue(updateResult),
