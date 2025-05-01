@@ -29,7 +29,7 @@ import { ModuleEntity } from './modules/entities/module.entity';
     }),
     ContentsModule,
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
+      rootPath: join(__dirname, '..', '..', 'public'),
       serveRoot: '/public',
     }),
     ConfigModule.forRoot({ isGlobal: true }),
