@@ -102,4 +102,138 @@ describe('AdminController', () => {
       },
     );
   });
+
+  it('should render a list of products', () => {
+    // Actions
+    controller.products(expressResponse);
+
+    // Assertions
+    expect(expressResponse.render).toHaveBeenCalledWith(
+      'admin/views/listProducts',
+      {
+        layout: 'admin',
+      },
+    );
+  });
+
+  it('should render the product form page in creation mode', () => {
+    // Actions
+    controller.createProduct(expressResponse);
+
+    // Assertions
+    expect(expressResponse.render).toHaveBeenCalledWith(
+      'admin/views/productForm',
+      {
+        layout: 'admin',
+      },
+    );
+  });
+
+  it('should render the product form page in edit mode', () => {
+    // Actions
+    controller.editProduct(expressResponse, '1234');
+
+    // Assertions
+    expect(expressResponse.render).toHaveBeenCalledWith(
+      'admin/views/productForm',
+      {
+        layout: 'admin',
+        id: '1234',
+      },
+    );
+  });
+
+  it('should render the product images list', () => {
+    // Actions
+    controller.editProductImages(expressResponse, '1234');
+
+    // Assertions
+    expect(expressResponse.render).toHaveBeenCalledWith(
+      'admin/views/listProductImages',
+      {
+        layout: 'admin',
+        id: '1234',
+      },
+    );
+  });
+
+  it('should render a list of modules', () => {
+    // Actions
+    controller.modules(expressResponse);
+
+    // Assertions
+    expect(expressResponse.render).toHaveBeenCalledWith(
+      'admin/views/listModules',
+      {
+        layout: 'admin',
+      },
+    );
+  });
+
+  it('should render the module form page in creation mode', () => {
+    // Actions
+    controller.createModules(expressResponse);
+
+    // Assertions
+    expect(expressResponse.render).toHaveBeenCalledWith(
+      'admin/views/moduleForm',
+      {
+        layout: 'admin',
+      },
+    );
+  });
+
+  it('should render the module form page in edit mode', () => {
+    // Actions
+    controller.editModules(expressResponse, '1234');
+
+    // Assertions
+    expect(expressResponse.render).toHaveBeenCalledWith(
+      'admin/views/moduleForm',
+      {
+        layout: 'admin',
+        id: '1234',
+      },
+    );
+  });
+
+  it('should render a list of offers', () => {
+    // Actions
+    controller.offers(expressResponse);
+
+    // Assertions
+    expect(expressResponse.render).toHaveBeenCalledWith(
+      'admin/views/listOffers',
+      {
+        layout: 'admin',
+      },
+    );
+  });
+
+  it('should render the offer form page in creation mode', () => {
+    // Actions
+    controller.createOffers(expressResponse);
+
+    // Assertions
+    expect(expressResponse.render).toHaveBeenCalledWith(
+      'admin/views/offerForm',
+      {
+        layout: 'admin',
+      },
+    );
+  });
+
+  it('should render the offer form page in edit mode', () => {
+    // Actions
+    controller.editOffers(expressResponse, '1234');
+
+    // Assertions
+    expect(expressResponse.render).toHaveBeenCalledWith(
+      'admin/views/offerForm',
+      {
+        layout: 'admin',
+        id: '1234',
+      },
+    );
+  });
 });

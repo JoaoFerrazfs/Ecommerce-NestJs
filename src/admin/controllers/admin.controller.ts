@@ -104,6 +104,13 @@ export class AdminController {
     });
   }
 
+  @Get('modules/create')
+  createModules(@Res() res: Response) {
+    return res.render(this.adminService.getVewPath('moduleForm'), {
+      layout: 'admin',
+    });
+  }
+
   @Get('offers')
   offers(@Res() res: Response) {
     return res.render(this.adminService.getVewPath('listOffers'), {
