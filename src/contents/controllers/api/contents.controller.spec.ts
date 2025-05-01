@@ -35,12 +35,7 @@ describe('Api Banners Controller', () => {
     // Assertions
     expect(actual).toEqual({
       data: {
-        banners: [
-          {
-            image: 'https://localhost/image.jpg',
-            title: 'test',
-          },
-        ],
+        modules: ['6795315ba07479c68c2e67dc'],
         name: 'test',
       },
     });
@@ -54,12 +49,7 @@ describe('Api Banners Controller', () => {
     expect(actual).toEqual({
       data: [
         {
-          banners: [
-            {
-              image: 'https://localhost/image.jpg',
-              title: 'test',
-            },
-          ],
+          modules: ['6795315ba07479c68c2e67dc'],
           name: 'test',
         },
       ],
@@ -83,12 +73,7 @@ describe('Api Banners Controller', () => {
 
       expect(actual).toEqual({
         data: {
-          banners: [
-            {
-              image: 'https://localhost/image.jpg',
-              title: 'test',
-            },
-          ],
+          modules: ['6795315ba07479c68c2e67dc'],
           name: 'test',
         },
       });
@@ -105,12 +90,7 @@ describe('Api Banners Controller', () => {
     // Assertions
     expect(actual).toEqual({
       data: {
-        banners: [
-          {
-            image: 'https://localhost/image.jpg',
-            title: 'test',
-          },
-        ],
+        modules: ['6795315ba07479c68c2e67dc'],
         name: 'test',
       },
     });

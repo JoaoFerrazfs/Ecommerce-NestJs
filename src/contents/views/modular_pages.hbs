@@ -1,7 +1,11 @@
 <main class="container">
 
   <script>
-    const path = window.location.pathname === '/' ? 'Home' : window.location.pathname;
+    let path = window.location.pathname === '/' ? 'Home' : window.location.pathname;
+
+    if(path.includes('modular')){
+      path = path.split('/').pop();
+    }
 
     function buildBanner(data) {
       const wrapper = document.createElement('div');

@@ -42,12 +42,7 @@ describe('Contents Service', () => {
     // Assertions
     expect(actual).toEqual([
       {
-        banners: [
-          {
-            image: 'https://localhost/image.jpg',
-            title: 'test',
-          },
-        ],
+        modules: ['6795315ba07479c68c2e67dc'],
         name: 'test',
       },
     ]);
@@ -69,12 +64,7 @@ describe('Contents Service', () => {
 
     // Assertions
     expect(actual).toEqual({
-      banners: [
-        {
-          image: 'https://localhost/image.jpg',
-          title: 'test',
-        },
-      ],
+      modules: ['6795315ba07479c68c2e67dc'],
       name: 'test',
     });
   });
@@ -83,22 +73,13 @@ describe('Contents Service', () => {
     // Set
 
     const expectedCall = {
-      banners: [
-        {
-          image: 'https://localhost/image.jpg',
-          title: 'test',
-        },
-        {
-          image: 'https://localhost/image.jpg',
-          title: 'test',
-        },
-      ],
+      modules: ['677ec5eeb8fc6b91ab73fede', '677ecdf5b0b5e2594e8e562d'],
       name: 'test',
     };
 
     const data = {
       name: 'test',
-      banners: ['677ec5eeb8fc6b91ab73fede', '677ecdf5b0b5e2594e8e562d'],
+      modules: ['677ec5eeb8fc6b91ab73fede', '677ecdf5b0b5e2594e8e562d'],
     } as CreateContentDto;
 
     // Actions
@@ -112,22 +93,13 @@ describe('Contents Service', () => {
     // Set
 
     const expectedCall = {
-      banners: [
-        {
-          image: 'https://localhost/image.jpg',
-          title: 'test',
-        },
-        {
-          image: 'https://localhost/image.jpg',
-          title: 'test',
-        },
-      ],
+      modules: ['677ec5eeb8fc6b91ab73fede', '677ecdf5b0b5e2594e8e562d'],
       name: 'test',
     };
 
     const data = {
       name: 'test',
-      banners: ['677ec5eeb8fc6b91ab73fede', '677ecdf5b0b5e2594e8e562d'],
+      modules: ['677ec5eeb8fc6b91ab73fede', '677ecdf5b0b5e2594e8e562d'],
     } as UpdateContentDto;
 
     // Actions

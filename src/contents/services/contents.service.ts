@@ -50,16 +50,7 @@ export class ContentsService implements RenderContract {
   }
 
   public async createContent(data: CreateContentDto): Promise<Content> {
-    const banners = await Promise.all(
-      data.banners.map(async (bannerId) => {
-        return await this.bannerRepository.findOneBy({
-          _id: new ObjectId(bannerId),
-        });
-      }),
-    );
-
     const content = new Content();
-    content.banners = banners;
     content.name = data.name;
     content.modules = data.modules;
 
@@ -67,20 +58,11 @@ export class ContentsService implements RenderContract {
   }
 
   public async update(data: UpdateContentDto, id: string): Promise<Content> {
-    const banners = await Promise.all(
-      data.banners.map(async (bannerId) => {
-        return await this.bannerRepository.findOneBy({
-          _id: new ObjectId(bannerId),
-        });
-      }),
-    );
-
     const content = await this.contentRepository.findOneBy({
       _id: new ObjectId(id),
     });
 
     content.name = data.name;
-    content.banners = banners;
     content.modules = data.modules;
     return await this.contentRepository.save(content);
   }
