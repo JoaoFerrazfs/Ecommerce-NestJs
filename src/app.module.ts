@@ -19,13 +19,11 @@ import { ModuleEntity } from './modules/entities/module.entity';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mongodb',
-      useNewUrlParser: true,
       port: 27017,
       host: 'localhost',
       database: 'ecommerce-nest-js',
       synchronize: true,
       entities: [Content, Banner, Product, Offer, ModuleEntity],
-      useUnifiedTopology: false,
       logger: 'debug',
       logging: true,
     }),

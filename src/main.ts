@@ -20,13 +20,15 @@ async function bootstrap() {
   // HandleBars
   const hbs = create({
     extname: 'hbs',
-    partialsDir: join(__dirname, '..', 'src', 'views', 'partials'),
-    defaultLayout: join(__dirname, '..', 'src', 'views', 'layouts', 'main'),
-    layoutsDir: join(__dirname, '..', 'src', 'views', 'layouts'),
+    partialsDir: join(__dirname, '..', '..', 'src', 'views', 'partials'),
+    defaultLayout: join(__dirname, '..', '..', 'src', 'views', 'layouts', 'main'),
+    layoutsDir: join(__dirname, '..', '..', 'src', 'views', 'layouts'),
     helpers: COMPARISON,
   });
 
-  app.setBaseViewsDir(join(__dirname, '..', 'src'));
+  app.setBaseViewsDir([
+    join(__dirname, '..', '..', 'src'),
+  ]);
   app.engine('hbs', hbs.engine);
   app.setViewEngine('hbs');
 
