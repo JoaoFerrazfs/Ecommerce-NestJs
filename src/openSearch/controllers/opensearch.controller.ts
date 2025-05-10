@@ -2,18 +2,18 @@ import { Body, Controller, Get, HttpCode, Param, Post } from '@nestjs/common';
 import { OpenSearchService } from '../services/opensearch.service';
 import { CreateIndexDto } from '../dto/create-index.dto';
 import { CreateIndex, GeneralSearch } from '../oas/openSearch.oas';
-import { OpensearchMapper } from '../services/transformers/opensearch.mapper';
+import { OpenSearchMapper } from '../services/mappers/open-search-mapper.service';
 
 @Controller('api/opensearch')
 export class SearchController {
   constructor(
     private readonly openSearchService: OpenSearchService,
-    private readonly opensearchMapper: OpensearchMapper,
+    private readonly opensearchMapper: OpenSearchMapper,
   ) {}
 
   @Get('/:index')
   @GeneralSearch()
-  async search(@Param('index') index: string) {
+  async searchAll(@Param('index') index: string) {
     const query = {
       query: {
         match_all: {},

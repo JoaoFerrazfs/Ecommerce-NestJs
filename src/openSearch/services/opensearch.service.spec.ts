@@ -2,10 +2,11 @@ import { OpenSearchService } from './opensearch.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { SearchController } from '../controllers/opensearch.controller';
 import { Search_RequestBody } from '@opensearch-project/opensearch/api';
-import { MockedOpenSearchClientBuilder } from '../../../test/mocks/services/mock.openSearchClient-builder';
-import { MockedOpenSearchClient } from '../../../test/mocks/services/mock.openSearch.client';
+import { MockedOpenSearchClientBuilder } from '../../../test/mocks/services/openSearch/mock.openSearchClient-builder';
+import { MockedOpenSearchClient } from '../../../test/mocks/services/openSearch/mock.openSearch.client';
 import { CreateIndexDto } from '../dto/create-index.dto';
 import { UnprocessableEntityException } from '@nestjs/common';
+import { MockedOpenSearchMapper } from '../../../test/mocks/services/openSearch/mock.openSearch-mapper';
 
 describe('OpenSearchService', () => {
   let openSearchService: OpenSearchService;
@@ -13,7 +14,11 @@ describe('OpenSearchService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [SearchController],
-      providers: [MockedOpenSearchClientBuilder, OpenSearchService],
+      providers: [
+        MockedOpenSearchClientBuilder,
+        OpenSearchService,
+        MockedOpenSearchMapper,
+      ],
     }).compile();
 
     openSearchService = module.get(OpenSearchService);

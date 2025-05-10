@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing';
-import { mockedOfferService } from '../../../test/mocks/services/mock.offers-service';
-import { mockedBannersService } from '../../../test/mocks/services/mock.banner-service';
+import { mockedOfferService } from '../../../test/mocks/services/offers/mock.offers-service';
+import { mockedBannersService } from '../../../test/mocks/services/contents/mock.banner-service';
 import { ValidateStoredIdPipe } from './validate-stored-id.pipe';
 import { ArgumentMetadata, UnprocessableEntityException } from '@nestjs/common';
 import { mockedOffer } from '../../../test/mocks/entities/mock.offer.entity';

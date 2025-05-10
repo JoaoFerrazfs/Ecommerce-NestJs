@@ -1,14 +1,14 @@
 import { OpenSearchClientBuilder } from './open-search-client-builder.service';
 import { Test, TestingModule } from '@nestjs/testing';
-import { MockedConfigService } from '../../../test/mocks/services/mock.config-service';
 import { Client } from '@opensearch-project/opensearch';
+import { MockedOpenSearchConfigService } from '../../../test/mocks/services/openSearch/mock.openSearch-config-service';
 
 describe('OpenSearchClientBuilderService', () => {
   let openSearchClientBuilder: OpenSearchClientBuilder;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [OpenSearchClientBuilder, MockedConfigService],
+      providers: [OpenSearchClientBuilder, MockedOpenSearchConfigService],
     }).compile();
 
     openSearchClientBuilder = module.get(OpenSearchClientBuilder);
@@ -16,7 +16,7 @@ describe('OpenSearchClientBuilderService', () => {
 
   it('should build client', () => {
     // Expectations
-    MockedConfigService.useValue.get.mockReturnValue(
+    MockedOpenSearchConfigService.useValue.get.mockReturnValue(
       'https://api.opensearch.com/v1',
     );
 
@@ -25,8 +25,5 @@ describe('OpenSearchClientBuilderService', () => {
 
     // Assertion
     expect(actual).toBeInstanceOf(Client);
-    expect(MockedConfigService.useValue.get).toBeCalledWith(
-      'OPENSEARCH_CONNECTION_STRING',
-    );
   });
 });

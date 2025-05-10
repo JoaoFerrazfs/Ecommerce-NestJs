@@ -1,5 +1,5 @@
-import { ContentsService } from '../../../src/contents/services/contents.service';
-import { mockedContent } from '../entities/mock.content.entity';
+import { ContentsService } from '../../../../src/contents/services/contents.service';
+import { mockedContent } from '../../entities/mock.content.entity';
 
 export const contentsService = {
   provide: ContentsService,

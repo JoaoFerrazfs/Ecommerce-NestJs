@@ -1,7 +1,7 @@
-import { OffersService } from '../../../src/offers/services/offers.service';
-import { LoadedOffer } from '../../../src/offers/entities/offer.entity';
+import { OffersService } from '../../../../src/offers/services/offers.service';
+import { LoadedOffer } from '../../../../src/offers/entities/offer.entity';
 import { ObjectId } from 'mongodb';
-import { mockedProduct } from '../entities/mock.product.entity';
+import { mockedProduct } from '../../entities/mock.product.entity';
 
 export const loadedOffer: LoadedOffer = {
   _id: new ObjectId('6795315ba07479c68c2e67dd'),

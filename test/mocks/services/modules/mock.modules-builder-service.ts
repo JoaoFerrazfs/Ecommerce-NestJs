@@ -1,4 +1,4 @@
-import { ModuleBuilderService } from '../../../src/modules/services/module-builder.service';
+import { ModuleBuilderService } from '../../../../src/modules/services/module-builder.service';
 
 export const moduleBuilderService = {
   provide: ModuleBuilderService,

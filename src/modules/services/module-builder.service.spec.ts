@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ModuleBuilderService } from './module-builder.service';
-import { mockedBannersService } from '../../../test/mocks/services/mock.banner-service';
+import { mockedBannersService } from '../../../test/mocks/services/contents/mock.banner-service';
 import {
   loadedOffer,
   mockedOfferService,
-} from '../../../test/mocks/services/mock.offers-service';
+} from '../../../test/mocks/services/offers/mock.offers-service';
 import { mockedBanner } from '../../../test/mocks/entities/mock.banner.entity';
 import { ModuleEntity, ModulesGroup } from '../entities/module.entity';
 import { ObjectId } from 'mongodb';

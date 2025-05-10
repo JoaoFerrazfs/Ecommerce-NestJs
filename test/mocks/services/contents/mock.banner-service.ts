@@ -1,5 +1,5 @@
-import { BannersService } from '../../../src/contents/services/banners.service';
-import { mockedBanner } from '../entities/mock.banner.entity';
+import { BannersService } from '../../../../src/contents/services/banners.service';
+import { mockedBanner } from '../../entities/mock.banner.entity';
 
 export const mockedBannersService = {
   provide: BannersService,

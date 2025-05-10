@@ -1,5 +1,5 @@
 import { MockedOpenSearchClient } from './mock.openSearch.client';
-import { OpenSearchClientBuilder } from '../../../src/openSearch/clients/open-search-client-builder.service';
+import { OpenSearchClientBuilder } from '../../../../src/openSearch/clients/open-search-client-builder.service';
 
 export const MockedOpenSearchClientBuilder = {
   provide: OpenSearchClientBuilder,

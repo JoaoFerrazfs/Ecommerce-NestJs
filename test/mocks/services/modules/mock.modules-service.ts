@@ -1,4 +1,4 @@
-import { ModulesService } from '../../../src/modules/services/modules.service';
+import { ModulesService } from '../../../../src/modules/services/modules.service';
 
 export const modulesService = {
   provide: ModulesService,

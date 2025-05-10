@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ModulesController } from './modules.controller';
-import { modulesService } from '../../../../test/mocks/services/mock.modules-service';
+import { modulesService } from '../../../../test/mocks/services/modules/mock.modules-service';
 import { CreateModulesDto } from '../../dto/create-module.dto';
 import { mockedModuleWithBanner } from '../../../../test/mocks/entities/mock.module.entity';
-import { mockedBannersService } from '../../../../test/mocks/services/mock.banner-service';
-import { mockedOfferService } from '../../../../test/mocks/services/mock.offers-service';
-import { moduleBuilderService } from '../../../../test/mocks/services/mock.modules-builder-service';
+import { mockedBannersService } from '../../../../test/mocks/services/contents/mock.banner-service';
+import { mockedOfferService } from '../../../../test/mocks/services/offers/mock.offers-service';
+import { moduleBuilderService } from '../../../../test/mocks/services/modules/mock.modules-builder-service';
 import { UpdateModuleDto } from '../../dto/update-module.dto';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 

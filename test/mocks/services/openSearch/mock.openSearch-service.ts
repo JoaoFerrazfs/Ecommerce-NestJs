@@ -1,4 +1,4 @@
-import { OpenSearchService } from '../../../src/openSearch/services/opensearch.service';
+import { OpenSearchService } from '../../../../src/openSearch/services/opensearch.service';
 
 export const MockedOpenSearchService = {
   provide: OpenSearchService,

@@ -4,7 +4,7 @@ import { CreateModulesDto } from '../dto/create-module.dto';
 import {
   mockBuilderService,
   mockedLoadedModule,
-} from '../../../test/mocks/services/mock.builder-service';
+} from '../../../test/mocks/services/contents/mock.builder-service';
 import { mockModuleRepository } from '../../../test/mocks/repositores/mock.moduleRepository';
 import { mockedModuleWithBanner } from '../../../test/mocks/entities/mock.module.entity';
 import { ObjectId } from 'mongodb';

@@ -4,16 +4,15 @@ import { ProductService } from './product.service';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { mockedProduct } from '../../../test/mocks/entities/mock.product.entity';
 import { HelpersModule } from '../../helpers/helpers.module';
-import { MockedConfigService } from '../../../test/mocks/services/mock.config-service';
 import { UpdateProductDto } from '../dto/update-product.dto';
 import { Product } from '../entities/product.entity';
-import { DeleteResult, ObjectId } from 'mongodb';
+import { ObjectId } from 'mongodb';
 
 describe('ProductController', () => {
   let service: ProductService;
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [ProductService, productsRepository, MockedConfigService],
+      providers: [ProductService, productsRepository],
 
       imports: [HelpersModule],
     }).compile();
