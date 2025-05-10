@@ -15,7 +15,6 @@ import { Offer } from './offers/entities/offer.entity';
 import { ModulesModule } from './modules/modules.module';
 import { ModuleEntity } from './modules/entities/module.entity';
 import { OpenSearchModule } from './openSearch/opensearch.module';
-import { OpenSearchService } from './openSearch/opensearch.service';
 
 @Module({
   imports: [

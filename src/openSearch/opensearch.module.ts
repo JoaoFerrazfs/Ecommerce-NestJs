@@ -1,21 +1,12 @@
 import { Module } from '@nestjs/common';
-import { Client } from '@opensearch-project/opensearch';
-import { SearchController } from './opensearch.controller';
-import { OpenSearchService } from './opensearch.service';
+import { SearchController } from './controllers/opensearch.controller';
+import { OpenSearchService } from './services/opensearch.service';
+import { OpenSearchClientBuilder } from './clients/open-search-client-builder.service';
+import { OpensearchMapper } from './services/transformers/opensearch.mapper';
 
 @Module({
   controllers: [SearchController],
-  providers: [
-    OpenSearchService,
-    {
-      provide: 'OPENSEARCH_CLIENT',
-      useFactory: () => {
-        return new Client({
-          node: 'http://localhost:9200', // URL do seu servidor OpenSearch
-        });
-      },
-    },
-  ],
-  exports: ['OPENSEARCH_CLIENT'],
+  providers: [OpenSearchService, OpenSearchClientBuilder, OpensearchMapper],
+  exports: [OpenSearchClientBuilder],
 })
 export class OpenSearchModule {}
