@@ -14,6 +14,7 @@ import { OffersModule } from './offers/offers.module';
 import { Offer } from './offers/entities/offer.entity';
 import { ModulesModule } from './modules/modules.module';
 import { ModuleEntity } from './modules/entities/module.entity';
+import { OpenSearchModule } from './openSearch/opensearch.module';
 
 @Module({
   imports: [
@@ -29,7 +30,7 @@ import { ModuleEntity } from './modules/entities/module.entity';
     }),
     ContentsModule,
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
+      rootPath: join(__dirname, '..', '..', 'public'),
       serveRoot: '/public',
     }),
     ConfigModule.forRoot({ isGlobal: true }),
@@ -38,8 +39,8 @@ import { ModuleEntity } from './modules/entities/module.entity';
     HelpersModule,
     OffersModule,
     ModulesModule,
+    OpenSearchModule,
   ],
   controllers: [],
-  providers: [],
 })
 export class AppModule {}

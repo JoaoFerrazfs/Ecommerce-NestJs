@@ -10,6 +10,7 @@ import { ContentsModule } from './contents/contents.module';
 import { NotFoundExceptionFilter } from './filters/not-found-exception.filter';
 import { ProductModule } from './products/product.module';
 import { ModulesModule } from './modules/modules.module';
+import { OpenSearchModule } from './openSearch/opensearch.module';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -21,14 +22,20 @@ async function bootstrap() {
   const hbs = create({
     extname: 'hbs',
     partialsDir: join(__dirname, '..', '..', 'src', 'views', 'partials'),
-    defaultLayout: join(__dirname, '..', '..', 'src', 'views', 'layouts', 'main'),
+    defaultLayout: join(
+      __dirname,
+      '..',
+      '..',
+      'src',
+      'views',
+      'layouts',
+      'main',
+    ),
     layoutsDir: join(__dirname, '..', '..', 'src', 'views', 'layouts'),
     helpers: COMPARISON,
   });
 
-  app.setBaseViewsDir([
-    join(__dirname, '..', '..', 'src'),
-  ]);
+  app.setBaseViewsDir([join(__dirname, '..', '..', 'src')]);
   app.engine('hbs', hbs.engine);
   app.setViewEngine('hbs');
 
@@ -41,7 +48,7 @@ async function bootstrap() {
 
   const documentFactory = (): OpenAPIObject =>
     SwaggerModule.createDocument(app, config, {
-      include: [ContentsModule, ProductModule, ModulesModule],
+      include: [ContentsModule, ProductModule, ModulesModule, OpenSearchModule],
     });
 
   SwaggerModule.setup('oas', app, documentFactory, {

@@ -5,12 +5,7 @@
 
   <script>
     async function fetchProduct() {
-      const productId = '88888888';
-
-      if (!productId) {
-        document.getElementById('product-container').innerHTML = '<p>Produto não encontrado.</p>';
-        return;
-      }
+      const productId = window.location.pathname.split('/').pop();
 
       try {
         const response = await fetch(`/api/products/${productId}`);
