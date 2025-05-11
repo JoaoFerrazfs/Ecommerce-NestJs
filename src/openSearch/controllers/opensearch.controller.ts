@@ -3,6 +3,7 @@ import { OpenSearchService } from '../services/opensearch.service';
 import { CreateIndexDto } from '../dto/create-index.dto';
 import { CreateIndex, GeneralSearch } from '../oas/openSearch.oas';
 import { OpenSearchMapper } from '../services/mappers/open-search-mapper.service';
+import { SearchByTextDto } from '../dto/search-by-text.dto';
 
 @Controller('api/opensearch')
 export class SearchController {
@@ -14,15 +15,17 @@ export class SearchController {
   @Get('/:index')
   @GeneralSearch()
   async searchAll(@Param('index') index: string) {
-    const query = {
-      query: {
-        match_all: {},
-      },
-    };
+    const results = await this.openSearchService.search(index);
 
-    const results = await this.openSearchService.search(index, query);
+    return this.opensearchMapper.mapMultipleResults(results.hits);
+  }
 
-    return this.opensearchMapper.mapMultipleResults(results);
+  @Post('/searchByText')
+  @GeneralSearch()
+  async searchByText(@Body() { index, text }: SearchByTextDto) {
+    const results = await this.openSearchService.search(index, text);
+
+    return this.opensearchMapper.mapMultipleResults(results.hits);
   }
 
   @Post('index')

@@ -1,8 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SearchController } from './opensearch.controller';
 import { CreateIndexDto } from '../dto/create-index.dto';
-import { MockedOpenSearchService } from '../../../test/mocks/services/openSearch/mock.openSearch-service';
+import {
+  MockedOpenSearchService,
+  SEARCH_RESULT,
+} from '../../../test/mocks/services/openSearch/mock.openSearch-service';
 import { MockedOpenSearchMapper } from '../../../test/mocks/services/openSearch/mock.openSearch-mapper';
+import { SearchByTextDto } from '../dto/search-by-text.dto';
 
 describe('OpenSearchController', () => {
   let searchController: SearchController;
@@ -31,9 +35,7 @@ describe('OpenSearchController', () => {
     const actual = await searchController.searchAll('test');
 
     // Assertion
-    expect(MockedOpenSearchService.useValue.search).toBeCalledWith('test', {
-      query: { match_all: {} },
-    });
+    expect(MockedOpenSearchService.useValue.search).toBeCalledWith('test');
 
     expect(actual).toEqual(expected);
   });
@@ -50,6 +52,26 @@ describe('OpenSearchController', () => {
     // Assertion
     expect(MockedOpenSearchService.useValue.createIndex).toBeCalledWith(
       payload,
+    );
+  });
+
+  it('should search by text', async () => {
+    // Set
+    const payload = new SearchByTextDto();
+    payload.index = 'test';
+    payload.text = 'escada';
+
+    // Actions
+    await searchController.searchByText(payload);
+
+    // Assertion
+    expect(MockedOpenSearchService.useValue.search).toBeCalledWith(
+      'test',
+      'escada',
+    );
+
+    expect(MockedOpenSearchMapper.useValue.mapMultipleResults).toBeCalledWith(
+      SEARCH_RESULT.hits,
     );
   });
 });

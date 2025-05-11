@@ -1,12 +1,15 @@
 import { OpenSearchService } from './opensearch.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { SearchController } from '../controllers/opensearch.controller';
-import { Search_RequestBody } from '@opensearch-project/opensearch/api';
 import { MockedOpenSearchClientBuilder } from '../../../test/mocks/services/openSearch/mock.openSearchClient-builder';
 import { MockedOpenSearchClient } from '../../../test/mocks/services/openSearch/mock.openSearch.client';
 import { CreateIndexDto } from '../dto/create-index.dto';
 import { UnprocessableEntityException } from '@nestjs/common';
 import { MockedOpenSearchMapper } from '../../../test/mocks/services/openSearch/mock.openSearch-mapper';
+import {
+  BUILT_QUERY,
+  MockedSimpleSearchQueryBuilder,
+} from '../../../test/mocks/services/openSearch/mock.openSearch-queryBuilder';
 
 describe('OpenSearchService', () => {
   let openSearchService: OpenSearchService;
@@ -18,6 +21,7 @@ describe('OpenSearchService', () => {
         MockedOpenSearchClientBuilder,
         OpenSearchService,
         MockedOpenSearchMapper,
+        MockedSimpleSearchQueryBuilder,
       ],
     }).compile();
 
@@ -25,29 +29,22 @@ describe('OpenSearchService', () => {
   });
 
   it('should search all results from index', async () => {
-    // Set
-    const body = { query: { match_all: {} } } as Search_RequestBody;
-
     // Actions
-    const actual = await openSearchService.search('products', body);
+    const actual = await openSearchService.search('products');
 
     // Assertion
     expect(actual).toStrictEqual({ result: 'something' });
-    expect(MockedOpenSearchClient.useValue.search).toBeCalledWith({
-      body: { query: { match_all: {} } },
-      index: 'products',
-    });
+    expect(MockedOpenSearchClient.useValue.search).toBeCalledWith(BUILT_QUERY);
   });
 
   it('should throw error while searching for data in index', async () => {
     // Set
-    const body = { query: { match_all: {} } } as Search_RequestBody;
     MockedOpenSearchClient.useValue.search.mockRejectedValue(
       new Error('some error'),
     );
 
     // Actions
-    const actual = openSearchService.search('products', body);
+    const actual = openSearchService.search('products');
 
     // Assertion
     await expect(actual).rejects.toEqual(

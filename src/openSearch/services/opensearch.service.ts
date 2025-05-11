@@ -6,7 +6,7 @@ import {
 import { CreateIndexDto } from '../dto/create-index.dto';
 import { OpenSearchClientBuilder } from '../clients/open-search-client-builder.service';
 import { Client } from '@opensearch-project/opensearch';
-import { Search_RequestBody } from '@opensearch-project/opensearch/api';
+import { SimpleSearchQueryBuilder } from './queryBuilder/simple-search.query-builder';
 
 @Injectable()
 export class OpenSearchService {
@@ -14,17 +14,18 @@ export class OpenSearchService {
 
   constructor(
     private readonly openSearchClientBuilder: OpenSearchClientBuilder,
+    private readonly simpleSearchQueryBuilder: SimpleSearchQueryBuilder,
   ) {
     this.client = this.openSearchClientBuilder.make();
   }
 
-  async search(index: string, body: Search_RequestBody) {
+  async search(index: string, text: string = null) {
     try {
-      const result = await this.client.search({
-        index,
-        body,
-      });
-      return result.body;
+      return (
+        await this.client.search(
+          this.simpleSearchQueryBuilder.findContentByText(index, text),
+        )
+      ).body;
     } catch (error) {
       throw new Error(`Error executing search: ${error.message}`);
     }

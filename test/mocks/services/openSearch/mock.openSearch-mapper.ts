@@ -4,6 +4,6 @@ import { mockedProduct } from '../../entities/mock.product.entity';
 export const MockedOpenSearchMapper = {
   provide: OpenSearchMapper,
   useValue: {
-    mapMultipleResults: jest.fn().mockResolvedValue([mockedProduct]),
+    mapMultipleResults: jest.fn().mockReturnValue([mockedProduct]),
   },
 };
