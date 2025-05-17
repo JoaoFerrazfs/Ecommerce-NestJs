@@ -1,5 +1,5 @@
-import { ProductMapper } from './entities/Products';
+import { ProductEntityMapper } from './entities/product-entity-mapper';
 
 export const ENTITY_MAPPERS = {
-  products: new ProductMapper(),
+  products: new ProductEntityMapper(),
 };

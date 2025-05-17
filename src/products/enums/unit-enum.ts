@@ -4,3 +4,7 @@ export enum Unit {
   UN = 'un',
   M = 'm',
 }
+
+export function parseStringToUnitEnum(unit: string): Unit | undefined {
+  return Unit[unit.toUpperCase() as keyof typeof Unit];
+}

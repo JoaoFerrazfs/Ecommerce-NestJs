@@ -11,6 +11,8 @@ import { NotFoundExceptionFilter } from './filters/not-found-exception.filter';
 import { ProductModule } from './products/product.module';
 import { ModulesModule } from './modules/modules.module';
 import { OpenSearchModule } from './openSearch/opensearch.module';
+import { CommandFactory } from 'nest-commander';
+import { CommandModule } from './commands/command.module';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);

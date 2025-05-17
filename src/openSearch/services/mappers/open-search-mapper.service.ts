@@ -8,12 +8,19 @@ import { ENTITY_MAPPERS } from './opensearch-list.mappers';
 
 @Injectable()
 export class OpenSearchMapper {
-  public mapMultipleResults({ hits }: HitsMetadata): BaseEntity[] {
+  public mapMultipleResults({
+    hits,
+  }: HitsMetadata): { results: BaseEntity[]; count: number } | [] {
     if (!hits) return [];
 
-    return hits.map(function (result: Hit): BaseEntity {
+    const results = hits.map(function (result: Hit): BaseEntity {
       const index = result._index;
       return ENTITY_MAPPERS[index].map(result._source);
     });
+
+    return {
+      count: results.length,
+      results,
+    };
   }
 }

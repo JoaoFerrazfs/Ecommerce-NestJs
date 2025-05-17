@@ -10,5 +10,6 @@ import { HelpersModule } from '../helpers/helpers.module';
   controllers: [ProductController, RenderProductController],
   providers: [ProductService],
   imports: [TypeOrmModule.forFeature([Product]), HelpersModule],
+  exports: [ProductService],
 })
 export class ProductModule {}

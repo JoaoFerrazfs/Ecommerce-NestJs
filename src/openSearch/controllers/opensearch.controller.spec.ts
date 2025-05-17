@@ -60,14 +60,18 @@ describe('OpenSearchController', () => {
     const payload = new SearchByTextDto();
     payload.index = 'test';
     payload.text = 'escada';
+    payload.size = 10;
+    payload.page = 2;
 
     // Actions
     await searchController.searchByText(payload);
 
     // Assertion
     expect(MockedOpenSearchService.useValue.search).toBeCalledWith(
-      'test',
-      'escada',
+      payload.index,
+      payload.text,
+      payload.page,
+      payload.size,
     );
 
     expect(MockedOpenSearchMapper.useValue.mapMultipleResults).toBeCalledWith(
