@@ -1,0 +1,98 @@
+<style>
+  .card.hover-float {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+  }
+
+  .card.hover-float:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+</style>
+
+<section class="mb-5 product-list">
+  <h2 class="mb-4">Resultados da Busca</h2>
+  <div id="product-container" class="row"></div>
+
+  <!-- Paginação -->
+  <div class="d-flex justify-content-center mt-4 gap-2">
+    <button id="prev-page-btn" class="btn btn-secondary d-none">Página Anterior</button>
+    <button id="next-page-btn" class="btn btn-primary">Próxima Página</button>
+  </div>
+</section>
+
+<script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const query = urlParams.get('query') || '';
+  let page = parseInt(urlParams.get('page') || '1');
+
+  async function fetchProducts() {
+    const payload = {
+      index: 'products',
+      text: query,
+      page: page,
+      size: 16
+    };
+
+    const res = await fetch('/api/opensearch/searchByText', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+    renderProducts(data.results || []);
+    updatePaginationButtons(data.count);
+  }
+
+  function renderProducts(products) {
+    const container = document.getElementById('product-container');
+    container.innerHTML = '';
+
+    products.forEach((product) => {
+      const imageUrl = product.images?.[0]?.path || 'https://placehold.co/200';
+      const card = document.createElement('div');
+      card.className = 'col-md-3 mb-4';
+
+      card.innerHTML = `
+        <a href="/products/${product.cod}" class="text-decoration-none text-dark">
+          <div class="card hover-float">
+            <img src="${imageUrl}" class="card-img-top" alt="${product.name || 'Produto'}" />
+            <div class="card-body">
+              <h5 class="card-title">${product.name}</h5>
+              <p class="card-text">R$ ${product.price.toFixed(2).replace('.', ',')}</p>
+            </div>
+          </div>
+        </a>
+      `;
+
+      container.appendChild(card);
+    });
+  }
+
+  function updatePaginationButtons(count) {
+    const prevBtn = document.getElementById('prev-page-btn');
+    const nextBtn = document.getElementById('next-page-btn');
+
+    prevBtn.classList.toggle('d-none', page <= 1);
+    nextBtn.disabled = count < 16; // desativa próxima se não há mais produtos
+  }
+
+  document.getElementById('next-page-btn').addEventListener('click', () => {
+    const nextPage = page + 1;
+    const newUrl = new URL(window.location.href);
+    newUrl.searchParams.set('page', nextPage);
+    window.location.href = newUrl.toString();
+  });
+
+  document.getElementById('prev-page-btn').addEventListener('click', () => {
+    const prevPage = Math.max(page - 1, 1);
+    const newUrl = new URL(window.location.href);
+    newUrl.searchParams.set('page', prevPage);
+    window.location.href = newUrl.toString();
+  });
+
+  fetchProducts();
+</script>

@@ -10,4 +10,9 @@ export class ProductController {
   public product(@Res() res: Response) {
     return res.render(this.productService.getVewPath('product'));
   }
+
+  @Get('/search/result')
+  public productSearch(@Res() res: Response) {
+    return res.render(this.productService.getVewPath('product-search-result'));
+  }
 }
