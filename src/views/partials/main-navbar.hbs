@@ -1,47 +1,133 @@
-<header class="container py-4">
-  <nav class="navbar navbar-expand-lg navbar-light bg-success">
-    <div class="container">
-      <a class="navbar-brand text-decoration-underline" style="color: white;" href="#">
-        <strong>Ecommerce Nest JS</strong>
-        <img src="/public/nestJs.svg" alt="NestJS" width="30" height="24">
-      </a>
+<header class='bg-white border-bottom'>
+  <hr style='border-color: transparent;' />
 
-      <!-- Botão para expandir o menu em telas pequenas -->
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+  <div
+    class='container-fluid px-4 py-2 d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center'
+  >
+
+    <!-- Logotipo -->
+    <a class='d-flex align-items-center text-decoration-none' href='/'>
+      <img
+        src='/public/nestJs.svg'
+        alt='NestJS'
+        width='40'
+        height='40'
+        class='me-2'
+      />
+      <span class='fw-bold text-dark'>Ecommerce NestJS</span>
+    </a>
+
+    {{> search-bar }}
+
+    <!-- Ícones separados no MOBILE -->
+    <div class='d-flex justify-content-between align-items-center mb-3 d-lg-none w-100'>
+      <!-- Perfil -->
+      <div class='dropdown'>
+        <a class='btn btn-light dropdown-toggle d-flex align-items-center' href='#' role='button' id='userDropdownMobile' data-bs-toggle='dropdown' aria-expanded='false'>
+          <img src='https://via.placeholder.com/30' class='rounded-circle me-2' alt='Foto do usuário' />
+          <span>Meu Perfil</span>
+        </a>
+        <ul class='dropdown-menu' aria-labelledby='userDropdownMobile'>
+          <li><a class='dropdown-item' href='#'>Meu Perfil</a></li>
+          <li><a class='dropdown-item' href='#'>Configurações</a></li>
+          <li><a class='dropdown-item' href='#'>Sair</a></li>
+        </ul>
+      </div>
+
+      <!-- Carrinho -->
+      <a href='#' class='btn btn-outline-dark position-relative'>
+        <i class='bi bi-cart'></i>
+        <span class='position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger'>3</span>
+      </a>
+    </div>
+
+    <!-- Ícones à direita no DESKTOP -->
+    <div class='d-none d-lg-flex align-items-center'>
+      <a href='#' class='text-dark me-4 fs-4'><i class='bi bi-heart'></i></a>
+      <div class='dropdown me-4'>
+        <a
+          class='btn btn-light dropdown-toggle d-flex align-items-center'
+          href='#'
+          role='button'
+          id='userDropdown'
+          data-bs-toggle='dropdown'
+          aria-expanded='false'
+        >
+          <img
+            src='https://via.placeholder.com/30'
+            class='rounded-circle me-2'
+            alt='Foto do usuário'
+          />
+          <span class='d-none d-lg-inline'>Meu Perfil</span>
+        </a>
+        <ul
+          class='dropdown-menu dropdown-menu-end'
+          aria-labelledby='userDropdown'
+        >
+          <li><a class='dropdown-item' href='#'>Meu Perfil</a></li>
+          <li><a class='dropdown-item' href='#'>Configurações</a></li>
+          <li><a class='dropdown-item' href='#'>Sair</a></li>
+        </ul>
+      </div>
+      <a href='#' class='btn btn-outline-dark position-relative'>
+        <i class='bi bi-cart'></i>
+        <span
+          class='position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger'
+        >
+          3
+        </span>
+      </a>
+    </div>
+  </div>
+
+  <hr style='border-color: transparent;' />
+
+  <!-- Menu de navegação inferior -->
+  <nav class='navbar navbar-expand-lg bg-light border-top'>
+    <div class='container-fluid px-4'>
+      <!-- Botão sanduíche -->
+      <button
+        class='navbar-toggler'
+        type='button'
+        data-bs-toggle='collapse'
+        data-bs-target='#navbarMenuInferior'
+        aria-controls='navbarMenuInferior'
+        aria-expanded='false'
+        aria-label='Toggle navigation'
+      >
+        <span class='navbar-toggler-icon'></span>
       </button>
 
-      <!-- Barra de Navegação -->
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <!-- Barra de Busca -->
-          <li class="nav-item">
-            <form class="d-flex w-100 mt-3 mt-lg-0" role="search">
-              <input class="form-control me-2" type="search" placeholder="Buscar produtos..." aria-label="Search">
-              <button class="btn btn-outline-light" type="submit">Buscar</button>
-            </form>
-          </li>
-
-          <!-- Botão de Perfil -->
-          <li class="nav-item dropdown ms-3 mt-3 mt-lg-0">
-            <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-              <img src="https://via.placeholder.com/30" class="rounded-circle" alt="Foto do usuário"> <span class="d-none d-lg-inline">Meu Perfil</span>
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="userDropdown">
-              <li><a class="dropdown-item" href="#">Meu Perfil</a></li>
-              <li><a class="dropdown-item" href="#">Configurações</a></li>
-              <li><a class="dropdown-item" href="#">Sair</a></li>
+      <!-- Menu que colapsa -->
+      <div class='collapse navbar-collapse' id='navbarMenuInferior'>
+        <ul class='navbar-nav w-100'>
+          <li class='nav-item dropdown'>
+            <a
+              class='nav-link dropdown-toggle'
+              href='#'
+              role='button'
+              data-bs-toggle='dropdown'
+            >Departamentos</a>
+            <ul class='dropdown-menu'>
+              <li><a class='dropdown-item' href='#'>Categoria 1</a></li>
+              <li><a class='dropdown-item' href='#'>Categoria 2</a></li>
             </ul>
           </li>
-
-          <!-- Carrinho de Compras -->
-          <li class="nav-item ms-3 mt-3 mt-lg-0">
-            <button class="btn btn-outline-light" type="button">
-              <i class="bi bi-cart"></i> <span class="badge bg-danger">3</span>
-            </button>
-          </li>
+          <li class='nav-item'><a class='nav-link' href='#'>Tendências</a></li>
+          <li class='nav-item'><a class='nav-link' href='#'>Ofertas</a></li>
+          <li class='nav-item'><a class='nav-link' href='#'>Projetos</a></li>
+          <li class='nav-item'><a class='nav-link' href='#'>Dicas</a></li>
+          <li class='nav-item'><a class='nav-link' href='#'>Serviços</a></li>
+          <li class='nav-item'><a class='nav-link' href='#'>Para empresas</a></li>
+          <li class='nav-item ms-lg-auto'><a
+              class='nav-link text-success fw-bold'
+              href='#'
+            >Programa de Fidelidade</a></li>
         </ul>
       </div>
     </div>
   </nav>
+
 </header>
+
+<hr style='border-color: transparent;' />

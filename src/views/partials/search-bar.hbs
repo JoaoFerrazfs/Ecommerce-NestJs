@@ -1,0 +1,99 @@
+<form class="w-100 my-2 my-lg-0 flex-grow-1 mx-lg-4" role="search" id="searchForm" autocomplete="off"
+  style="position: relative;">
+  <input class="form-control form-control-lg" type="search" placeholder="O que você procura?" aria-label="Search"
+    id="searchInput" name="search" />
+  <div id="quickSearchResults" style="
+    position: absolute;
+    top: 100%;           /* posiciona logo abaixo do input */
+    left: 0;
+    width: 100%;         /* ocupa 100% da largura do form */
+    background: white;
+    border: 1px solid #ddd;
+    border-top: none;
+    z-index: 1000;
+    display: none;
+    max-height: 300px;
+    overflow-y: auto;
+  "></div>
+</form>
+
+
+<script>
+  const input = document.getElementById('searchInput');
+  const resultsContainer = document.getElementById('quickSearchResults');
+
+  let timeoutId;
+
+  input.addEventListener('input', () => {
+    clearTimeout(timeoutId);
+    const query = input.value.trim();
+
+    if (query.length < 3) {
+      resultsContainer.style.display = 'none';
+      resultsContainer.innerHTML = '';
+      return;
+    }
+
+
+    timeoutId = setTimeout(() => {
+      fetch('/api/opensearch/searchByText', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          index: 'products',
+          text: query,
+          page: 1,
+          size: 5
+        })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (!data.results || data.results.length === 0) {
+            resultsContainer.style.display = 'none';
+            resultsContainer.innerHTML = '';
+            return;
+          }
+
+          // Montar lista de resultados
+          resultsContainer.innerHTML = data.results
+            .map(product => {
+              const imageUrl = product.images && product.images.length > 0
+                ? product.images[0].path
+                : 'https://placehold.co/400';
+
+              return `
+                <a href="/products/${product.cod}" style="
+                  display: flex;
+                  align-items: center;
+                  padding: 8px;
+                  border-bottom: 1px solid #eee;
+                  text-decoration: none;
+                  color: inherit;
+                ">
+                  <img src="${imageUrl}" alt="${product.name}" style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px; border-radius: 4px;" />
+                  <div>
+                    <div style="font-weight: bold;">${product.name}</div>
+                    <div style="color: #666;">R$ ${product.price.toFixed(2)}</div>
+                  </div>
+                </a>
+              `;
+            })
+            .join('');
+
+          resultsContainer.style.display = 'block';
+        })
+        .catch(() => {
+          resultsContainer.style.display = 'none';
+          resultsContainer.innerHTML = '';
+        });
+    }, 300);
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!resultsContainer.contains(event.target) && event.target !== input) {
+      resultsContainer.style.display = 'none';
+    }
+  });
+</script>
