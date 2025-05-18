@@ -74,16 +74,16 @@
         const card = document.createElement('div');
         card.className = 'card';
 
-        const link = document.createElement('a'); // <-- novo LINK
-        link.href = `/produto/${product.slug}`; // <-- link para página do produto
-        link.style.textDecoration = 'none'; // remove sublinhado
+        const link = document.createElement('a'); 
+        link.href = `/products/${product.cod}`; 
+        link.style.textDecoration = 'none';
 
         const img = document.createElement('img');
-        img.src = product.images[0].path;
+        img.src =  product.images?.[0]?.path || 'https://placehold.co/200';
         img.className = 'card-img-top';
         img.alt = product.name;
 
-        link.appendChild(img); // link envolvendo a imagem
+        link.appendChild(img);
 
         const cardBody = document.createElement('div');
         cardBody.className = 'card-body';
