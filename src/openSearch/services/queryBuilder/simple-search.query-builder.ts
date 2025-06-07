@@ -14,13 +14,13 @@ export class SimpleSearchQueryBuilder {
     return {
       index,
       body: {
-        from: page,
+        from: (page - 1),
         size: size,
         query: {
           match: {
             name: {
               query: text,
-              fuzziness: 1,
+              fuzziness: 'AUTO',
             },
           },
         },

@@ -18,11 +18,11 @@ describe('SimpleSearchQueryBuilder', () => {
     const text = 'escada';
     const expected = {
       body: {
-        from: 1,
+        from: 0,
         query: {
           match: {
             name: {
-              fuzziness: 1,
+              fuzziness: 'AUTO',
               query: 'escada',
             },
           },

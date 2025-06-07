@@ -39,6 +39,7 @@ export class SearchController {
         page,
         size,
       );
+
       return this.opensearchMapper.mapMultipleResults(results.hits);
     } catch (error: unknown) {
       if (error instanceof RuntimeException) {
